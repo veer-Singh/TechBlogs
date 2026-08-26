@@ -1,0 +1,20 @@
+# Publishing metadata for this blog. Not part of the post body.
+title: "{{TITLE}}"
+slug: "{{SLUG}}"
+created: "{{DATE}}"
+
+# Where this post is (or will be) published.
+targets:
+  - platform: ""        # e.g. medium | devto | hashnode | linkedin | internal-wiki
+    url: ""
+    published_at: ""
+
+# Runtime this blog's scripts need, so it can be rebuilt later.
+environment:
+  language: ""          # python | node | dotnet | none
+  version: ""           # e.g. 3.12, 20.x
+  setup: "See scripts/README.md"
+
+review:
+  technical_review_by: ""
+  edited: false
