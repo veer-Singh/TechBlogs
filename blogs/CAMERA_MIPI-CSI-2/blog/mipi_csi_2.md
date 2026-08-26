@@ -246,6 +246,7 @@ The calculations :
 
 
 Find the smallest number of pixels N such that N × bpp is divisible by 8:
+
 $$
 N = \frac{\operatorname{LCM}(bpp, 8)}{bpp}
 $$
