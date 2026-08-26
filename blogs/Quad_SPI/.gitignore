@@ -1,0 +1,7 @@
+# Per-blog local artifacts
+output/*
+!output/.gitkeep
+.venv/
+node_modules/
+.env
+__pycache__/

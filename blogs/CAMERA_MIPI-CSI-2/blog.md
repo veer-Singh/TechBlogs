@@ -1,8 +1,10 @@
+
 ---
-title: "All About the Camera"
+
+title: "Camera MIPI-CSI-2"
 slug: "all-about-the-camera"
 date: "2026-08-21"
-status: draft          # draft | review | published
+status: review          # draft | review | published
 author: "singhl"
 tags:
   - camera
@@ -17,9 +19,23 @@ summary: >
   RAW Bayer output into a usable YUV image.
 canonical_url: ""      # filled in after publishing
 cover_image: "assets/images/export/01-camera-sensor-parts.png"
+
 ---
 
-# All About the Camera
+
+
+<h1 align="center">
+ <img src="assets/images/export/MIPI-Camera.png">
+  <br />
+ CAMERA MIPI CSI-2
+</h1>
+
+<a href="https://github.com/veer-Singh?tab=followers">
+  <img alt="Follow" title="Follow me for Updates" src="https://img.shields.io/github/followers/veer-Singh?style=plastic&color=236ad3&labelColor=1155ba&logo=github&label=Follow&logoColor=white"/>
+</a>
+
+![Views](https://visitor-badge.laobi.icu/badge?page_id=veer-Singh.TechBlogs.CAMERA_MIPI_CSI_2&left_text=Views&right_color=%2379c83d)
+![Last local commit](https://img.shields.io/badge/commit-19f804e_%282026--08--26%29-blue?style=plastic&logo=git&logoColor=white)
 
 ## Parts of the camera sensor
 
