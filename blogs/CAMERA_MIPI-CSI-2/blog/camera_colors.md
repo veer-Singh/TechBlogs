@@ -339,3 +339,5 @@ the 20-bit HDR data correctly.
 ---
 
 [◀ Previous: **CAMERA MIPI CSI-2**](mipi_csi_2.md)
+&nbsp;·&nbsp;
+[Next: **Camera settings &amp; colour balancing** ▶](color_balancing.md)

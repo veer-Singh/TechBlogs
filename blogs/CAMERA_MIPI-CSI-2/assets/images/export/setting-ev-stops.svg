@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 420" font-family="'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <rect x="0" y="0" width="820" height="420" fill="#fdfdfd" stroke="#e2e2e2"/>
+  <text x="410" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">One "stop" = one EV = a factor of 2 in light</text>
+
+  <!-- bars: relative exposure doubling -->
+  <g>
+    <!-- baseline -->
+    <line x1="90" y1="330" x2="760" y2="330" stroke="#999" stroke-width="1"/>
+
+    <!-- -2 EV -->
+    <rect x="110" y="313" width="70" height="17" fill="#3a7de8"/>
+    <text x="145" y="352" text-anchor="middle" font-size="12" fill="#1a1a1a">-2 EV</text>
+    <text x="145" y="368" text-anchor="middle" font-size="11" fill="#666">×0.25</text>
+
+    <!-- -1 EV -->
+    <rect x="220" y="296" width="70" height="34" fill="#3a7de8"/>
+    <text x="255" y="352" text-anchor="middle" font-size="12" fill="#1a1a1a">-1 EV</text>
+    <text x="255" y="368" text-anchor="middle" font-size="11" fill="#666">×0.5</text>
+
+    <!-- 0 EV -->
+    <rect x="330" y="262" width="70" height="68" fill="#1155ba"/>
+    <text x="365" y="352" text-anchor="middle" font-size="12" font-weight="700" fill="#1a1a1a">0 EV</text>
+    <text x="365" y="368" text-anchor="middle" font-size="11" fill="#666">×1 (AE target)</text>
+
+    <!-- +1 EV -->
+    <rect x="440" y="194" width="70" height="136" fill="#3a7de8"/>
+    <text x="475" y="352" text-anchor="middle" font-size="12" fill="#1a1a1a">+1 EV</text>
+    <text x="475" y="368" text-anchor="middle" font-size="11" fill="#666">×2</text>
+
+    <!-- +2 EV -->
+    <rect x="550" y="58" width="70" height="272" fill="#3a7de8"/>
+    <text x="585" y="352" text-anchor="middle" font-size="12" fill="#1a1a1a">+2 EV</text>
+    <text x="585" y="368" text-anchor="middle" font-size="11" fill="#666">×4</text>
+  </g>
+
+  <text x="690" y="150" font-size="12.5" fill="#666">height =</text>
+  <text x="690" y="168" font-size="12.5" fill="#666">relative</text>
+  <text x="690" y="186" font-size="12.5" fill="#666">light</text>
+
+  <text x="410" y="398" text-anchor="middle" font-size="12.5" fill="#666">Any control reaches the same EV: 2× time, 2× ISO, or one wider f-stop all add +1 EV. EV = log2(N² / t).</text>
+</svg>

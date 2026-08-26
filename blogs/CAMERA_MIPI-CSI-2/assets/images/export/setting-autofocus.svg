@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 440" font-family="'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <rect x="0" y="0" width="860" height="440" fill="#fdfdfd" stroke="#e2e2e2"/>
+  <text x="430" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">Two ways to find focus</text>
+
+  <!-- LEFT: contrast detection hill-climb -->
+  <text x="70" y="70" font-size="14" font-weight="700" fill="#1a1a1a">Contrast AF (CDAF)</text>
+  <line x1="70" y1="300" x2="380" y2="300" stroke="#999"/>
+  <line x1="70" y1="300" x2="70" y2="90" stroke="#999"/>
+  <text x="225" y="330" text-anchor="middle" font-size="12" fill="#666">lens position (macro → ∞)</text>
+  <text x="46" y="200" text-anchor="middle" font-size="12" fill="#666" transform="rotate(-90 46 200)">high-freq contrast</text>
+
+  <path d="M70,285 C150,280 190,120 225,110 C260,120 300,270 380,288" fill="none" stroke="#1155ba" stroke-width="2.5"/>
+  <!-- sample points / hunting -->
+  <g fill="#e8833a">
+    <circle cx="110" cy="282" r="4"/><circle cx="150" cy="250" r="4"/><circle cx="190" cy="150" r="4"/>
+    <circle cx="225" cy="110" r="5"/><circle cx="255" cy="140" r="4"/><circle cx="210" cy="126" r="4"/>
+  </g>
+  <text x="225" y="98" text-anchor="middle" font-size="11" fill="#b5451b">peak = in focus</text>
+  <text x="150" y="360" font-size="11.5" fill="#666">Step the lens, measure contrast, climb toward the max.</text>
+  <text x="150" y="378" font-size="11.5" fill="#666">Must overshoot to know it passed the peak → "hunting".</text>
+  <text x="150" y="396" font-size="11.5" fill="#666">No sign info: doesn't know which way until it moves.</text>
+
+  <!-- divider -->
+  <line x1="440" y1="60" x2="440" y2="410" stroke="#e2e2e2"/>
+
+  <!-- RIGHT: phase detection -->
+  <text x="480" y="70" font-size="14" font-weight="700" fill="#1a1a1a">Phase-detect AF (PDAF)</text>
+
+  <!-- two sub-signals shifted -->
+  <line x1="480" y1="200" x2="800" y2="200" stroke="#999"/>
+  <path d="M480,200 Q560,90 620,200 Q660,270 720,200" fill="none" stroke="#3a7de8" stroke-width="2.5"/>
+  <path d="M540,200 Q620,90 680,200 Q720,270 780,200" fill="none" stroke="#d8443a" stroke-width="2.5"/>
+  <text x="590" y="120" font-size="11" fill="#3a7de8">left photodiodes</text>
+  <text x="700" y="120" font-size="11" fill="#d8443a">right photodiodes</text>
+
+  <!-- disparity -->
+  <line x1="600" y1="230" x2="660" y2="230" stroke="#1a1a1a" stroke-width="1.5" marker-start="url(#a2)" marker-end="url(#a2)"/>
+  <defs><marker id="a2" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M0,4.5 L9,0 L9,9 Z" fill="#1a1a1a"/></marker></defs>
+  <text x="630" y="250" text-anchor="middle" font-size="12" fill="#1a1a1a">disparity d</text>
+
+  <text x="480" y="300" font-size="11.5" fill="#666">Split pixels see the lens from two sides. The shift d</text>
+  <text x="480" y="318" font-size="11.5" fill="#666">gives both the sign and size of defocus:</text>
+  <text x="480" y="342" font-size="12.5" font-weight="700" fill="#1a1a1a">lens move ∝ d  →  one jump to focus, no hunting</text>
+  <text x="480" y="368" font-size="11.5" fill="#666">d = 0 → in focus · d &gt; 0 → front · d &lt; 0 → back</text>
+  <text x="480" y="392" font-size="11.5" fill="#999">Actuator: VCM driven by a DAC code; code↔distance is</text>
+  <text x="480" y="408" font-size="11.5" fill="#999">calibrated at build (macro stop … hyperfocal … infinity).</text>
+</svg>

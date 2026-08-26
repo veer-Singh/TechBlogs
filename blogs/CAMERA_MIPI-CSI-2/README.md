@@ -26,6 +26,24 @@ Originals are in `assets/images/source/`; `export/` currently holds unmodified
 copies, since both diagrams were already clean and publish-ready. Re-export from
 `source/` if a target platform needs different dimensions.
 
+### Hand-authored SVG diagrams (Part 3 — `color_balancing.md`)
+
+Schematics drawn directly as SVG, no source file — edit the `.svg` in `export/`:
+
+| File                             | Shows                                                        |
+|----------------------------------|-------------------------------------------------------------|
+| `setting-exposure-triangle.svg`  | shutter / gain / aperture feeding one EV, each side-effect  |
+| `setting-ev-stops.svg`           | one stop = one EV = ×2 light; same EV via any control       |
+| `setting-bit-depth.svg`          | ideal ramp vs 3-bit / 5-bit quantisation (banding)          |
+| `setting-hdr-merge.svg`          | 3 sub-exposures → weighted merge → tone curve to display    |
+| `setting-white-balance.svg`      | grey card under 3000 K → R/B gains → neutral; Kelvin scale  |
+| `setting-denoise-sharpen.svg`    | one edge: noisy → denoised (softened) → sharpened (halo)    |
+| `setting-autofocus.svg`          | CDAF contrast hill-climb (hunting) vs PDAF phase disparity  |
+
+These are schematic explainers, not photo examples. Real before/after captures
+(HDR on/off, WB presets, NR sweep, focus sweep) could replace or supplement them
+later if the post gets a shoot.
+
 ## Notes on this draft
 
 - The duplicated "The pipeline splits into three domains…" paragraph in the

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 520" font-family="'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <rect x="0" y="0" width="860" height="520" fill="#fdfdfd" stroke="#e2e2e2"/>
+  <text x="430" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">Three controls, one result: how bright the photo is</text>
+
+  <!-- triangle -->
+  <polygon points="430,95 200,410 660,410" fill="#eef4fc" stroke="#1155ba" stroke-width="2"/>
+
+  <!-- centre: EV -->
+  <circle cx="430" cy="315" r="66" fill="#1155ba"/>
+  <text x="430" y="308" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">EV</text>
+  <text x="430" y="330" text-anchor="middle" font-size="11.5" fill="#dbe7f7">total light =</text>
+  <text x="430" y="346" text-anchor="middle" font-size="11.5" fill="#dbe7f7">photo brightness</text>
+
+  <!-- TOP corner: shutter -->
+  <circle cx="430" cy="95" r="8" fill="#e8833a"/>
+  <g transform="translate(430,44)">
+    <rect x="-150" y="-24" width="300" height="44" rx="6" fill="#fff" stroke="#e8833a"/>
+    <text x="0" y="-6" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">Shutter / exposure time</text>
+    <text x="0" y="12" text-anchor="middle" font-size="12" fill="#b5451b">longer → brighter, but movement BLURS</text>
+  </g>
+
+  <!-- LEFT corner: gain -->
+  <circle cx="200" cy="410" r="8" fill="#e8833a"/>
+  <g transform="translate(150,455)">
+    <rect x="-140" y="-22" width="280" height="44" rx="6" fill="#fff" stroke="#e8833a"/>
+    <text x="0" y="-4" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">Gain / ISO</text>
+    <text x="0" y="14" text-anchor="middle" font-size="12" fill="#b5451b">higher → brighter, but image gets GRAINY</text>
+  </g>
+
+  <!-- RIGHT corner: aperture -->
+  <circle cx="660" cy="410" r="8" fill="#e8833a"/>
+  <g transform="translate(710,455)">
+    <rect x="-150" y="-22" width="300" height="44" rx="6" fill="#fff" stroke="#999" stroke-dasharray="4 3"/>
+    <text x="0" y="-4" text-anchor="middle" font-size="14" font-weight="700" fill="#555">Aperture (fixed f/2.0 here)</text>
+    <text x="0" y="14" text-anchor="middle" font-size="12" fill="#777">wider → brighter, but less is IN FOCUS</text>
+  </g>
+
+  <!-- arrows from corners toward centre -->
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#8aa9d6"/></marker></defs>
+  <line x1="430" y1="120" x2="430" y2="243" stroke="#8aa9d6" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="228" y1="392" x2="372" y2="335" stroke="#8aa9d6" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="632" y1="392" x2="488" y2="335" stroke="#8aa9d6" stroke-width="2" marker-end="url(#a)"/>
+
+  <text x="430" y="504" text-anchor="middle" font-size="12.5" fill="#666">Auto-exposure adjusts these every frame to hit a target brightness, using whichever control hurts the picture least.</text>
+</svg>

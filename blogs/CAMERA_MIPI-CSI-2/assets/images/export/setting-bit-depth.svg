@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 440" font-family="'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <rect x="0" y="0" width="820" height="440" fill="#fdfdfd" stroke="#e2e2e2"/>
+  <text x="410" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">Bit depth = how finely a smooth gradient is quantised</text>
+
+  <!-- axes -->
+  <line x1="80" y1="360" x2="740" y2="360" stroke="#999"/>
+  <line x1="80" y1="360" x2="80" y2="70" stroke="#999"/>
+  <text x="410" y="400" text-anchor="middle" font-size="12.5" fill="#666">scene brightness (linear) →</text>
+  <text x="46" y="215" text-anchor="middle" font-size="12.5" fill="#666" transform="rotate(-90 46 215)">stored code value →</text>
+
+  <!-- ideal ramp -->
+  <line x1="80" y1="360" x2="740" y2="80" stroke="#bbb" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="600" y="120" font-size="12" fill="#999">ideal (infinite bits)</text>
+
+  <!-- 3-bit staircase: 8 steps -->
+  <polyline fill="none" stroke="#e8833a" stroke-width="2.5"
+    points="80,360 162,360 162,325 245,325 245,290 327,290 327,255 410,255 410,220 492,220 492,185 575,185 575,150 657,150 657,115 740,115"/>
+  <text x="150" y="352" font-size="12" font-weight="700" fill="#b5451b">3-bit — 8 levels, visible banding</text>
+
+  <!-- 5-bit staircase: finer -->
+  <polyline fill="none" stroke="#1155ba" stroke-width="2.5"
+    points="80,360 121,360 121,343 162,343 162,326 204,326 204,309 245,309 245,292 286,292 286,275 327,275 327,258 369,258 369,241 410,241 410,224 451,224 451,207 492,207 492,190 534,190 534,173 575,173 575,156 616,156 616,139 657,139 657,122 699,122 699,105 740,105"/>
+  <text x="470" y="300" font-size="12" font-weight="700" fill="#1155ba">5-bit — 32 levels, smoother</text>
+
+  <text x="410" y="428" text-anchor="middle" font-size="12.5" fill="#666">RAW8 = 256 levels · RAW10 = 1024 · RAW12 = 4096 · RAW20 = ~1.05M. Extra bits only help while noise &lt; 1 LSB.</text>
+</svg>

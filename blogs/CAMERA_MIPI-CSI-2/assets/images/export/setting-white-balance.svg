@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" font-family="'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <rect x="0" y="0" width="820" height="430" fill="#fdfdfd" stroke="#e2e2e2"/>
+  <text x="410" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">White balance: scale R and B so a grey object reads grey</text>
+
+  <!-- kelvin scale -->
+  <defs>
+    <linearGradient id="k" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff9036"/><stop offset="0.5" stop-color="#fff6e8"/><stop offset="1" stop-color="#9cc4ff"/>
+    </linearGradient>
+  </defs>
+  <rect x="70" y="70" width="680" height="34" fill="url(#k)" stroke="#ccc"/>
+  <g font-size="12" fill="#444" text-anchor="middle">
+    <text x="110" y="124">2000K</text>
+    <text x="240" y="124">3000K</text>
+    <text x="380" y="124">4500K</text>
+    <text x="520" y="124">6500K</text>
+    <text x="680" y="124">10000K</text>
+  </g>
+  <g font-size="11" fill="#777" text-anchor="middle">
+    <text x="150" y="58">candle / tungsten (warm)</text>
+    <text x="520" y="58">daylight D65</text>
+    <text x="690" y="58">shade / blue sky (cool)</text>
+  </g>
+
+  <!-- raw vs corrected swatches -->
+  <text x="70" y="180" font-size="14" font-weight="700" fill="#1a1a1a">Grey card under 3000K tungsten</text>
+
+  <rect x="70" y="195" width="150" height="80" fill="#c98b45" stroke="#ccc"/>
+  <text x="145" y="240" text-anchor="middle" font-size="12" fill="#3a2a12">RAW</text>
+  <text x="145" y="256" text-anchor="middle" font-size="11" fill="#3a2a12">R210 G150 B95</text>
+
+  <text x="238" y="240" font-size="22" fill="#999">→</text>
+
+  <text x="275" y="192" font-size="12.5" fill="#1155ba">apply WB gains  R ×1.00  G ×1.00  B ×2.21</text>
+  <rect x="275" y="195" width="150" height="80" fill="#9e9e9e" stroke="#ccc"/>
+  <text x="350" y="240" text-anchor="middle" font-size="12" fill="#fff">BALANCED</text>
+  <text x="350" y="256" text-anchor="middle" font-size="11" fill="#fff">R210 G150 B210</text>
+
+  <!-- gain bars -->
+  <g transform="translate(500,180)">
+    <text x="0" y="0" font-size="13" font-weight="700" fill="#1a1a1a">Channel gains</text>
+    <text x="0" y="28" font-size="12" fill="#444">R</text><rect x="30" y="17" width="60" height="14" fill="#d8443a"/><text x="98" y="28" font-size="11" fill="#666">1.00</text>
+    <text x="0" y="52" font-size="12" fill="#444">G</text><rect x="30" y="41" width="60" height="14" fill="#4fa02c"/><text x="98" y="52" font-size="11" fill="#666">1.00 (anchor)</text>
+    <text x="0" y="76" font-size="12" fill="#444">B</text><rect x="30" y="65" width="133" height="14" fill="#3a7de8"/><text x="171" y="76" font-size="11" fill="#666">2.21</text>
+  </g>
+
+  <text x="410" y="330" text-anchor="middle" font-size="12.5" fill="#666">AWB estimates the illuminant (grey-world / white-patch / illuminant match) → picks R,B gains → applied in the RAW domain, before demosaic.</text>
+  <text x="410" y="352" text-anchor="middle" font-size="12.5" fill="#666">Range (~2000–10000K) is set by how far a gain can push before a channel clips or shadow noise is amplified past tolerance.</text>
+  <text x="410" y="392" text-anchor="middle" font-size="12" fill="#999">A second "tint" axis (green ↔ magenta) corrects fluorescent / LED spikes the Kelvin axis alone cannot.</text>
+</svg>

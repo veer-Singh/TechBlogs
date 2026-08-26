@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 430" font-family="'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <rect x="0" y="0" width="860" height="430" fill="#fdfdfd" stroke="#e2e2e2"/>
+  <text x="430" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">Denoise and sharpen act on the same edge — and fight each other</text>
+
+  <!-- three stacked intensity profiles across one dark→light edge -->
+  <g>
+    <!-- panel 1: noisy input -->
+    <text x="70" y="78" font-size="13" font-weight="700" fill="#1a1a1a">1 · raw edge + noise</text>
+    <line x1="70" y1="150" x2="330" y2="150" stroke="#ddd"/>
+    <polyline fill="none" stroke="#888" stroke-width="1.8"
+      points="70,120 90,128 110,116 130,124 150,118 170,122 190,119 205,119 205,60 220,58 240,66 260,56 280,64 300,58 320,62"/>
+    <text x="200" y="170" font-size="11" fill="#999">grain on both sides of the step</text>
+  </g>
+
+  <g>
+    <!-- panel 2: denoised -->
+    <text x="360" y="78" font-size="13" font-weight="700" fill="#1a1a1a">2 · after denoise</text>
+    <line x1="360" y1="150" x2="620" y2="150" stroke="#ddd"/>
+    <path d="M360,121 L490,120 Q500,120 508,100 Q516,80 528,72 L620,60" fill="none" stroke="#1155ba" stroke-width="2.2"/>
+    <text x="470" y="170" font-size="11" fill="#1155ba">noise gone — but the step is softened (detail lost)</text>
+  </g>
+
+  <g>
+    <!-- panel 3: sharpened -->
+    <text x="650" y="78" font-size="13" font-weight="700" fill="#1a1a1a">3 · after sharpen</text>
+    <line x1="650" y1="150" x2="850" y2="150" stroke="#ddd"/>
+    <path d="M650,121 L735,121 L742,138 L748,60 L756,44 L764,60 L850,60" fill="none" stroke="#b5451b" stroke-width="2.2"/>
+    <text x="640" y="170" font-size="11" fill="#b5451b">edge steepened; over/undershoot = halo</text>
+  </g>
+
+  <!-- tradeoff strip -->
+  <rect x="70" y="210" width="780" height="120" fill="#f4f6f9" stroke="#e2e2e2"/>
+  <text x="90" y="238" font-size="13" font-weight="700" fill="#1a1a1a">The knobs</text>
+  <g font-size="12" fill="#444">
+    <text x="90" y="262">Denoise strength ↑  → smoother flat areas, but fine texture (hair, foliage, text) smears into "watercolour"</text>
+    <text x="90" y="285">Sharpen amount ↑   → crisper edges, but halos widen and any residual noise is amplified as "crunch"</text>
+    <text x="90" y="308">Sharpen radius ↑   → thicker halo; keep small so enhancement stays on true edges, not gradients</text>
+  </g>
+
+  <text x="430" y="360" text-anchor="middle" font-size="12.5" fill="#666">Both strengths are scheduled by gain/ISO: a per-ISO noise model sets how hard NR runs and how much sharpening is safe.</text>
+  <text x="430" y="382" text-anchor="middle" font-size="12.5" fill="#666">Order matters — luma/chroma NR runs before edge enhancement so sharpening does not re-lift the noise NR just removed.</text>
+  <text x="430" y="410" text-anchor="middle" font-size="12" fill="#999">Chroma noise is denoised harder than luma (the eye tolerates soft colour but not soft brightness).</text>
+</svg>

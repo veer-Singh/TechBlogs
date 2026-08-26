@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 470" font-family="'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <rect x="0" y="0" width="860" height="470" fill="#fdfdfd" stroke="#e2e2e2"/>
+  <text x="430" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">HDR: capture 2–3 exposures, merge the unclipped parts, tone-map to display</text>
+
+  <!-- scene dynamic range bar -->
+  <text x="60" y="70" font-size="12.5" fill="#666">scene: dark shadows ————————————————— bright highlights (≈ 24 stops)</text>
+  <rect x="60" y="78" width="740" height="14" fill="url(#g1)"/>
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#111"/><stop offset="1" stop-color="#fff"/>
+    </linearGradient>
+  </defs>
+
+  <!-- three sub-exposures -->
+  <g font-size="12.5">
+    <rect x="60" y="120" width="300" height="22" fill="#e8833a" opacity="0.85"/>
+    <text x="370" y="136" fill="#1a1a1a">LONG exposure — shadows clean, highlights clipped</text>
+
+    <rect x="230" y="152" width="330" height="22" fill="#5aa02c" opacity="0.85"/>
+    <text x="570" y="168" fill="#1a1a1a">MID exposure — mid-tones correct</text>
+
+    <rect x="430" y="184" width="370" height="22" fill="#3a7de8" opacity="0.85"/>
+    <text x="60" y="200" fill="#1a1a1a" text-anchor="start"></text>
+    <text x="430" y="222" fill="#1a1a1a">SHORT exposure — highlights kept, shadows noisy</text>
+  </g>
+
+  <!-- merge arrow -->
+  <line x1="430" y1="240" x2="430" y2="272" stroke="#999" stroke-width="2" marker-end="url(#ar)"/>
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#999"/></marker></defs>
+  <text x="446" y="262" font-size="12.5" fill="#666">weighted merge → linear HDR (~20 bits)</text>
+
+  <rect x="60" y="276" width="740" height="16" fill="#1155ba"/>
+  <text x="430" y="288" text-anchor="middle" font-size="11" fill="#fff">merged HDR — full range, no clipping</text>
+
+  <!-- tone curve -->
+  <g transform="translate(300,310)">
+    <line x1="0" y1="120" x2="0" y2="0" stroke="#999"/>
+    <line x1="0" y1="120" x2="260" y2="120" stroke="#999"/>
+    <path d="M0,120 C60,20 140,10 260,4" fill="none" stroke="#b5451b" stroke-width="2.5"/>
+    <line x1="0" y1="120" x2="260" y2="0" stroke="#ccc" stroke-dasharray="4 3"/>
+    <text x="130" y="150" text-anchor="middle" font-size="12.5" fill="#666">tone-mapping curve: compress 20 stops → 8-bit display</text>
+    <text x="-8" y="-6" text-anchor="end" font-size="11" fill="#999">out</text>
+    <text x="264" y="136" font-size="11" fill="#999">in (HDR)</text>
+  </g>
+
+  <text x="430" y="462" text-anchor="middle" font-size="12.5" fill="#666">IMX623 does this in-sensor (split-pixel / dual conversion gain); moving subjects between frames cause ghosting.</text>
+</svg>
