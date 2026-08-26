@@ -1,29 +1,3 @@
-
----
-
-title: "Camera MIPI-CSI-2"
-slug: "all-about-the-camera"
-date: "2026-08-21"
-status: review          # draft | review | published
-author: "singhl"
-tags:
-  - camera
-  - image-sensor
-  - isp
-  - automotive
-  - imx623
-  - gmsl2
-summary: >
-  A walk through a camera module from front to back: what each part of the optical
-  and sensor stack actually does, and then how the ISP pipeline turns the sensor's
-  RAW Bayer output into a usable YUV image.
-canonical_url: ""      # filled in after publishing
-cover_image: "assets/images/export/01-camera-sensor-parts.png"
-
----
-
-
-
 <h1 align="center">
  <img src="assets/images/export/MIPI-Camera.png">
   <br />
@@ -36,6 +10,53 @@ cover_image: "assets/images/export/01-camera-sensor-parts.png"
 
 ![Views](https://visitor-badge.laobi.icu/badge?page_id=veer-Singh.TechBlogs.CAMERA_MIPI_CSI_2&left_text=Views&right_color=%2379c83d)
 ![Last local commit](https://img.shields.io/badge/commit-19f804e_%282026--08--26%29-blue?style=plastic&logo=git&logoColor=white)
+
+
+---
+## SUMMARY :
+
+This post walks a camera module from front to back: what each part of the optical and
+sensor stack does, how the ISP pipeline turns the sensor's RAW Bayer output into a
+usable YUV image, and finally the **MIPI CSI-2** link that carries that data off the
+sensor.
+
+**Where MIPI CSI-2 sits in the pipeline.** It is the wire between the image *sensor*
+and the *SoC* — the very last hop of the sensor side, right after the on-chip ADC and
+just before the host's CSI-2 receiver feeds the ISP:
+
+```
+lens → aperture → shutter → CFA → pixel array → ADC → [ MIPI CSI-2 ] → SoC RX → ISP → YUV
+```
+
+In automotive the link is broken by a SerDes: sensor → CSI-2 → **GMSL2 / FPD-Link IV
+serializer** → coax → deserializer → CSI-2 → SoC. The pixel data is one-way; sensor
+configuration stays on a separate I2C/CCI bus.
+
+**What it is.** A MIPI Alliance standard: a unidirectional, point-to-point,
+packet-based serial interface running on the **D-PHY** physical layer — one clock lane
+plus 1–4 data lanes, each a differential pair. Pixels are framed into packets with a
+Data Type and Virtual Channel, header **ECC**, and payload **CRC**.
+
+**Why it is required.** A parallel pixel bus does not scale — too many pins, tight
+inter-line skew, and heavy EMI at speed. CSI-2 replaces it with a few differential
+pairs at low voltage swing (~200 mV in high-speed mode), which keeps pin count,
+power, and emissions low while allowing much higher clock rates.
+
+**Advantages.**
+
+- Far fewer wires; longer reach, especially over a SerDes bridge.
+- Differential signalling → low EMI and good noise immunity.
+- Built-in error handling (header ECC corrects 1 bit / detects 2; payload CRC).
+- Multiple logical streams multiplexed on one link via Virtual Channels.
+- Lane scaling — add data lanes to add bandwidth.
+- Low-Power (LP) state lets lanes idle between bursts to save power.
+
+**Speed.** D-PHY is DDR, so the data rate is 2× the lane clock. Roughly **1.5 Gbps
+per lane** on D-PHY v1.2 (newer D-PHY revisions go higher), so a 4-lane link carries
+about **10 Gbps** of payload — enough for multi-megapixel RAW10 / RAW12 video at
+automotive frame rates. 
+
+---
 
 ## Parts of the camera sensor
 
