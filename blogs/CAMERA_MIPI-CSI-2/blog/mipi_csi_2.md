@@ -1,5 +1,5 @@
 <h1 align="center">
- <img src="assets/images/export/MIPI-Camera.png">
+ <img src="../assets/images/export/MIPI-Camera.png">
   <br />
  CAMERA MIPI CSI-2
 </h1>
@@ -60,7 +60,7 @@ automotive frame rates.
 
 ## Parts of the camera sensor
 
-![Cross-section of a camera module: lens, aperture, shutter, color filter array and image sensor](assets/images/export/01-camera-sensor-parts.png)
+![Cross-section of a camera module: lens, aperture, shutter, color filter array and image sensor](../assets/images/export/01-camera-sensor-parts.png)
 
 - **Lens**: Collects incoming light rays and bends them to focus a sharp image onto the focal plane.
 
@@ -86,7 +86,7 @@ automotive frame rates.
 
 ## Next step: the ISP pipeline
 
-![ISP pipeline stages from black level correction through demosaic to YUV output](assets/images/export/02-isp-pipeline.png)
+![ISP pipeline stages from black level correction through demosaic to YUV output](../assets/images/export/02-isp-pipeline.png)
 
 The pipeline splits into three domains, and that's the key mental model: everything before demosaic operates on single-channel Bayer pixels (RAW domain), demosaic is the transition, and everything after works on full RGB and then YUV.
 
@@ -127,10 +127,10 @@ RGGB image sensor IMX623 and FPD Link IV serializer TI971
 
 ### Sensor IMX623
 #### Basic camera pipeline 
-![camera pipeline](assets/images/export/camera_pipeline.png)
+![camera pipeline](../assets/images/export/camera_pipeline.png)
 
 #### PINOUT for MIPI CSI-2 interface
-![MIPI CSI-2 pinout](assets/images/export/mipi_csi2_pinout.png)
+![MIPI CSI-2 pinout](../assets/images/export/mipi_csi2_pinout.png)
 
 CSI-2 (Camera Serial Interface 2) is a MIPI Alliance standard for moving image data from a camera sensor to a host.
 It's a unidirectional, point-to-point, packet-based interface.
@@ -205,10 +205,10 @@ Continuous clock mode allows for higher data rates because the timing overhead o
 
 
 
-![Lane states](assets/images/export/Lane_states_description.png)
+![Lane states](../assets/images/export/Lane_states_description.png)
 
 ### FRAME TIMINGS : 
-![FRAME Seq ]( assets/images/export/Digital_display_sync_relationship.png)
+![FRAME Seq ](../assets/images/export/Digital_display_sync_relationship.png)
 
 >**Active Image area** — the region of real, valid pixels that becomes your image; everything else is overhead.<br>
 >**HSYNC** (horizontal sync) — a pulse marking the start of each new line.<br>
@@ -218,15 +218,11 @@ Continuous clock mode allows for higher data rates because the timing overhead o
 >**VBP** (vertical back porch) — the idle lines after VSYNC before the first active line.<br>
 >**VFP** (vertical front porch) — the idle lines after the last active line, before the next VSYNC.
 
-![FRAME TIMINGS ]( assets/images/export/Vertical_Horizontal_Timing.png)
+![FRAME TIMINGS ](../assets/images/export/Vertical_Horizontal_Timing.png)
 
+---
 
-
-
-
-
-
-
+### Packet length per data format
 
 The calculations : 
 |Data format	|Bits per Pixel (bpp)|	Pixels per packet (min)|	Packet length (byte)|
@@ -270,6 +266,19 @@ $$
 so ```Bandwidth  = Pixel Clock * Bits Per Pixel (bpp)```
 <br>and<br>
  ```Data Rate Per Lane  = Bandwith / number of data lanes```
+
+---
+
+## Next page — colour formats & pixel metadata
+
+The pixel data above can be carried in several **colour formats** (RAW / RGB /
+YUV), each embedding different information and packed differently on the wire.
+That, plus how per-frame **metadata (embedded data)** rides alongside the pixels,
+is covered on the next page:
+
+[**Camera colour formats &amp; pixel metadata →**](camera_colors.md)
+
+---
 
 ## References
 * [MIPI Transmissions](https://www.macnica.co.jp/en/business/semiconductor/articles/lattice/142604/)
