@@ -1,6 +1,73 @@
 # Advanced 08 Communication Protocols Interview Questions
 
-> 75-question deep-dive track with practical coding examples. Use each Q&A as a flashcard: answer aloud, study the example, then compare with the follow-up.
+> 90-question deep-dive track with practical coding examples. Use each Q&A as a flashcard: answer aloud, study the example, then compare with the follow-up.
+
+## Frame Diagrams
+
+### UART frame (8N1: 8 data bits, no parity, 1 stop bit)
+
+```text
+Idle    Start   D0   D1   D2   D3   D4   D5   D6   D7   Stop    Idle
+(high) (low)  (LSB) ...................................  (MSB) (high) (high)
+
+Line level:
+ 1111111 0  b0   b1   b2   b3   b4   b5   b6   b7   1    1111111
+         ^                                          ^
+    Start bit                                   Stop bit(s)
+    (falling edge                               (line returns
+     marks frame start)                          to idle/high)
+```
+
+```mermaid
+packet-beta
+title UART Frame (8N1)
+0: "Start (0)"
+1-8: "Data D0-D7 (LSB first)"
+9: "Stop (1)"
+```
+
+Each frame begins with a low start bit (the falling edge the receiver uses to synchronize its sample clock), followed by the data bits (LSB first for most UARTs), an optional parity bit, and one or two high stop bits that guarantee the line returns to idle before the next frame.
+
+### I2C frame (7-bit addressing, single-byte register write)
+
+```text
+ S | A6 A5 A4 A3 A2 A1 A0 R/W | ACK | D7 D6 D5 D4 D3 D2 D1 D0 | ACK | P
+   |------- 7-bit address ----|      |------- data byte -------|
+
+SCL: _/‾\_/‾\_/‾\_/‾\_/‾\_/‾\_/‾\_/‾\____/‾\_/‾\_/‾\_/‾\_/‾\_/‾\_/‾\_/‾\____
+SDA:  [   address bits, MSB first  ]      [    data bits, MSB first   ]
+
+S    = START condition (SDA falls while SCL is high)
+R/W  = 0 for write, 1 for read
+ACK  = receiver pulls SDA low for one clock to acknowledge
+P    = STOP condition (SDA rises while SCL is high)
+```
+
+```mermaid
+packet-beta
+title I2C Frame (7-bit address, single byte write)
+0-6: "Slave Address (7b)"
+7: "R/W"
+8: "ACK"
+9-16: "Data Byte"
+17: "ACK"
+```
+
+The controller drives SCL for every clock pulse (including during clock stretching, where a target can hold SCL low itself). Both START and STOP are defined by SDA transitions while SCL is held high — this is what makes them unambiguous compared to a data bit, which only changes while SCL is low.
+
+### SPI transaction (single byte, Mode 0)
+
+```text
+CS   : ‾\_________________________/‾
+SCK  : __/‾\_/‾\_/‾\_/‾\_/‾\_/‾\_/‾\_/‾\__
+MOSI : ==[b7][b6][b5][b4][b3][b2][b1][b0]==
+MISO : ==[b7][b6][b5][b4][b3][b2][b1][b0]==
+           (data sampled on rising edge in Mode 0: CPOL=0, CPHA=0)
+```
+
+CS goes low to select the target before the clock starts and stays low for the whole transaction; MOSI and MISO shift a bit per clock edge simultaneously (full duplex), so a "read" is really just discarding the byte received while sending a command, and a "write" discards the byte received while sending data.
+
+---
 
 ## 1. Why is UART asynchronous?
 
@@ -526,6 +593,70 @@ They connect wire semantics to electrical behavior, timing, memory, security, in
 ```text
 requirements -> wire design -> implementation -> fault tests -> observability -> recovery
 ```
+
+## USB, Ethernet, and TCP/IP: Additional Advanced Questions
+
+## 76. What is USB differential signaling, and how does the host know a device just connected?
+
+USB data (D+/D-) is transmitted differentially (NRZI-encoded) for noise immunity, similar in spirit to CAN/RS-485. Detection of connection/speed uses pull-up resistors: a full-speed device pulls D+ high, a low-speed device pulls D- high, and a high-speed device negotiates further after starting as full-speed; the host/hub senses which line is pulled up to detect both "something connected" and the initial signaling speed before enumeration begins.
+
+## 77. Walk through USB enumeration after a device is plugged in
+
+After the host detects a connection and resets the bus, it assigns a temporary default address (0), then requests the device descriptor (`GET_DESCRIPTOR`) to learn vendor/product ID, class, and endpoint 0's max packet size. The host then assigns a unique address (`SET_ADDRESS`), reads the full configuration descriptor (interfaces, endpoints, power requirements), and finally activates a configuration (`SET_CONFIGURATION`) — after which class drivers (HID, CDC, mass storage, etc.) bind and normal data transfers can begin.
+
+## 78. What are the four USB transfer types, and when would you use each in an embedded product?
+
+Control transfers (used for enumeration/configuration and vendor-specific commands, guaranteed but not high throughput) — every device must support them on endpoint 0. Bulk transfers (large, non-time-critical data with error retry, no guaranteed bandwidth or latency — mass storage, firmware transfer). Interrupt transfers (small, low-latency, polled at a guaranteed minimum rate — HID devices like keyboards, or a sensor needing periodic guaranteed servicing). Isochronous transfers (guaranteed bandwidth and timing but no retry on error — audio/video streaming where a dropped sample is better than a stalled stream).
+
+## 79. Why is USB polled by the host rather than device-initiated like an interrupt line?
+
+USB is a host-centric bus — the host schedules every transaction (even "interrupt" transfers are host-polled at a negotiated interval, not asynchronously pushed by the device) so that bus arbitration is centrally managed and multiple devices can share bandwidth deterministically without needing an arbitration protocol like CAN's. This trades true asynchronous push notification for predictable bus scheduling and simpler device-side logic (a device only needs to respond when addressed, never contend for the bus).
+
+## 80. How does an Ethernet MAC frame look, and what is the role of the preamble and FCS?
+
+An Ethernet frame is: preamble + SFD (7+1 bytes, a fixed bit pattern letting the receiver's clock-recovery circuitry lock onto the incoming bit stream), destination MAC, source MAC, EtherType/length, payload (46-1500 bytes, padded if shorter), and a 4-byte FCS (a CRC-32 covering the frame, letting the receiver discard corrupted frames). The preamble is discarded by the receiving MAC before the frame is handed up — it exists purely for physical-layer synchronization, not addressing.
+
+## 81. What is CSMA/CD, and is it still relevant on modern embedded Ethernet?
+
+CSMA/CD (Carrier Sense Multiple Access with Collision Detection) was the arbitration scheme for shared-medium (hub-based, half-duplex) Ethernet: a node listens before transmitting, and if two nodes transmit simultaneously and detect a collision, both back off for a random interval before retrying. It's largely obsolete on modern embedded systems, which almost always use switched, full-duplex Ethernet (a dedicated switch port per device) where collisions structurally cannot occur — but it's still asked about because some interviewers want to confirm you understand why full-duplex switching eliminates the whole problem class.
+
+## 82. What is the difference between MII, RMII, and RGMII in an embedded Ethernet design?
+
+These are standardized digital interfaces between the MAC (often inside the SoC) and the PHY (the physical-layer transceiver chip). MII uses more pins (a wider parallel bus, lower clock — 25MHz for 100Mbps) which is simple but uses more board routing. RMII reduces pin count by roughly half at a higher clock rate, popular for area-constrained designs. RGMII further reduces pins by using both clock edges (DDR-style) to reach gigabit speeds with far fewer signals than a straightforward MII scale-up would need. Choosing between them is mostly a board layout/pin-budget/speed trade-off, not a protocol behavior difference visible to software.
+
+## 83. What is ARP, and why does an embedded device need it even for a purely local/static-IP network?
+
+ARP (Address Resolution Protocol) maps an IP address to the MAC address needed to actually deliver an Ethernet frame on the local network segment — IP is a logical addressing scheme, but the physical Ethernet frame needs the destination's hardware address. Even with a static IP, a device must ARP-resolve its default gateway (or any local peer) at least once (and refresh a cached entry periodically) before it can send the first Ethernet frame to that IP, since without a MAC address the frame has nowhere to be physically addressed to.
+
+## 84. Explain the TCP three-way handshake and why two steps aren't enough
+
+The client sends SYN (proposing an initial sequence number), the server responds SYN-ACK (acknowledging the client's sequence number and proposing its own), and the client responds ACK (acknowledging the server's sequence number) — after which both sides have confirmed they can send and receive with an agreed-upon starting point for reliable, ordered delivery. Two steps aren't enough because the initiator alone can't confirm that the second party actually received its SYN and picked a consistent sequence number; the third step confirms the return path also works, preventing "half-open" connections and old duplicate SYNs from a previous connection attempt being misinterpreted as a new one.
+
+## 85. What is the Nagle algorithm, and why do embedded/real-time TCP applications often disable it (TCP_NODELAY)?
+
+Nagle's algorithm delays sending small TCP segments, buffering them to coalesce into fewer, larger packets, which reduces overhead for bulk transfers of many small writes (like older Telnet sessions echoing one keystroke at a time). For latency-sensitive embedded protocols (a command/response control loop, or transmitting one part of a message per line), this delay is undesirable, so `TCP_NODELAY` disables it so each `send()` goes out immediately — the classic reason it interacts badly with is delayed ACKs on the other side, which can compound into visible ~200ms round-trip stalls if not addressed on both ends.
+
+## 86. What is MTU, and what happens when a packet exceeds it?
+
+The Maximum Transmission Unit is the largest frame size a given link layer can carry (commonly 1500 bytes for Ethernet). If an IP packet exceeds the outgoing link's MTU, it's fragmented into multiple IP packets (each independently routed and reassembled at the destination) unless the "Don't Fragment" flag is set, in which case an ICMP "fragmentation needed" error is returned instead. Embedded/IoT designs often deliberately keep application messages well under the path MTU to avoid fragmentation entirely, since fragmentation adds reassembly complexity/failure modes and a single lost fragment forces retransmission of the whole original packet.
+
+## 87. What is TCP congestion control, and why does it matter for a constrained IoT link (e.g., cellular/LPWAN backhaul)?
+
+TCP congestion control (e.g., the classic slow-start plus congestion-avoidance approach) dynamically limits how much unacknowledged data a sender can have in flight, growing the window when acknowledgments arrive promptly and shrinking sharply on loss (interpreted as a sign of congestion), so that many concurrent TCP flows on a shared network converge toward fair, sustainable throughput rather than overwhelming a bottleneck link. On a constrained/high-latency IoT backhaul (satellite, cellular, LPWAN), high round-trip time and non-congestion packet loss (radio interference) can be misinterpreted as congestion, causing TCP to throttle aggressively even when the link isn't actually congested — a reason some IoT designs prefer UDP with an application-level reliability/rate scheme tuned for the link's actual characteristics.
+
+## 88. What is DHCP, and what should an embedded device do if it fails to get a lease?
+
+DHCP (Dynamic Host Configuration Protocol) lets a device automatically obtain an IP address, subnet mask, gateway, and DNS servers from a server on the local network via a DISCOVER/OFFER/REQUEST/ACK exchange, avoiding manual per-device IP configuration. A robust embedded device should have a bounded retry/backoff strategy and a defined fallback behavior if no DHCP server responds (e.g., fall back to a static/link-local address, retry indefinitely in the background while still bringing up whatever functionality doesn't need networking, or surface a clear fault state) rather than blocking boot indefinitely waiting for a lease that may never come.
+
+## 89. What is the difference between TCP keep-alive and an application-level heartbeat?
+
+TCP keep-alive is a transport-layer mechanism (enabled via socket options, `SO_KEEPALIVE` plus interval/count settings) where the OS periodically sends a probe on an otherwise-idle connection to detect a dead peer or a silently-dropped link (e.g., a NAT timeout or router reboot with no clean FIN), but it doesn't tell the application anything about the peer's actual health beyond "the socket is still connected." An application-level heartbeat is a message exchanged at the protocol layer (like MQTT's PINGREQ/PINGRESP) that can confirm the remote application is actually alive and responsive, not just that the underlying TCP session hasn't been torn down — the two are complementary, not redundant, and many embedded network stacks disable or shorten OS keep-alive defaults (which are often hours) in favor of an application heartbeat tuned to the product's actual failure-detection needs.
+
+## 90. How would you design a TCP client to survive a flaky cellular/Wi-Fi link on an embedded device?
+
+Use non-blocking sockets or a hard `connect()`/`recv()`/`send()` timeout so a stalled link never hangs the application task indefinitely; implement exponential backoff with a cap and jitter for reconnect attempts to avoid a "reconnect storm" against a struggling access point/base station; detect a truly dead connection early with a short application-level heartbeat rather than relying on TCP's often very long default keep-alive timers; buffer or discard queued outbound data according to a defined policy (don't grow an unbounded queue while disconnected); and make the reconnect/resend logic idempotent (sequence numbers, resume points) since a connection can drop mid-message with the peer's actual receipt state unknown.
+
+---
 
 ## Examples and Follow-ups for Questions 1-50
 
