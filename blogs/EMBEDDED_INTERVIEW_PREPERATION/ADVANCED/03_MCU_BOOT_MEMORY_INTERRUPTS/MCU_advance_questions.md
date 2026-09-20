@@ -1,413 +1,630 @@
 # Advanced MCU, Boot, Memory and Interrupt Questions
 
-These questions focus on what happens between reset and `main()`, how the linker and memory map shape a running firmware, and how exceptions/interrupts actually enter, nest, and return. For every question, answer in the order: **Definition -> Why -> How -> Example -> Failure mode / trade-off**.
+These questions cover what happens between reset and `main()`, how the linker and memory map shape a running firmware, and how exceptions and interrupts enter, nest, and return.
 
-> Note: exact addresses, register names, alignment rules, and boot-memory aliases differ per Cortex-M profile and per silicon vendor. Treat the numbers here as representative; confirm against the target reference manual.
+**Answer pattern for every question:** Definition, then Why, then How, then Example, then Failure mode or trade-off.
 
-## 1. Explain a Cortex-M reset path.
+> Note: addresses, register names, alignment rules, and boot-memory aliases differ per Cortex-M profile and per vendor. Treat the numbers here as representative and confirm them against your reference manual.
 
-On power-on, external `nRESET`, or a system reset, the core does very little by itself. It reads two words from the boot memory that is currently aliased at address `0x00000000`:
+## Contents
 
-- Word at `0x00000000` -> initial **MSP** (Main Stack Pointer).
-- Word at `0x00000004` -> **Reset** vector (address of the reset handler).
+| Questions | Topic |
+| --- | --- |
+| 1-14 | Reset, vector table, startup, linker, memory sections |
+| 15-28 | Interrupts, NVIC, exception entry and exit, PendSV |
+| 29-40 | Stack overflow, faults, barriers, cache, MPU, and debugging |
 
-The core loads MSP, fetches the reset handler, and begins executing in Thread mode / handler-style startup before `main()`. The reset handler (toolchain `startup_*.s` / `Reset_Handler`) then runs the C runtime setup: `SystemInit()` for clocks and flash wait states, copy `.data` from flash to RAM, zero `.bss`, optionally run C++ constructors, then call `main()`.
+---
 
-Which physical memory is aliased at `0x00000000` depends on the boot configuration (main flash, system memory, or SRAM). That is why a blank or mis-linked image, or a wrong boot-pin state, produces a lockup before any user code runs.
+## Part 1: Reset, vector table, startup, and linker
+
+## 1. Explain a Cortex-M reset path
+
+**Short answer:** The core reads the initial stack pointer and the reset handler address from the first two words of the vector table, then runs the reset handler.
+
+```mermaid
+flowchart TD
+    A["Reset (power-on, nRESET, system reset)"] --> B["Read word 0 at 0x00000000 into MSP"]
+    B --> C["Read word 1 at 0x00000004: reset handler address"]
+    C --> D["Reset_Handler runs"]
+    D --> E["SystemInit: clocks, flash wait states"]
+    E --> F["Copy .data from flash to RAM"]
+    F --> G["Zero .bss"]
+    G --> H["C++ constructors (if any)"]
+    H --> I["main()"]
+```
+
+Which physical memory appears at address `0x00000000` depends on the boot configuration (main flash, system memory, or SRAM).
+
+**Failure mode:** a blank or mis-linked image, or a wrong boot-pin state, locks up before any user code runs.
+
+**Remember:** the first two words of the table are MSP and Reset.
 
 ## 2. What is in the vector table and how is it laid out?
 
-The vector table is an array of 32-bit words starting at the active vector-table base:
+**Short answer:** An array of 32-bit words: initial MSP, then Reset, then the system exceptions, then the device IRQs.
 
-- Word 0: initial MSP.
-- Word 1: Reset.
-- Then the system exceptions: NMI, HardFault, MemManage, BusFault, UsageFault, SVC, DebugMon, PendSV, SysTick (availability varies by profile).
-- Then the device IRQs (IRQ0, IRQ1, ...).
+```text
+Word 0   initial MSP
+Word 1   Reset
+Word 2   NMI
+Word 3   HardFault
+ ...     MemManage, BusFault, UsageFault, SVC, DebugMon, PendSV, SysTick
+Word 16+ device IRQ0, IRQ1, ...
+```
 
-Each handler entry is the **address** of the handler; the low bit is the Thumb bit and is normally set to 1 for a valid handler in Thumb state. Entries are usually supplied as weak symbols so application code can override a default infinite-loop handler by defining the same name.
+- Each entry is the **address** of a handler. The low bit is the **Thumb bit** and must be 1.
+- Entries are usually weak symbols, so your code can override a default infinite-loop handler by defining the same name.
 
-Failure mode: an entry of `0` or a non-Thumb address causes a fault or an unexpected branch the moment that exception is taken.
+**Failure mode:** an entry of `0` or a non-Thumb address faults the moment that exception is taken.
 
 ## 3. What is VTOR, and when do you relocate the vector table?
 
-**VTOR** (Vector Table Offset Register, Cortex-M3 and later) holds the base address of the *active* vector table. Cortex-M0/M0+ has no VTOR, so the table is fixed at its hardware base.
+**Short answer:** VTOR (Vector Table Offset Register) holds the base address of the active vector table. Cortex-M0 has no VTOR.
 
-You relocate the table when:
+Relocate the table when:
 
-- A bootloader hands control to an application that sits at a different flash address and has its own table.
-- You want handler addresses in RAM so you can patch/register ISRs dynamically.
-- An RTOS or firmware framework registers per-driver ISRs at runtime.
+- A bootloader hands over to an application at a different flash address with its own table
+- You want handlers in RAM so ISRs can be registered dynamically
+- An RTOS or framework registers ISRs at runtime
 
-Requirements: the base must satisfy the alignment the device documents (commonly the table size, and often at least 32 words / 128 bytes), and VTOR must be updated **before** any interrupt that will use the new table is enabled. After writing VTOR, issue a `__DSB()` followed by `__ISB()` so the change is visible and the pipeline refetches.
+```c
+SCB->VTOR = APP_FLASH_BASE;     /* point the core at the application's vector table */
+__DSB();                        /* wait until the write has completed */
+__ISB();                        /* flush the pipeline so later fetches use the new table */
+```
+
+Requirements: respect the documented alignment, and write VTOR **before** enabling any interrupt that will use the new table.
 
 ## 4. What does the startup code do before `main()`?
 
-The startup file bridges hardware reset and C code. Typical steps, in order:
+**Short answer:** It prepares the CPU and the C runtime, then calls `main()`.
 
-1. MSP is already loaded by hardware from vector[0].
-2. `SystemInit()`: configure the clock tree (PLL, prescalers), flash wait states, and optionally disable the watchdog.
-3. Set `VTOR` to the correct table.
-4. Copy `.data` from its load address in flash to its run address in RAM.
-5. Zero the `.bss` region.
-6. Initialize the C library (`__libc_init_array` runs C++ static constructors; `_sbrk` heap setup vary by toolchain).
-7. Call `main()`.
+1. MSP is already loaded by hardware from word 0
+2. `SystemInit()`: clock tree, flash wait states, optionally disable the watchdog
+3. Set `VTOR` to the correct table
+4. Copy `.data` from flash to RAM
+5. Zero `.bss`
+6. Initialize the C library (`__libc_init_array` runs C++ static constructors)
+7. Call `main()`
 
-Ordering matters: clocks must be correct before code that depends on timing, and `.data`/`.bss` must be ready before any C code that uses initialized/zeroed globals executes.
+**Why the order matters:** clocks must be right before code that depends on timing, and `.data` and `.bss` must be ready before any C code uses globals.
 
 ## 5. What is the difference between LMA and VMA?
 
-- **VMA (Virtual Memory Address)**: where a section lives when the program runs.
-- **LMA (Load Memory Address)**: where that section's initial image is stored in nonvolatile memory.
+**Short answer:** VMA is where a section lives while running. LMA is where its initial image is stored in non-volatile memory.
 
-For `.text` and `.rodata`, LMA and VMA are usually identical (both in flash). For `.data`, the VMA is in RAM but the LMA is in flash, because the value must be writable at runtime yet survive power loss. The linker emits the copy source addresses, and startup code performs the copy.
+| Section | LMA (stored) | VMA (runs) |
+| --- | --- | --- |
+| `.text`, `.rodata` | Flash | Flash (same) |
+| `.data` | Flash | RAM |
 
-Linker-provided symbols such as `_sidata`, `_sdata`, `_edata`, `_sbss`, `_ebss` mark these boundaries and are consumed by the startup copy/zero loops.
+`.data` must be writable at run time (so it runs in RAM) but its start values must survive power loss (so they are stored in flash). Startup code copies them.
+
+```c
+/* Linker-provided boundary symbols, used by the startup copy and zero loops */
+extern uint32_t _sidata;   /* start of .data initial values in flash (LMA) */
+extern uint32_t _sdata;    /* start of .data in RAM (VMA) */
+extern uint32_t _edata;    /* end of .data in RAM */
+extern uint32_t _sbss;     /* start of .bss */
+extern uint32_t _ebss;     /* end of .bss */
+
+uint32_t *src = &_sidata, *dst = &_sdata;
+while (dst < &_edata) { *dst++ = *src++; }     /* copy .data from flash to RAM */
+for (dst = &_sbss; dst < &_ebss; ) { *dst++ = 0; }   /* zero .bss */
+```
 
 ## 6. What happens if the vector table or reset vector is wrong?
 
-The core has no recovery path of its own at reset:
+**Short answer:** The core has no recovery of its own at reset, so it faults or runs garbage.
 
-- Bad initial MSP -> first push or interrupt faults immediately; often a lockup or HardFault before `main()`.
-- Bad reset vector (not a Thumb address, erased 0xFFFFFFFF, or pointing to garbage) -> the core branches into invalid code.
+- Bad initial MSP: the first push or interrupt faults immediately
+- Bad reset vector (not Thumb, erased `0xFFFFFFFF`, or garbage): the core branches into invalid code
 
-Common causes: wrong link/load base address, wrong VTOR after a bootloader jump, a partially programmed or erased flash region, wrong boot-pin selection, or an incorrectly aligned vector table. Because no user code has run yet, the only diagnostics are the fault registers and a debugger attached at reset.
+Common causes: wrong link or load address, stale VTOR after a bootloader jump, half-programmed flash, wrong boot pins, or a misaligned table.
 
-## 7. How does a typical bootloader-to-application handoff work?
+**How to diagnose:** no user code has run yet, so use the fault registers and a debugger attached at reset.
 
-A robust handoff does more than jump:
+## 7. How does a bootloader-to-application handoff work?
 
-1. Validate the application image (header, length, hash, signature).
-2. Shut down bootloader activity: disable its interrupts, clear pending IRQs, stop timers/DMA it owns, and de-initialize or reset peripherals the app will own.
-3. Ensure a clean state: mask interrupts, set VTOR to the application's table (or let the app do it first), and load MSP from the application vector[0].
-4. Jump to the application reset vector.
+**Short answer:** Validate the image, quiet the bootloader, then load the application's stack pointer and jump to its reset vector.
 
-Failure modes: leaving bootloader interrupts enabled so an ISR vectors into the old table after the jump; not clearing the bootloader's peripheral state; or relying on the app to re-enable clocks it never set up. The app must fully reinitialize the clock tree and its own vector table.
+```mermaid
+flowchart LR
+    A["Validate image: header, length, hash, signature"] --> B["Quiet the bootloader: disable IRQs, clear pending, stop timers and DMA"]
+    B --> C["Set VTOR to the app table, load MSP from app word 0"]
+    C --> D["Jump to app reset handler"]
+```
 
-## 8. How does the application know firmware is valid?
+```c
+typedef void (*app_entry_t)(void);
 
-By combining integrity and authenticity:
+void jump_to_app(uint32_t app_base)
+{
+    uint32_t app_msp   = *(volatile uint32_t *)(app_base);        /* word 0: app's initial stack pointer */
+    uint32_t app_reset = *(volatile uint32_t *)(app_base + 4u);   /* word 1: app's reset handler */
 
-- **Integrity**: a CRC or cryptographic hash (SHA-256) over the image detects corruption. A hash alone is only as trustworthy as the expected value, which must come from a trusted source.
-- **Authenticity**: a digital signature over the image hash, verified with a public key whose trust anchor (public key hash / root cert) is stored in immutable memory such as OTP or protected ROM.
+    __disable_irq();                        /* nothing may fire during the switch */
+    /* ... stop bootloader timers/DMA, clear NVIC pending, reset used peripherals ... */
+    SCB->VTOR = app_base;                   /* use the application's vector table */
+    __set_MSP(app_msp);                     /* switch to the application's stack */
+    ((app_entry_t)app_reset)();             /* branch to the application's reset handler */
+}
+```
 
-A typical image header holds magic, version, image length, hash, and signature. If the trust anchor can be replaced or the verifier skipped, the whole scheme collapses, so protecting the anchor and the verification code is the real security boundary.
+**Failure modes:** bootloader interrupts still enabled, so an ISR vectors into the wrong table; peripheral state left behind; the app relying on clocks it never set up.
 
-## 9. What is secure boot conceptually, and what is A/B with rollback?
+## 8. How does the application know the firmware is valid?
 
-**Secure boot** establishes a chain of trust: each stage verifies the next stage before transferring control. The first stage's trust is rooted in immutable hardware (ROM boot + OTP key hash); it verifies stage 2, stage 2 verifies the application, and so on.
+**Short answer:** Integrity (a hash detects corruption) plus authenticity (a signature proves who made it).
 
-**A/B (dual-slot) update** keeps two application slots. The running slot is marked good; new firmware is written to the inactive slot, verified, and then selected by boot metadata that is updated atomically. Rollback protection uses a monotonic version counter so an attacker cannot re-flash a known-vulnerable older image.
+| Property | Mechanism | Note |
+| --- | --- | --- |
+| Integrity | CRC or SHA-256 over the image | A hash is only as trustworthy as where the expected value comes from |
+| Authenticity | Digital signature over the hash | Public key or its hash is stored in immutable memory (OTP, ROM) |
 
-Trade-off: authentication proves the image came from the trusted signer, but it does **not** hide its contents. Confidentiality is a separate goal requiring encryption of the image.
+A typical image header holds magic, version, length, hash, and signature.
+
+**Key point:** if the trust anchor can be replaced or the verifier skipped, the whole scheme collapses. Protecting the anchor and the verification code is the real security boundary.
+
+## 9. What is secure boot, and what is A/B with rollback?
+
+**Short answer:** Secure boot is a chain of trust. A/B keeps two slots so a bad update can be undone.
+
+```mermaid
+flowchart LR
+    ROM["Immutable ROM + OTP key hash"] --> S2["Stage 2 verified"] --> APP["Application verified"]
+```
+
+**A/B update:** write the new firmware to the inactive slot, verify it, then switch using boot metadata updated atomically. Rollback protection uses a monotonic version counter so an attacker cannot re-flash an older vulnerable image.
+
+**Trade-off:** authentication proves the signer but does not hide the contents. Confidentiality needs encryption as a separate goal.
 
 ## 10. What is the role of the boot pins (BOOT0/BOOT1)?
 
-At reset the core samples boot pins and uses them to select which physical memory is aliased at `0x00000000`:
+**Short answer:** At reset they choose which memory appears at `0x00000000`.
 
-- Main flash -> normal application boot.
-- System memory -> vendor bootloader ROM (UART/USB/CAN DFU) for factory programming and recovery.
-- SRAM -> debug/development boot.
+| Selection | Result |
+| --- | --- |
+| Main flash | Normal application boot |
+| System memory | Vendor ROM bootloader (UART, USB, CAN DFU) for factory programming and recovery |
+| SRAM | Debug or development boot |
 
-The pins are sampled only at reset, so their state during normal running is irrelevant to the current boot. A design bug here is common: a floating or wrongly strapped BOOT pin makes a device occasionally enter the ROM bootloader instead of the application.
+The pins are sampled **only at reset**. A floating or wrongly strapped BOOT pin makes a device occasionally enter the ROM bootloader.
 
 ## 11. Why is clock configuration in `SystemInit` important before `main()`?
 
-Almost every peripheral derives its clock from the system clock tree, and the CPU-to-flash timing depends on it:
+**Short answer:** Almost everything derives its timing from the clock tree, and the CPU-to-flash timing depends on it.
 
-- After reset the core usually runs from a fast-but-imprecise internal RC oscillator.
-- Firmware raises the clock via the PLL, requiring **flash wait states** proportional to the target frequency.
-- Peripherals (UART, timers, ADC, SysTick/HAL tick) are configured from their bus clock, so their divisors are meaningless until the tree is set.
+- After reset the core usually runs from a slow, imprecise internal RC oscillator
+- To go faster, firmware uses the PLL, which needs **more flash wait states** at higher frequency
+- UART, timers, ADC, and the RTOS tick all use divisors that are meaningless until the tree is set
 
-Failure modes: not increasing flash wait states when raising the clock (unreliable fetches), or switching the clock source after configuring a peripheral that then runs at the wrong rate. Keep the sequence: set source and wait states, switch, then update `SystemCoreClock` and the tick source.
+```c
+/* Correct order when raising the clock */
+FLASH->ACR = FLASH_ACR_LATENCY_5WS;     /* 1. more wait states first */
+RCC_EnablePLL();                        /* 2. start and lock the PLL */
+RCC_SelectSysclk(PLL);                  /* 3. switch the system clock */
+SystemCoreClockUpdate();                /* 4. update the variable used by the tick and drivers */
+```
 
-## 12. How do `.text`, `.data`, `.bss`, `.rodata`, `.heap`, and `.stack` differ?
+**Failure mode:** raising the clock without adding wait states gives unreliable instruction fetches.
 
-- **`.text`**: executable code.
-- **`.rodata`**: read-only data such as string literals and `const` objects; normally placed in flash, but may be copied to RAM if declared with a RAM attribute.
-- **`.data`**: initialized read/write globals; VMA in RAM, LMA in flash; copied at startup.
-- **`.bss`**: uninitialized or zero-initialized globals; RAM only; zeroed at startup.
-- **heap**: dynamic-allocation region; grows/shrinks at runtime; region and limits are toolchain-specific.
-- **stack**: automatic storage and exception frames; usually the region is grown downward from its top.
+## 12. How do `.text`, `.data`, `.bss`, `.rodata`, heap, and stack differ?
 
-Placement followed one rule: a `const` definition lands in `.rodata`, an initialized non-`const` in `.data`, and an uninitialized or explicitly zeroed object in `.bss`. Understanding this is how you predict what actually consumes RAM versus flash.
+**Short answer:** They differ by what they hold and where they live.
+
+| Section | Holds | Lives in | Set up at startup |
+| --- | --- | --- | --- |
+| `.text` | Code | Flash | Nothing |
+| `.rodata` | `const` data, string literals | Flash | Nothing |
+| `.data` | Initialized read/write globals | RAM (copied from flash) | Copied |
+| `.bss` | Zero or uninitialized globals | RAM | Zeroed |
+| heap | Dynamic allocations | RAM | Depends on toolchain |
+| stack | Locals and exception frames | RAM, grows downward | Initial pointer loaded |
+
+```c
+const int a = 5;        /* .rodata */
+int b = 7;              /* .data   */
+int c;                  /* .bss    */
+```
+
+**Remember:** this is how you predict what uses RAM and what uses flash.
 
 ## 13. How does a linker script describe memory regions?
 
-A linker script (`.ld`/scatter file) has two conceptually separate halves:
+**Short answer:** `MEMORY` says where bytes may go; `SECTIONS` says what goes where.
 
-- **`MEMORY`**: names physical regions with origin and length, e.g. `FLASH`, `RAM`, sometimes `CCMRAM` and multiple RAM banks. This tells the linker where bytes *may* go.
-- **`SECTIONS`**: maps input sections from compiled objects into output sections and assigns them to regions, setting addresses and optionally `AT> region` load addresses.
+```text
+MEMORY
+{
+  FLASH (rx)  : ORIGIN = 0x08000000, LENGTH = 512K
+  RAM   (rwx) : ORIGIN = 0x20000000, LENGTH = 128K
+}
 
-A minimal mapping: `.text`/`.rodata` -> FLASH; `.data` -> RAM with `AT> FLASH`; `.bss` -> RAM; `.stack`/`.heap` -> RAM near the end. Linker-provided symbols (`_estack`, `_sidata`) are how startup code learns the boundaries.
+SECTIONS
+{
+  .isr_vector : { KEEP(*(.isr_vector)) } > FLASH            /* vector table first */
+  .text       : { *(.text*) *(.rodata*) } > FLASH           /* code and constants */
+  .data       : { *(.data*) } > RAM AT> FLASH               /* runs in RAM, stored in FLASH */
+  .bss        : { *(.bss*) *(COMMON) } > RAM                /* zeroed at startup */
+}
+```
 
-Trade-off: how much flash and RAM to reserve for the stack/heap, and whether to place latency-critical code in RAM, are design decisions expressed here, not in C.
+The design decisions (stack and heap sizes, code placed in RAM for speed) are expressed here, not in C.
 
-## 14. Why keep the stack 8-byte aligned, and how do link errors appear?
+## 14. Why keep the stack 8-byte aligned?
 
-The AAPCS (Arm procedure call standard) requires **8-byte** stack alignment at a public interface. When an exception occurs, the core hardware-aligns the stack and pushes a 32-byte frame (8 words) on the aligned stack; if the SP was not already aligned, it inserts padding and records it in `xPSR` bit 9 (STKALIGN/SPREALIGN). Correct C compiled by a correct compiler maintains this automatically.
+**Short answer:** The Arm procedure call standard (AAPCS) requires 8-byte stack alignment at public interfaces.
 
-The classic link error `undefined reference to _sbrk` / the startup symbol occurs when startup is responsible for setting the stack but it is missing or mismatched, or when `malloc` is used but the heap is not defined. In a **scatter/`.ld`** flow the stack is a reserved region; in a **`-nostartfiles`** flow it must be an explicit symbol. Let the toolchain's startup/linker defaults apply unless you have a reason to override them.
+On exception entry, the core pushes a 32-byte frame on an aligned stack. If SP was not aligned, it adds padding and records this in `xPSR` bit 9. A correct compiler keeps alignment automatically.
+
+**Linker error clue:** `undefined reference to _sbrk` means `malloc` is used but no heap or syscall stub is defined. Use the toolchain's default startup and linker files unless you have a reason to override them.
+
+---
+
+## Part 2: Interrupts, NVIC, and exceptions
 
 ## 15. How does interrupt-driven I/O differ from polling?
 
-- **Polling**: the CPU repeatedly reads a status bit in a tight loop. Simple and predictable, but wastes cycles and delays other work.
-- **Interrupt-driven**: a peripheral raises an IRQ; the CPU saves context, runs the ISR, and returns. Efficient and responsive, but adds context-switch overhead and concurrency hazards.
+**Short answer:** Polling checks in a loop; an interrupt lets the peripheral call the CPU.
 
-Rules that keep interrupt-driven I/O safe: keep ISRs short, defer heavy work to the main loop or a task, mark shared variables `volatile` (or use explicit memory ordering), guard multi-word state, and never call non-reentrant/blocking APIs from an ISR.
+| | Polling | Interrupt-driven |
+| --- | --- | --- |
+| Simplicity | Simple, predictable | Concurrency hazards |
+| CPU use | Wastes cycles | Efficient |
+| Response | Delays other work | Responsive, but adds context overhead |
 
-Success depends on which peripheral and which HAL: polling may be acceptable for a low-rate status check, while UART RX, DMA completion, and timing-critical events belong in interrupts.
+Safe interrupt rules: keep ISRs short, defer heavy work, mark shared variables `volatile`, guard multi-word state, never call blocking or non-reentrant APIs.
 
 ## 16. What are NVIC priority, preemption, and subpriority?
 
-The NVIC encodes each IRQ's priority in a register (on STM32: an 8-bit field in `NVIC_IPR`, of which only the implemented high bits matter). A fixed bit split divides each priority value into:
+**Short answer:** Preemption decides who can interrupt whom. Subpriority only breaks ties.
 
-- **Preemption priority**: a higher-preemption (numerically lower) IRQ can interrupt a lower-preemption ISR.
-- **Subpriority**: only breaks ties between equal preemption priorities when several are pending; it does not preempt.
+- Each IRQ has a priority field. A fixed bit split divides it into **preemption** and **subpriority**
+- A lower number means higher priority
+- An ISR can preempt another only if its preemption priority is **strictly higher**
+- Equal preemption priorities never preempt each other
 
-Two rules define nesting: an ISR can preempt another only if its preemption priority is strictly higher, and equal-priority IRQs do not preempt each other. On a FreeRTOS system, every IRQ that calls a `...FromISR` API must have a preemption priority numerically **greater than or equal to** `configMAX_SYSCALL_INTERRUPT_PRIORITY`.
+**FreeRTOS rule:** every IRQ that calls a `...FromISR` function must have a preemption priority numerically **greater than or equal to** `configMAX_SYSCALL_INTERRUPT_PRIORITY`.
 
 ## 17. What are the Cortex-M exception entry and exit steps?
 
-On taking an exception the hardware automatically:
+**Short answer:** Hardware pushes eight registers, jumps to the handler, and restores them on return.
 
-1. Pushes a frame: `xPSR`, `PC`, `LR`, `R12`, `R3`, `R2`, `R1`, `R0` (32 bytes).
-2. Loads the handler address from the vector table.
-3. Loads `LR` with the EXC_RETURN magic value encoding which stack to return to and which mode.
-4. Enters Handler mode, optionally stacking an FP frame if the FPU was active.
+```mermaid
+sequenceDiagram
+    participant Core
+    participant Stack
+    participant Handler
+    Core->>Stack: push xPSR, PC, LR, R12, R3, R2, R1, R0 (32 bytes)
+    Core->>Handler: load handler address from the vector table
+    Core->>Core: set LR = EXC_RETURN (magic value)
+    Handler->>Core: return (bx lr) with EXC_RETURN
+    Core->>Stack: pop the frame, resume interrupted code
+```
 
-On exit it restores the frame and branches using `EXC_RETURN`.
+If the FPU was in use, an FP frame is stacked as well. This is why an ISR looks like a normal function yet returns to the interrupted code.
 
-This is why an ISR looks like a normal function yet returns to the interrupted code. For long or persistent work, the hardware frame plus Tail-chaining keeps overhead low; for a context switch, firmware triggers **PendSV** and does the switch in software.
+## 18. What are tail-chaining, late arrival, and lazy FPU stacking?
 
-## 18. What are tail-chaining, late arrival, and the lazy FPU state?
+**Short answer:** Three hardware features that make interrupt handling fast.
 
-- **Tail-chaining**: if an exception is pending when an ISR is ready to return, the core skips unstacking/restacking and immediately vectors to the next handler, so back-to-back IRQs cost much less than two independent entries.
-- **Late arrival**: if a higher-priority exception arrives while the core is already stacking for a lower-priority one, the core vectors straight to the higher-priority handler; the lower one runs afterward.
-- **Lazy FPU stacking**: FPU registers are not stacked on exception entry unless the context actually used floating point, which is recorded in `CONTROL.FPCA`; the FP frame is added only when needed.
+- **Tail-chaining:** if another exception is pending when an ISR finishes, the core skips unstacking and restacking and goes straight to the next handler
+- **Late arrival:** if a higher-priority exception arrives while stacking for a lower one, the core goes to the higher one first
+- **Lazy FPU stacking:** FP registers are stacked only if the interrupted code used floating point (recorded in `CONTROL.FPCA`)
 
-Together these features make Cortex-M interrupt latency short and its throughput high, but they also mean measured latency depends on pending state, not only on priority.
+**Consequence:** measured latency depends on pending state, not only on priority.
 
 ## 19. What is a memory barrier, and how does it differ from `volatile`?
 
-A memory barrier constrains the **ordering** of memory accesses. `volatile` constrains the **optimizer** from removing or merging accesses to that specific object; it is not a barrier. They solve different problems.
+**Short answer:** `volatile` stops the compiler from removing or merging accesses. A barrier controls the **order** in which accesses become visible.
 
-Firmware uses:
+| Tool | Purpose |
+| --- | --- |
+| `volatile` | Compiler must perform every access |
+| Compiler barrier `asm volatile("" ::: "memory")` | Stop the compiler reordering around a point |
+| `__DMB()` | Order data accesses |
+| `__DSB()` | Complete all accesses before continuing |
+| `__ISB()` | Flush the pipeline and refetch instructions |
+| `LDREX/STREX`, C11 atomics | Atomic read-modify-write |
 
-- Compiler barriers (`__asm volatile("" ::: "memory")`, `asm volatile` clobbers) to prevent reordering around a critical region.
-- Instruction barriers: `__DSB()` (complete before continuing), `__DMB()` (order data accesses), `__ISB()` (flush pipeline and refetch instruction stream).
-- Architecture atomics/acquire-release (or `LDREX/STREX`) for inter-core sharing.
-
-Needed when: releasing a lock, publishing a buffer pointer to DMA/another core, changing `VTOR` or MPU registers, or after cache maintenance.
+Needed when: releasing a lock, publishing a buffer pointer to DMA or another core, changing `VTOR` or MPU registers, or after cache maintenance.
 
 ## 20. What is cache coherency, and how do you handle DMA with caches?
 
-On a cacheless MCU, CPU and DMA see the same memory, so a DMA buffer placed in RAM is naturally coherent. On a cached core (Cortex-M7 with D-cache, or an application core in an application processor), the CPU may read a stale cache line or fail to write back a dirty one, so DMA and CPU disagree.
+**Short answer:** With a data cache, the CPU and DMA can see different copies of the same memory.
 
-Handling rules:
+Rules for a cached core (for example Cortex-M7):
 
-- **Global rules** where possible: mark DMA (and shared) buffers **non-cacheable** via MPU attributes, invalidate before a DMA-in transfer, clean before a DMA-out transfer, and align naturally to the cache-line size.
-- Use a cache-maintenance API (`SCB_InvalidateDCache_by_Addr`, `SCB_CleanDCache_by_Addr`) after the transfer, not before and after blindly.
-- Never place CPU-held data and DMA data in the same not-yet-maintained cache line.
+| Direction | Action |
+| --- | --- |
+| Memory to peripheral (DMA reads the buffer) | **Clean** the cache (write dirty lines to RAM) before starting DMA |
+| Peripheral to memory (DMA writes the buffer) | **Invalidate** the cache before the CPU reads the result |
+
+```c
+SCB_CleanDCache_by_Addr((uint32_t *)tx_buf, sizeof tx_buf);        /* before DMA reads tx_buf */
+/* ... DMA transfer completes ... */
+SCB_InvalidateDCache_by_Addr((uint32_t *)rx_buf, sizeof rx_buf);   /* before CPU reads rx_buf */
+```
+
+Alternatives: place DMA buffers in a **non-cacheable** MPU region. Align buffers to the cache line size, and never share a cache line between CPU-owned and DMA-owned data.
+
+On a cacheless MCU, none of this is needed.
 
 ## 21. What causes a HardFault, and how do you diagnose one?
 
-A HardFault is the catch-all escalation (or direct cause) of a fault that the fault-status unit records. Typical causes: a bus error (bad address, unclocked peripheral, unaligned word access), a usage error (divide by zero if enabled, undefined instruction, unaligned access), a stack overflow, or an exception return with a bad frame.
+**Short answer:** A HardFault is the catch-all for faults. Find the faulting instruction from the saved PC.
 
-Diagnose methodically:
+Typical causes: bus error (bad address, unclocked peripheral), usage error (undefined instruction, unaligned access, divide by zero if trapped), stack overflow, bad exception return.
 
-1. Catch it in the handler and save the stacked frame words (`R0-R3, R12, LR, PC, xPSR`).
-2. Read the fault status registers (`CFSR`/`HFSR`, plus `BFAR`/`MMFAR`) to classify the fault.
-3. Map the saved `PC` to source/a disassembly listing to find the instruction.
-4. Check `LR`/`SP` if the stack may be corrupted.
+```c
+void HardFault_Handler_C(uint32_t *frame)     /* frame = stacked registers */
+{
+    volatile uint32_t r0  = frame[0];
+    volatile uint32_t lr  = frame[5];
+    volatile uint32_t pc  = frame[6];          /* the faulting instruction (or just after it) */
+    volatile uint32_t cfsr = SCB->CFSR;        /* which fault, and why */
+    volatile uint32_t hfsr = SCB->HFSR;
+    /* MMFAR/BFAR hold the bad address only if the matching VALID bit in CFSR is set */
+    for (;;) { }                               /* stop here so a debugger can inspect */
+}
+```
 
-The saved `PC` is usually the single most useful value: it points at or just after the faulting instruction. Note that `MMFAR`/`BFAR` are only valid when the corresponding `VALID` bit in `CFSR` is set.
+Steps: capture the frame, read `CFSR` and `HFSR`, map the saved `PC` to source or disassembly, check `LR` and `SP` if the stack may be corrupt.
 
 ## 22. Why does the CPU lock up after enabling an interrupt that has no handler?
 
-The default handler in most startup files is an infinite loop `b .`, or an exception. When the IRQ fires, the core vectors to that handler and stays there, so the CPU appears dead to the main loop. In Handler mode at the same priority, the main loop never runs again.
+**Short answer:** The default handler is usually an infinite loop, so the CPU sits there forever.
 
-This is why the symbol shown in the debugger as the current PC when "the program hangs" is often a default handler name, and why the very first debugging step is to read the current PC and match it to a handler. Always implement every enabled IRQ's handler, or ensure the startup default is a conscious choice.
+```c
+void Default_Handler(void) { for (;;) { } }    /* typical startup default: "b ." */
+```
 
-## 23. What is the difference between level- and edge-triggered interrupts?
+**First debugging step:** when a program hangs, read the current PC. If it is inside a default handler name, you enabled an IRQ you never implemented.
 
-- **Level-triggered**: while the interrupt source is asserted, the IRQ stays pending. If the ISR does not clear the source, it fires again immediately. Common for shared/peripheral request lines.
-- **Edge-triggered**: the IRQ is latched on the transition only; no retrigger until the next edge, even if the source stays asserted.
+## 23. Level-triggered vs edge-triggered interrupts
 
-Practical consequences: level-triggered IRQs require the ISR to clear or mask the condition before return, or the CPU livelocks in the handler; edge-triggered IRQs can lose events if the source pulses faster than the software can clear pending, and require debouncing for mechanical inputs. Many MCU external-interrupt blocks (e.g. EXTI) let you choose edge or level, and the choice interacts with how the pending bit is cleared.
+**Short answer:** Level stays pending while the source is active; edge fires once per transition.
+
+| | Level-triggered | Edge-triggered |
+| --- | --- | --- |
+| Behaviour | Stays pending while the source is asserted | Latched on the transition only |
+| ISR must | Clear or mask the source, or it fires again | Nothing extra, but events can be lost if faster than service |
+| Watch out | Livelock in the handler | Needs debouncing for mechanical inputs |
 
 ## 24. How do you prioritize an interrupt that must be very fast?
 
-Classify by latency requirement and isolate the critical section:
+**Short answer:** Give it a high preemption priority and make its ISR tiny; move everything else to deferred work.
 
-- Put the highest-frequency, shortest-latency work on the highest preemption priority, and keep that ISR tiny (a flag, a counter, a register read, a single handoff).
-- Move everything else to lower-priority deferred work (main loop, RTOS task, or a software-triggered lower-priority IRQ).
-- Protect shared data with the lightest mechanism that works, and account for the RTOS priority ceiling if one exists.
-- Watch out for priority inversions: calling a kernel/blocking API from too high a priority leads to faults, while making unrelated ISRs equal-priority blocks preemption.
+- Highest frequency and shortest latency work goes at the top priority, with a tiny ISR (flag, counter, register read, handoff)
+- Everything else goes to lower-priority deferred work (main loop, RTOS task, software-triggered low-priority IRQ)
+- Use the lightest protection for shared data
+- Do not call kernel APIs from a priority that is too high (it faults), and do not make unrelated ISRs equal priority (it blocks preemption)
 
-The inverse trade-off also matters: a very high priority for a noisy source can starve the rest of the system.
+**Trade-off:** a very high priority on a noisy source can starve the system.
 
 ## 25. How do you debug an interrupt that never fires?
 
-Walk the chain in order:
+**Short answer:** Walk the chain from the source to the vector.
 
-- Is the peripheral's interrupt enable bit set inside the peripheral itself?
-- Is the function of the pin/peripheral configured (alternate function, input mode)?
-- Is the specific IRQ enabled in NVIC (or is the block clock/IRQ masked)?
-- Is there a pending flag left set from before enable that must be cleared, and does enabling occur while the source is already asserted?
-- Is the priority valid (not below `configMAX_SYSCALL_INTERRUPT_PRIORITY` on an RTOS), and is global interrupt masking (`PRIMASK`/`FAULTMASK`) left set?
-- Are the vector entry and handler name correct, and is `VTOR` pointing at the table that contains it?
+```mermaid
+flowchart TD
+    A["Peripheral interrupt enable bit set?"] --> B["Pin and peripheral configured (alternate function, input mode)?"]
+    B --> C["IRQ enabled in the NVIC and peripheral clock on?"]
+    C --> D["Stale pending flag left set from before?"]
+    D --> E["Priority valid (not below configMAX_SYSCALL_INTERRUPT_PRIORITY)? PRIMASK/FAULTMASK clear?"]
+    E --> F["Vector entry and handler name correct? VTOR points at that table?"]
+```
 
-Debug by toggling a GPIO in the handler and watching a scope, and by polling the pending/enable registers from the main loop to see which stage stops.
+Debug technique: toggle a GPIO in the handler and watch it on a scope, and poll the pending and enable registers from the main loop to see which stage stops.
 
-## 26. How do you handle interrupt latency deterministically?
+## 26. How do you make interrupt latency deterministic?
 
-Latency is the sum of several terms, and to bound it you must bound each:
+**Short answer:** Latency is a sum of parts. Bound each part.
 
-- **Hardware entry**: stacking/handling, worst case when a late high-priority IRQ arrives and FPU state must be stacked.
-- **Masking**: time spent with `PRIMASK` set (critical sections), which delays *all* IRQs; keep these short.
-- **Nesting**: preemption by higher-priority ISRs, bounded by the priority scheme.
-- **Software**: the ISR work itself.
+| Part | How to bound it |
+| --- | --- |
+| Hardware entry (stacking, FPU state) | Fixed for the core; worst case with late arrival |
+| Masking (`PRIMASK`, critical sections) | Keep critical sections to a few instructions |
+| Nesting | Priority scheme bounds preemption |
+| ISR work | Keep the ISR small; no blocking calls or long floating-point |
 
-Techniques: assign priorities so latency-critical IRQs are near the top, keep critical sections to a few instructions, avoid blocking calls and long floating-point in ISRs, use DMA to decouple burst work from the CPU, and measure with a GPIO toggled at entry/exit rather than reasoning about it.
+Also use DMA to decouple bursts from the CPU, and **measure** with a GPIO toggled at ISR entry and exit.
 
 ## 27. What are PendSV and SysTick, and why use PendSV for context switching?
 
-- **SysTick**: a core 24-bit down counter used as a periodic tick for an RTOS (or time base) generated by the core itself.
-- **PendSV**: a software-triggered exception, typically lowest priority, used to perform the actual context switch.
+**Short answer:** SysTick provides the tick. PendSV, at the lowest priority, performs the actual switch.
 
-The pattern: SysTick (or an event) sets PendSV pending; when all higher-priority handlers have finished, PendSV runs and saves/restores task context. Because PendSV is lowest priority and software-controlled, it **never interrupts another ISR**, so a context switch can wait until the current interrupt work is complete. Doing the switch in PendSV instead of inside SysTick avoids preempting interrupts and keeps a deterministic, single place where the switch happens.
+```mermaid
+sequenceDiagram
+    participant SysTick
+    participant PendSV
+    participant Scheduler
+    SysTick->>PendSV: set PendSV pending (a switch is needed)
+    Note over PendSV: waits until all higher-priority ISRs finish
+    PendSV->>Scheduler: save current task context, pick next task
+    PendSV->>PendSV: restore next task context and return
+```
+
+Because PendSV is the lowest priority and software-triggered, it never interrupts another ISR, so the context switch happens in one deterministic place after other interrupt work is done.
 
 ## 28. What is `EXC_RETURN`, and what does it encode?
 
-When an exception is taken, the hardware loads `LR` with a special value whose bit pattern identifies how to return: which stack pointer to use (MSP or PSP), whether to return to Thread or Handler mode, and whether a floating-point frame is present.
+**Short answer:** A magic value placed in `LR` on exception entry that tells the core how to return.
 
-The handler must not corrupt this `LR` if it intends to return normally; this is why a plain `bx lr` at the end of an ISR restores the interrupted context. A context switch instead *changes* the saved `LR` (or the stacked context) so the return lands in the chosen task.
+It encodes: which stack to return to (MSP or PSP), Thread or Handler mode, and whether an FP frame is present.
 
-## 29. What does the stack overflow look like at the hardware level?
+A plain `bx lr` at the end of an ISR restores the interrupted context. A context switch **changes** the saved context so the return lands in a different task.
 
-The stack grows downward in the region you reserved. When it underflows its region it physically writes below it, into adjacent RAM: another variable's area, a task stack, or the heap.
+---
 
-Symptoms and detection:
+## Part 3: Stack, faults, barriers, cache, MPU
 
-- A write to a variable that changes unexpectedly, or a HardFault whose faulting `SP` is outside the expected region.
-- A HardFault on entry when the MSP hits a boundary or an unaligned/invalid address.
-- Detection: enable an MPU guard region below the stack, place a known canary pattern below it and scan it periodically, use the RTOS high-water-mark check, or keep the lowest addresses reserved.
+## 29. What does a stack overflow look like at the hardware level?
 
-Root causes are usually deep recursion, a large automatic array in a task with a small stack, or an ISR that preempts deep in the call tree.
+**Short answer:** The stack grows downward and, when it runs past its region, silently overwrites whatever is below it.
 
-## 30. How do device faults progress from a configurable unit up to HardFault?
+Symptoms:
 
-The core evaluates each fault against its **enable** bits:
+- A variable that changes unexpectedly
+- A HardFault whose faulting `SP` is outside the expected region
+- Corrupted task stack, heap, or neighbouring data
 
-- If the specific fault is enabled in `SHCSR`, the core vectors to the corresponding handler (MemManage, BusFault, UsageFault).
-- If it is disabled, or if the fault occurs while already in a fault handler at the same or lower priority, it **escalates** to HardFault.
+Detection: an MPU guard region below the stack, a canary pattern scanned periodically, the RTOS high-water mark, or reserved guard memory.
 
-Because a fault taken inside a fault handler escalates, a bug in a fault handler's own access tends to become a second HardFault. This is why diagnostics should be gathered as early and as simply as possible in a minimal-entry HardFault handler.
+Typical causes: deep recursion, a large local array in a small task stack, an ISR that preempts deep in the call tree.
+
+## 30. How do faults progress from a configurable fault up to HardFault?
+
+**Short answer:** An enabled fault goes to its own handler. Otherwise, or if it happens inside another fault handler, it escalates to HardFault.
+
+```mermaid
+flowchart LR
+    F["Fault occurs"] --> E{"Enabled in SHCSR?"}
+    E -->|yes| H["MemManage / BusFault / UsageFault handler"]
+    E -->|no| HF["HardFault"]
+    H -->|"fault inside the handler"| HF
+```
+
+Because a fault inside a fault handler escalates, keep the HardFault handler minimal so it does not fault again.
 
 ## 31. How do you split RAM between stack and heap deliberately?
 
-Give the design a budget rather than leaving it to chance:
+**Short answer:** Give each a budget instead of leaving it to chance.
 
-- Reserve the **stack** region explicitly, size it for the actual worst-case path, and reserve margin. Static allocation avoids fragmentation.
-- Reserve a **heap** region only ifyou actually use `malloc`/`new`; many safety-critical designs forbid dynamic allocation entirely.
-- On an RTOS, allocate per-task stacks and avoid heap-based queues/timers where bounded behavior is required.
+- Reserve the **stack** explicitly, sized for the worst-case path with margin
+- Reserve a **heap** only if you actually use `malloc` or `new`. Many safety-critical designs forbid dynamic allocation
+- On an RTOS, allocate per-task stacks and avoid heap-based queues and timers where bounded behaviour is needed
 
-Linker scripts and toolchain defaults differ; the design decision is which sections are placed where, plus the guard/canary and overflow checks around them. A useful rule: prefer static allocation on MCUs, and treat any heap as a fixed budget you measure with a high-water mark.
+**Rule:** prefer static allocation on MCUs. Treat any heap as a fixed budget and measure it with a high-water mark.
 
 ## 32. What is `volatile` actually required for?
 
-`volatile` tells the compiler the object may change **outside the current flow of control**, so it must not cache it in a register, reorder it away, or remove apparently redundant reads/writes. It is required for:
+**Short answer:** Objects that can change outside the current flow of control.
 
-- Memory-mapped peripheral registers.
-- Variables shared between an ISR and main/task context.
-- Variables changed by DMA or another core.
+Required for:
 
-It is **not** a substitute for atomicity or memory barriers. A 32-bit aligned read/write is atomic on Cortex-M, but a read-modify-write (`counter++`), a bitfield, or a 64-bit value is not. Use `volatile` for observability plus a critical section/atomic for the modification.
+- Memory-mapped peripheral registers
+- Variables shared between an ISR and main or task code
+- Variables changed by DMA or another core
 
-## 33. How does a peripheral interrupt make it from the pin to the CPU?
+**It is not atomicity.** A 32-bit aligned read or write is atomic on Cortex-M, but `counter++` (read-modify-write), a bit-field, or a 64-bit value is not.
 
-Peripheral interrupt latency is a chain of enable and routing stages, not a single step. A typical path, using an external line as an example:
+```c
+volatile uint32_t tick;            /* observed correctly in main */
+/* tick++ in main is NOT safe if an ISR also changes it: protect it with a critical section */
+```
 
-1. The **pin/alternate function** is configured, and the edge detector (e.g. EXTI) records the event and sets its **pending** flag.
-2. The peripheral's event is routed to the **NVIC** by a mux; NVIC sets the corresponding pending IRQ.
-3. If the IRQ is **enabled** in NVIC and its priority passes the current mask, the core takes the exception.
-4. Hardware saves the frame and vectors to the handler from the vector table (`VTOR`-based).
+## 33. How does a peripheral interrupt get from the pin to the CPU?
 
-Where it breaks: a programming error at any stage — an unconfigured pin, a debounce that never triggers, the wrong peripheral-to-line mapping, a pending flag left set, the wrong IRQ enabled, or a handler name that does not match the symbol.
+**Short answer:** Through a chain of enables. A mistake at any stage stops it.
+
+```mermaid
+flowchart LR
+    P["Pin / alternate function"] --> D["Edge detector (for example EXTI) sets its pending flag"]
+    D --> N["NVIC pending, if the IRQ is enabled and priority passes the mask"]
+    N --> C["Core takes the exception"]
+    C --> V["Vector fetched from the table (VTOR)"]
+```
+
+Typical breaks: unconfigured pin, wrong peripheral-to-line mapping, pending flag left set, wrong IRQ enabled, handler name mismatch.
 
 ## 34. What are the main sources of interrupt latency and jitter?
 
-Split into fixed and variable:
+**Short answer:** A fixed hardware part and a variable part.
 
-- **Fixed/hardware**: exception entry costs a stacking + vector fetch, deterministic for a given state.
-- **Variable**: tail-chaining/late-arrival scheduling, waiting for a long critical section (`PRIMASK`) to end, and preemption by higher-priority IRQs.
+- **Fixed:** exception entry (stacking and vector fetch)
+- **Variable:** tail-chaining or late arrival, waiting for a long critical section (`PRIMASK`) to end, and preemption by higher-priority IRQs
 
-Examples of the same IRQ firing with different measured latency: a pending higher-priority IRQ is mid-service in one run and absent in another; or the main line is inside a long critical section in one run. Because of this, always quote a worst-case bound and the conditions under which it holds, not an average.
+The same IRQ can show different latency in different runs. Always quote a **worst-case bound** and the conditions it holds under, not an average.
 
-## 35. How do you implement a C function to be an ISR safely?
+## 35. How do you write a C function to be an ISR safely?
 
-- Use the **exact handler name** the vector table defines (or the toolchain's attribute/irq-handler convention) so the vector resolves to your function.
-- Declare shared data `volatile` and protect it where atomicity is required.
-- Keep it short; do not block, allocate, print with an unbounded formatter, or call non-reentrant library code.
-- Do the minimum in the ISR: read the source data, clear the interrupt flag, then hand off (set a flag or send a queue message) for heavier processing.
-- For an RTOS, use the `...FromISR` variants and the correct yield on exit.
+**Short answer:** Correct name, tiny body, ISR-safe calls, hand off the real work.
 
-In C, a function used as a handler by name is resolved by the linker, not by source ordering; a typo silently keeps the weak default handler.
+```c
+void USART2_IRQHandler(void)                  /* exact name from the vector table */
+{
+    if (USART2->ISR & USART_ISR_RXNE) {       /* which source fired? */
+        uint8_t b = (uint8_t)USART2->RDR;     /* read data (this also clears the flag) */
+        ring_push(&rx, b);                    /* O(1) hand-off; no blocking, no printf */
+    }
+}
+```
+
+- Use the **exact handler name**. A typo silently keeps the weak default handler
+- Declare shared data `volatile` and protect it where atomicity is required
+- On an RTOS, use `...FromISR` calls and yield on exit
 
 ## 36. What is the difference between an interrupt and an exception?
 
-- **Exception**: the architectural term (Cortex-M), covering anything that interrupts normal flow: reset, NMI, HardFault, SVC, PendSV, SysTick, and external interrupts.
-- **Interrupt (IRQ)**: an external or peripheral event routed to the NVIC that requests service.
+**Short answer:** "Exception" is the general term on Cortex-M. An interrupt (IRQ) is an exception that comes from a peripheral through the NVIC.
 
-Practical rule: the mechanism is the same (save frame, vector, return), so the same care applies; the difference is the source. Reset is a half-exception (it does not return the normal way), which is why the startup path is special-cased.
+Exceptions include reset, NMI, HardFault, SVC, PendSV, SysTick, and external interrupts. The mechanism (save frame, vector, return) is the same for all except reset, which does not return in the normal way.
 
 ## 37. How do you debug a corrupted vector table or bad handler?
 
-Compile a one-line check first: dump the words at the active `VTOR` base and compare with the linked image and the map file.
+**Short answer:** Dump the table at `VTOR` and compare it with the linked image and the map file.
 
-Then:
+- Does `VTOR` match the running image base? (A stale `VTOR` after a bootloader jump is a classic cause.)
+- Do handler symbol names match the vector declarations? A mismatch leaves the default loop in place.
+- Is the image loaded at the address the linker assumed?
+- Is a handler word `0xFFFFFFFF` or garbage? Suspect flash corruption.
 
-- Confirm `VTOR` matches the running image base (a stale `VTOR` after a bootloader jump is a classic cause).
-- Confirm handler symbol names match the vector declarations; a name mismatch means the default loop survives.
-- Confirm the image is loaded at the address the linker assumed.
-- Suspect flash corruption if a word that should be a valid handler is `0xFFFFFFFF` or garbage.
+A wrong table usually locks up the first time an affected IRQ fires, so correlate with the debugger's current PC and the fault registers.
 
-A wrong table usually produces a lockup the first time an affected IRQ fires, so correlate with the debugger's current PC and the fault registers.
+## 38. What is an unaligned access, and how do you prevent a fault?
 
-## 38. What is an unaligned access and how do you prevent a fault?
+**Short answer:** Reading a wider value from an address that is not a multiple of its size.
 
-An aligned word access has its address a multiple of the access size. Cortex-M generally allows some unaligned halfword/word accesses, but not all: unaligned access to a device/peripheral region or with unaligned access trapping enabled raises a UsageFault (or becomes HardFault if UsageFault is disabled).
+Cortex-M allows some unaligned halfword and word accesses, but not all. Unaligned access to device memory, or with trapping enabled, raises a UsageFault (or HardFault if UsageFault is disabled).
 
-Prevention: align buffers and structures (compiler alignment attributes), avoid casting packed/`char` buffers to wider types, use `memcpy` for unaligned copies, and check that the fault's saved `PC` points at the offending load/store. Reading naturally-aligned rings and DMA descriptors avoids the whole class.
+```c
+/* Unsafe: casting a byte buffer to uint32_t* may be misaligned */
+uint32_t bad = *(uint32_t *)&buf[1];
+
+/* Safe: memcpy handles any alignment */
+uint32_t good;
+memcpy(&good, &buf[1], sizeof good);
+```
+
+Also align buffers and structures with compiler alignment attributes.
 
 ## 39. What does a stack backtrace look like when the CPU is in an ISR?
 
-A normal call returns by `LR`/stack frames, but an ISR entered by hardware has a hardware-pushed exception frame, not a `BL` return address. Debugger unwinders recognize this and use the stacked `PC`/`LR` plus `EXC_RETURN` to reconstruct the interrupted call chain.
+**Short answer:** An ISR entered by hardware has an exception frame, not an ordinary call return address.
 
-Consequences: a naive frame-pointer walk may stop or misreport at an ISR boundary; the reliable anchors are the stacked `PC` (where the interrupt happened) and the interrupts-already-active state. Preserve the exception frame early in the handler if you want a trustworthy postmortem.
+Debugger unwinders use the stacked `PC` and `LR` plus `EXC_RETURN` to rebuild the interrupted call chain. A naive frame-pointer walk may stop or misreport at the ISR boundary.
 
-## 40. What is the role of memory attributes (MPU / cacheability)?
+**Tip:** save the exception frame early in the handler if you want a trustworthy post-mortem.
 
-For Cortex-M with an MPU, each region carries attributes: read/write/execute permissions, and memory type/behavior such as Normal cached, Normal non-cacheable, and Device/Strongly-ordered. These determine both access permission and how the interconnect treats the region.
+## 40. What is the role of memory attributes (MPU and cacheability)?
+
+**Short answer:** Each MPU region sets permissions and memory type, which controls both access rights and how the bus treats it.
+
+Attributes: read, write, execute permissions, and type (Normal cached, Normal non-cacheable, Device, Strongly-ordered).
 
 They matter for:
 
-- **DMA/shared buffers**: mark as non-cacheable or manage cache explicitly (see #20).
-- **Protection**: make code/variables read-only to catch stray writes; use a guard region to catch stack overflow.
-- **Peripherals**: keeping device regions strongly ordered and non-cacheable avoids stale reads and reordering.
+- **DMA and shared buffers:** mark non-cacheable, or manage the cache explicitly (Q20)
+- **Protection:** make code and constants read-only to catch stray writes, and add a guard region to catch stack overflow
+- **Peripherals:** keep device regions strongly ordered and non-cacheable to avoid stale reads and reordering
 
-Trade-off: attribute conflicts and multiple regions overlapping require the priority rules of the MPU; and marking shared RAM non-cacheable trades performance for simplicity. On hard real-time audio, the same reasoning appears in audio/DSP systems where buffer access must not stall on cache lines.
+**Trade-off:** overlapping regions follow MPU priority rules, and marking shared RAM non-cacheable trades speed for simplicity.
 
-## Bonus: Quick reference for the numbers
+---
 
-| Item | Representative value / rule |
+## Quick reference
+
+| Item | Representative value or rule |
 | --- | --- |
-| Initial MSP and reset vector | words 0 and 1 of the active vector table |
-| CPU exception frame size | 32 bytes (8 words); +FP frame if FPU active |
-| Thumb handler address | low bit set to 1 |
+| Initial MSP and reset vector | Words 0 and 1 of the active vector table |
+| CPU exception frame size | 32 bytes (8 words); plus FP frame if the FPU is active |
+| Thumb handler address | Low bit set to 1 |
 | Default stack alignment | 8 bytes (AAPCS) at public interfaces |
-| Typical Cortex-M D-cache line | 32 bytes (Cortex-M7, part dependent) |
-| Fault status registers | `CFSR`/`HFSR`, `MMFAR`, `BFAR` |
-| FreeRTOS ISR priority rule | preemption priority numerically >= `configMAX_SYSCALL_INTERRUPT_PRIORITY` |
+| Typical Cortex-M7 D-cache line | 32 bytes (part dependent) |
+| Fault status registers | `CFSR`, `HFSR`, `MMFAR`, `BFAR` |
+| FreeRTOS ISR priority rule | Preemption priority numerically >= `configMAX_SYSCALL_INTERRUPT_PRIORITY` |
 
-> Always confirm the exact values against the target reference manual and the toolchain's linker/startup files before relying on any of the above in production code.
+> Always confirm exact values against the target reference manual and the toolchain's linker and startup files before relying on them in production code.

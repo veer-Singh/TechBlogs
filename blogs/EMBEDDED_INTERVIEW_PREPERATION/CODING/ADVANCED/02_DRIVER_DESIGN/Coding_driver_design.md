@@ -354,6 +354,21 @@ typedef enum {
 
 ## Senior / Staff / Architect-Level Questions
 
+### At a glance (one line each, for quick revision)
+
+| Q | Topic | One-line answer |
+| --- | --- | --- |
+| 11 | Stable public API | Opaque handle, versioned config struct, append-only enums |
+| 12 | ISR vs deferred work | The ISR does only bounded must-do-now work; state its worst-case cycles |
+| 13 | Blocking and async together | One async core; the blocking call is a thin wrapper on a semaphore |
+| 14 | Power management | Never suspend mid-transaction; save and restore registers; validate on wake |
+| 15 | Shared peripheral arbitration | Mutex with priority inheritance, short critical section, documented hold time |
+| 16 | Timing validation | WCET analysis, GPIO measurement, and stress tests, with margin |
+| 17 | MISRA in CI | Automatic checker, documented deviations, fast local feedback |
+| 18 | Bare-metal and RTOS builds | An OS abstraction layer; the driver core is written against it |
+| 19 | Polling vs interrupts | Polling for very high rates or tight bounded latency, justified with numbers |
+| 20 | Driver review checklist | Bounded ISR, error model, testable, race-free, stable API, measured timing |
+
 ## 11. How do you design a driver's public API so it stays stable (ABI/API-compatible) across chip variants and future feature additions?
 
 ```mermaid

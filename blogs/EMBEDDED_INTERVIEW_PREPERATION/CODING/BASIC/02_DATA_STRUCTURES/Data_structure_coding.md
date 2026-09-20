@@ -1,31 +1,53 @@
-# Basic Embedded Coding — Data Structures
+# Basic Embedded Coding: Data Structures
 
-## 1. Reverse a singly linked list
+How to use this file: read the **Idea** first, try to write the code yourself, then compare with the commented solution. Each question ends with a **Remember** line.
+
+## Contents
+
+| Questions | Topic |
+| --- | --- |
+| 1-3, 8 | Linked lists |
+| 4-6 | Ring buffers and caches |
+| 7, 9-11 | Arrays, stacks, queues, searching |
+| 12-14 | Bit tricks |
+| 15 | Array vs linked list |
+
+All linked-list examples use this node type:
 
 ```c
 struct Node {
-    int value;
-    struct Node *next;
+    int value;               /* the data stored in the node */
+    struct Node *next;       /* the next node, or NULL at the end */
 };
+```
 
+---
+
+## 1. Reverse a singly linked list
+
+**Idea:** Walk the list once and turn each `next` pointer to point backward.
+
+```c
 struct Node *reverse(struct Node *head)
 {
-    struct Node *prev = NULL;
+    struct Node *prev = NULL;        /* the already-reversed part */
     struct Node *curr = head;
 
     while (curr != NULL) {
-        struct Node *next = curr->next;
-        curr->next = prev;
-        prev = curr;
+        struct Node *next = curr->next;   /* 1. remember the rest of the list */
+        curr->next = prev;                /* 2. point this node backward */
+        prev = curr;                      /* 3. move both pointers forward */
         curr = next;
     }
-    return prev;
+    return prev;                          /* prev is the new head */
 }
 ```
 
-## 2. Detect a loop — Floyd's algorithm
+**Remember:** three pointers (`prev`, `curr`, `next`), O(n) time, O(1) space.
 
-Use a slow pointer moving one node and a fast pointer moving two. If they meet, a cycle exists. Complexity: `O(n)` time and `O(1)` extra space.
+## 2. Detect a loop: Floyd's algorithm
+
+**Idea:** A slow pointer moves one step and a fast pointer moves two. If there is a cycle, they meet.
 
 ```c
 bool has_cycle(struct Node *head)
@@ -33,29 +55,31 @@ bool has_cycle(struct Node *head)
     struct Node *slow = head;
     struct Node *fast = head;
 
-    while (fast != NULL && fast->next != NULL) {
-        slow = slow->next;
-        fast = fast->next->next;
+    while (fast != NULL && fast->next != NULL) {   /* fast reaches NULL only if there is no loop */
+        slow = slow->next;                         /* 1 step */
+        fast = fast->next->next;                   /* 2 steps */
         if (slow == fast) {
-            return true;
+            return true;                           /* they met inside a cycle */
         }
     }
     return false;
 }
 ```
 
+**Remember:** O(n) time, O(1) extra space.
+
 ## 3. Merge two sorted linked lists
 
-Use a dummy head and repeatedly link the smaller current node. This tests pointer manipulation and stable ordering.
+**Idea:** Use a dummy head node and repeatedly link the smaller of the two current nodes.
 
 ```c
 struct Node *merge_sorted(struct Node *a, struct Node *b)
 {
-    struct Node dummy = {0, NULL};
-    struct Node *tail = &dummy;
+    struct Node dummy = {0, NULL};       /* a stack node that removes the "empty result" special case */
+    struct Node *tail = &dummy;          /* where the next node is attached */
 
     while (a != NULL && b != NULL) {
-        if (a->value <= b->value) {
+        if (a->value <= b->value) {      /* <= keeps the merge stable */
             tail->next = a;
             a = a->next;
         } else {
@@ -64,39 +88,47 @@ struct Node *merge_sorted(struct Node *a, struct Node *b)
         }
         tail = tail->next;
     }
-    tail->next = (a != NULL) ? a : b;
-    return dummy.next;
+    tail->next = (a != NULL) ? a : b;    /* attach whatever is left */
+    return dummy.next;                   /* skip the dummy */
 }
 ```
 
+**Remember:** a dummy head avoids special-casing the first node.
+
 ## 4. Circular buffer
 
-A circular buffer is ideal for UART RX, logging, or streaming data. Maintain `head` and `tail`, define the full/empty rules clearly, and document whether one slot is intentionally left unused or a count is maintained.
+**Idea:** A fixed array with `head` (write) and `tail` (read) indexes that wrap around. Good for UART RX, logging, and streaming.
+
+```mermaid
+flowchart LR
+    P["Producer (ISR)"] -->|"push at head"| RB[("Ring buffer")]
+    RB -->|"pop at tail"| C["Consumer (task)"]
+```
 
 ```c
 #define RB_SIZE 64u
 
 typedef struct {
-    uint8_t buffer[RB_SIZE];
-    uint16_t head;   /* next write index */
-    uint16_t tail;   /* next read index */
+    uint8_t  buffer[RB_SIZE];
+    uint16_t head;    /* next write index */
+    uint16_t tail;    /* next read index */
 } ring_buffer_t;
 
 bool rb_push(ring_buffer_t *rb, uint8_t byte)
 {
-    uint16_t next = (uint16_t)((rb->head + 1u) % RB_SIZE);
+    uint16_t next = (uint16_t)((rb->head + 1u) % RB_SIZE);   /* wrap around */
     if (next == rb->tail) {
-        return false; /* full: one slot intentionally left unused */
+        return false;                  /* full: one slot is deliberately left unused */
     }
-    rb->buffer[rb->head] = byte;
-    rb->head = next;
+    rb->buffer[rb->head] = byte;       /* store first... */
+    rb->head = next;                   /* ...then publish */
     return true;
 }
 
 bool rb_pop(ring_buffer_t *rb, uint8_t *byte)
 {
     if (rb->head == rb->tail) {
-        return false; /* empty */
+        return false;                  /* empty */
     }
     *byte = rb->buffer[rb->tail];
     rb->tail = (uint16_t)((rb->tail + 1u) % RB_SIZE);
@@ -104,26 +136,28 @@ bool rb_pop(ring_buffer_t *rb, uint8_t *byte)
 }
 ```
 
-## 5. Array-based ring buffer with an explicit count
+**Remember:** define "full" and "empty" clearly. Empty is `head == tail`. Full leaves one slot unused, or uses a count.
 
-For single-producer/single-consumer use cases, an array plus head/tail indices gives deterministic memory use. Tracking a `count` (instead of sacrificing a slot) uses full capacity but requires the count update to be atomic with respect to the other side if producer and consumer run concurrently — establish the required memory-ordering/synchronization model rather than relying only on `volatile`.
+## 5. Ring buffer with an explicit count
+
+**Idea:** Track `count` so all slots are usable. If a producer and consumer run concurrently, `count` becomes shared state and needs protection.
 
 ```c
 typedef struct {
     int data[32];
     uint8_t head;
     uint8_t tail;
-    volatile uint8_t count; /* shared between ISR and task context */
+    volatile uint8_t count;    /* shared between an ISR and a task */
 } counted_ring_t;
 
 bool counted_ring_push(counted_ring_t *rb, int value)
 {
     if (rb->count == 32u) {
-        return false;
+        return false;                          /* really full: all 32 slots used */
     }
     rb->data[rb->head] = value;
     rb->head = (uint8_t)((rb->head + 1u) % 32u);
-    rb->count++;
+    rb->count++;                               /* NOT atomic: protect it if both sides can run at once */
     return true;
 }
 
@@ -134,41 +168,53 @@ bool counted_ring_pop(counted_ring_t *rb, int *value)
     }
     *value = rb->data[rb->tail];
     rb->tail = (uint8_t)((rb->tail + 1u) % 32u);
-    rb->count--;
+    rb->count--;                               /* same warning: read-modify-write */
     return true;
 }
 ```
 
-## 6. LRU cache interview problem
+**Watch out:** `volatile` alone does not make `count++` safe when an ISR and a task both change it. Use a critical section or atomics, or use the index-only design from Q4.
 
-A common design uses a hash map for lookup and a doubly linked list for recency ordering, giving near `O(1)` average lookup/update when the hash table supports it. In embedded systems, ask whether fixed-capacity storage and bounded allocation are required — a fixed-size array of nodes with an intrusive doubly linked list (no `malloc`) is usually preferred over `std::unordered_map`/dynamic allocation.
+## 6. LRU cache
+
+**Idea:** A hash map gives fast lookup, and a doubly linked list keeps recency order. On embedded targets use a fixed pool and no `malloc`.
+
+```mermaid
+flowchart LR
+    H["Hash map: key to entry"] --> L["Doubly linked list: head = most recent, tail = least recent"]
+```
 
 ```c
 #define LRU_CAP 4u
 
 typedef struct {
-    int key;
-    int value;
-    int prev, next; /* indices into the fixed pool, -1 = none */
+    int  key;
+    int  value;
+    int  prev, next;     /* indexes into the fixed pool; -1 means none */
     bool used;
 } lru_entry_t;
 
 typedef struct {
-    lru_entry_t entries[LRU_CAP];
-    int head; /* most recently used */
-    int tail; /* least recently used */
+    lru_entry_t entries[LRU_CAP];    /* the fixed pool: no dynamic allocation */
+    int head;                        /* most recently used */
+    int tail;                        /* least recently used (evicted first) */
 } lru_cache_t;
-/* On a hit: unlink the entry and relink it at head.
-   On a miss with a full cache: evict tail, reuse its slot, relink at head. */
+
+/* On a hit:  unlink the entry, then relink it at head.
+   On a miss with a full cache: evict tail, reuse its slot, link it at head. */
 ```
 
+**Remember:** lookup O(1) average, update O(1). Ask whether bounded allocation is required.
+
 ## 7. Reverse an array in place
+
+**Idea:** Two indexes, one at each end, swap and move inward.
 
 ```c
 void reverse_array(int *arr, size_t len)
 {
     size_t left = 0u;
-    size_t right = (len == 0u) ? 0u : len - 1u;
+    size_t right = (len == 0u) ? 0u : len - 1u;    /* avoid unsigned underflow when len is 0 */
 
     while (left < right) {
         int temp = arr[left];
@@ -182,7 +228,7 @@ void reverse_array(int *arr, size_t len)
 
 ## 8. Find the middle of a linked list in one pass
 
-Use the same slow/fast two-pointer idea as cycle detection: when `fast` reaches the end, `slow` is at the middle. This avoids a first pass just to count nodes.
+**Idea:** Same slow and fast pointers as Q2. When `fast` reaches the end, `slow` is at the middle.
 
 ```c
 struct Node *find_middle(struct Node *head)
@@ -191,47 +237,45 @@ struct Node *find_middle(struct Node *head)
     struct Node *fast = head;
 
     while (fast != NULL && fast->next != NULL) {
-        slow = slow->next;
+        slow = slow->next;            /* moves half as fast */
         fast = fast->next->next;
     }
-    return slow;
+    return slow;                      /* for an even count, this is the second middle node */
 }
 ```
 
-## 9. Implement a fixed-capacity stack using an array
+**Remember:** no need for a first pass to count the nodes.
 
-Common embedded interview question since a stack is often needed without `malloc` (e.g., a bounded expression evaluator or a bracket-matching validator).
+## 9. Fixed-capacity stack using an array
+
+**Idea:** An array and a `top` counter. Push writes and increments. Pop decrements and reads. No `malloc`.
 
 ```c
 #define STACK_CAP 16u
 
 typedef struct {
-    int data[STACK_CAP];
-    uint8_t top; /* number of elements currently stored */
+    int     data[STACK_CAP];
+    uint8_t top;                /* number of elements currently stored */
 } stack_t;
 
 bool stack_push(stack_t *s, int value)
 {
-    if (s->top >= STACK_CAP) {
-        return false; /* overflow */
-    }
+    if (s->top >= STACK_CAP) return false;   /* overflow: report it */
     s->data[s->top++] = value;
     return true;
 }
 
 bool stack_pop(stack_t *s, int *value)
 {
-    if (s->top == 0u) {
-        return false; /* underflow */
-    }
+    if (s->top == 0u) return false;          /* underflow */
     *value = s->data[--s->top];
     return true;
 }
 ```
 
-## 10. Implement a queue using two stacks
+## 10. Queue using two stacks
 
-A classic conceptual question to check understanding of amortized complexity: push always goes to `in_stack`; a pop/peek moves everything from `in_stack` to `out_stack` only when `out_stack` is empty, so each element is moved at most once — giving amortized `O(1)` per operation even though a single pop can occasionally cost `O(n)`.
+**Idea:** Push always goes to `in_stack`. When `out_stack` is empty, move everything from `in_stack` to `out_stack`, which reverses the order to first-in, first-out. Each element moves at most once, so the amortized cost is O(1).
 
 ```c
 typedef struct {
@@ -246,7 +290,7 @@ bool queue_enqueue(queue_t *q, int value)
 
 bool queue_dequeue(queue_t *q, int *value)
 {
-    if (q->out_stack.top == 0u) {
+    if (q->out_stack.top == 0u) {                       /* refill only when out_stack is empty */
         int temp;
         while (stack_pop(&q->in_stack, &temp)) {
             if (!stack_push(&q->out_stack, temp)) {
@@ -254,82 +298,100 @@ bool queue_dequeue(queue_t *q, int *value)
             }
         }
     }
-    return stack_pop(&q->out_stack, value);
+    return stack_pop(&q->out_stack, value);             /* oldest element is now on top */
 }
 ```
 
+**Remember:** a single dequeue can cost O(n), but the average over many is O(1).
+
 ## 11. Binary search on a sorted array
 
-Frequently asked to check for the classic off-by-one and integer-overflow mistakes in the midpoint calculation.
+**Idea:** Halve the search range each step. Watch the midpoint overflow and off-by-one traps.
 
 ```c
 int binary_search(const int *arr, size_t len, int target)
 {
     size_t low = 0u;
-    size_t high = len; /* exclusive upper bound avoids len==0 underflow */
+    size_t high = len;                          /* exclusive upper bound: works for len == 0 */
 
     while (low < high) {
-        size_t mid = low + (high - low) / 2u; /* avoids (low+high) overflow */
+        size_t mid = low + (high - low) / 2u;   /* avoids overflow of (low + high) */
         if (arr[mid] == target) {
             return (int)mid;
         } else if (arr[mid] < target) {
-            low = mid + 1u;
+            low = mid + 1u;                     /* target is in the upper half */
         } else {
-            high = mid;
+            high = mid;                         /* target is in the lower half */
         }
     }
-    return -1;
+    return -1;                                  /* not found */
 }
 ```
 
-## 12. Swap two variables without a temporary variable
+**Remember:** O(log n), and the array must be sorted.
 
-Asked as a quick warm-up question, often followed by "why is the XOR version risky?" — it fails silently if both arguments happen to be the same memory location, because `a ^= a` zeroes it out before the swap can happen.
+## 12. Swap two variables without a temporary
+
+**Idea:** XOR three times. But if both pointers point at the same variable, it becomes zero.
 
 ```c
 void swap_xor(int *a, int *b)
 {
     if (a == b) {
-        return; /* required guard: XOR swap breaks on aliasing */
+        return;            /* required guard: a ^= a would zero the variable */
     }
-    *a ^= *b;
-    *b ^= *a;
-    *a ^= *b;
+    *a ^= *b;              /* a = a ^ b */
+    *b ^= *a;              /* b = b ^ (a ^ b) = original a */
+    *a ^= *b;              /* a = (a ^ b) ^ original a = original b */
 }
 ```
 
+**Remember:** a normal temporary variable is usually clearer and just as fast.
+
 ## 13. Check if a number is a power of two
 
-A very common bit-manipulation warm-up in embedded interviews, since power-of-two sizes come up constantly (buffer sizes, alignment, masks).
+**Idea:** A power of two has one set bit. Subtracting 1 flips it and every bit below it, so ANDing gives 0.
 
 ```c
 bool is_power_of_two(unsigned int n)
 {
-    return (n != 0u) && ((n & (n - 1u)) == 0u);
+    return (n != 0u) && ((n & (n - 1u)) == 0u);    /* n != 0 excludes zero */
 }
 ```
 
-**Why it works:** a power of two has exactly one bit set (e.g., `01000`). Subtracting 1 flips that bit and every bit below it (`00111`). ANDing the two together always yields 0 — for any non-power-of-two value, at least one bit survives the AND.
+Example: `8 = 1000` and `7 = 0111`, so `8 & 7 = 0`.
 
-## 14. Count the number of set bits in an integer (Brian Kernighan's algorithm)
+## 14. Count the set bits (Brian Kernighan's algorithm)
+
+**Idea:** Repeatedly clear the lowest set bit and count how many times you can.
 
 ```c
 unsigned int count_set_bits(unsigned int n)
 {
     unsigned int count = 0u;
     while (n != 0u) {
-        n &= (n - 1u); /* clears the lowest set bit each iteration */
+        n &= (n - 1u);       /* clears the lowest set bit */
         count++;
     }
-    return count;
+    return count;            /* runs once per set bit */
 }
 ```
 
-This runs in `O(number of set bits)` rather than looping over every bit position, which matters when checking, say, a 32-bit GPIO register where usually only a few pins are set.
+Useful for GPIO registers, where only a few pins are usually set.
 
-## 15. Array vs linked list — when would you use each in an embedded system?
+## 15. Array vs linked list: when would you use each in an embedded system?
 
-Arrays give contiguous, cache-friendly, statically-allocatable storage with O(1) indexed access, but insertion/deletion in the middle requires shifting elements and the capacity must be fixed (or reallocated) up front — a good fit for a fixed-size sensor sample buffer or lookup table. Linked lists give O(1) insertion/deletion once you have a pointer to the node, without needing contiguous memory or a pre-known maximum size, but every node needs its own allocation (ideally from a static pool, not the heap, on a memory-constrained target), pointer traversal defeats cache locality, and there's per-node pointer overhead — better suited to something like a free-list of fixed-size buffers or a linked list of active timers where the count varies at runtime but total memory is still bounded by a fixed pool.
+| | Array | Linked list |
+| --- | --- | --- |
+| Access by index | O(1) | O(n) |
+| Insert or delete in the middle | Shift elements | O(1) once you have the node |
+| Memory | Contiguous, static allocation possible | Per-node pointer overhead, scattered |
+| Cache behaviour | Good | Poor |
+| Best fit | Sensor sample buffer, lookup table | Free-list of buffers, list of active timers |
+
+On a memory-constrained target, allocate list nodes from a **static pool**, not the heap.
 
 ## References
 
+- Floyd's cycle detection (tortoise and hare)
+- Amortized analysis of a queue built from two stacks

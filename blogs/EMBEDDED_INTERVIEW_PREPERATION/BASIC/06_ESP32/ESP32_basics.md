@@ -1,36 +1,126 @@
 # ESP32 Interview Questions
 
+How to use this file: read the **Short answer**, explain it aloud, then check the details. Each question ends with a **Remember** line.
+
 ## 1. What is ESP-IDF?
 
-ESP-IDF is Espressif's official framework for ESP32-family development. It exposes drivers, networking, FreeRTOS integration, build/configuration tooling, and chip-specific APIs.
+**Short answer:** Espressif's official framework for ESP32-family chips.
 
-## 2. Arduino framework vs ESP-IDF?
+It provides drivers, networking, FreeRTOS integration, build and configuration tools (`idf.py`, `menuconfig`), and chip-specific APIs.
 
-Arduino provides a simpler programming model and ecosystem. ESP-IDF gives lower-level control and broader access to ESP-specific capabilities. For production firmware, the framework should be selected according to requirements for control, maintainability, performance, and team expertise.
+**Remember:** ESP-IDF is the production-grade toolchain; Arduino is a layer on top of it.
+
+## 2. Arduino framework vs ESP-IDF
+
+**Short answer:** Arduino is simpler; ESP-IDF gives more control.
+
+| | Arduino | ESP-IDF |
+| --- | --- | --- |
+| Learning curve | Easy | Steeper |
+| Control over chip features | Limited | Full |
+| Ecosystem of libraries | Very large | Growing |
+| Typical use | Prototypes | Production firmware |
+
+Choose by required control, maintainability, performance, and team expertise.
+
+**Remember:** prototype in Arduino if you like, but decide the framework for production deliberately.
 
 ## 3. Why is FreeRTOS relevant on ESP32?
 
-ESP-IDF integrates FreeRTOS concepts such as tasks, queues, semaphores, and timers into the application environment. Some ESP32 variants use multicore architectures, so task affinity and cross-core synchronization can also matter.
+**Short answer:** ESP-IDF is built on FreeRTOS, so tasks, queues, semaphores, and timers are the normal way to structure an application.
+
+Some ESP32 variants have two cores, so also think about:
+
+- **Task affinity:** which core a task runs on (`xTaskCreatePinnedToCore`)
+- **Cross-core synchronization:** shared data between cores needs proper locking
+
+**Remember:** on a dual-core ESP32, shared data between tasks can be accessed truly in parallel.
 
 ## 4. How would you design Wi-Fi reconnect logic?
 
-Treat connection as a state machine: DISCONNECTED -> CONNECTING -> CONNECTED -> LOST -> BACKOFF -> CONNECTING. Add bounded retry/backoff and avoid blocking application-critical work while the network is down.
+**Short answer:** Treat the connection as a state machine with bounded retry and backoff.
+
+```mermaid
+stateDiagram-v2
+    [*] --> DISCONNECTED
+    DISCONNECTED --> CONNECTING
+    CONNECTING --> CONNECTED: got IP
+    CONNECTING --> BACKOFF: failed
+    CONNECTED --> LOST: link dropped
+    LOST --> BACKOFF
+    BACKOFF --> CONNECTING: delay elapsed
+```
+
+Design points:
+
+- Increase the delay between retries (backoff) and cap it
+- Do not block application-critical work while the network is down
+- Report connection state to the rest of the system
+
+**Remember:** the application should keep working when Wi-Fi is down.
 
 ## 5. What is NVS?
 
-Non-volatile storage in ESP-IDF provides a key-value storage mechanism commonly used for configuration/calibration/state that must survive reset. The exact storage characteristics and wear behavior should be considered for frequently updated data.
+**Short answer:** Non-Volatile Storage, a key-value store in flash for data that must survive a reset.
 
-## 6. What is the typical embedded approach for OTA?
+```c
+nvs_handle_t h;
+nvs_open("config", NVS_READWRITE, &h);       /* open a namespace called "config" */
+nvs_set_u32(h, "boot_count", count);         /* stage the value */
+nvs_commit(h);                               /* write it to flash (do not forget this) */
+nvs_close(h);
+```
 
-Download the image safely, verify integrity/authenticity as required, write it to an inactive update slot/partition, mark the new image for boot, and support rollback or recovery if startup validation fails. Exact mechanism depends on ESP-IDF version and partition scheme.
+Typical use: configuration, calibration, small state.
+
+**Watch out:** flash wears out. Do not write frequently-changing data (such as a value updated every second) without considering endurance.
+
+**Remember:** `nvs_commit`, and mind the wear.
+
+## 6. What is the typical approach to OTA?
+
+**Short answer:** Download to the inactive slot, verify, mark it for boot, and roll back if it fails validation.
+
+```mermaid
+flowchart LR
+    DL["Download image"] --> VER["Verify integrity / signature"]
+    VER --> WR["Write to inactive OTA partition"]
+    WR --> MARK["Mark new image to boot"]
+    MARK --> BOOT["Reboot"]
+    BOOT --> OK{"App confirms healthy?"}
+    OK -->|yes| KEEP["Keep new image"]
+    OK -->|no| RB["Rollback to previous image"]
+```
+
+The exact mechanism depends on the ESP-IDF version and partition table.
+
+**Remember:** the running image is never overwritten while it runs.
 
 ## 7. How would you debug a crash?
 
-Capture the panic/backtrace, decode the call stack against the exact firmware binary, identify whether the root cause is memory corruption, stack overflow, invalid access, watchdog timeout, or another fault class, then reproduce with instrumentation.
+**Short answer:** Capture the backtrace, decode it against the exact binary, classify the fault, and reproduce it.
+
+Steps:
+
+1. Capture the panic message and backtrace
+2. Decode addresses against the **same** `.elf` that was flashed (for example with `idf.py monitor` or `addr2line`)
+3. Classify: memory corruption, stack overflow, invalid access, watchdog timeout, or another fault
+4. Reproduce with instrumentation
+
+**Remember:** a backtrace is only meaningful with the exact matching ELF file.
 
 ## 8. What should you consider for low-power ESP32 firmware?
 
-Reduce wakeups, choose appropriate sleep mode, shut down unused peripherals/radios, batch work, and measure actual current with the real board. The correct design depends on radio duty cycle, wake latency, RAM retention, and external hardware.
+**Short answer:** Wake up less, sleep deeper, turn off what you do not use, and measure on the real board.
+
+- Reduce wakeups and batch work
+- Choose the right sleep mode (light sleep, deep sleep)
+- Shut down unused peripherals and the radio
+- Measure actual current with the real hardware
+
+The right design depends on radio duty cycle, wake latency, RAM retention, and external hardware.
+
+**Remember:** estimates lie. Measure with a current meter.
 
 ## References
 

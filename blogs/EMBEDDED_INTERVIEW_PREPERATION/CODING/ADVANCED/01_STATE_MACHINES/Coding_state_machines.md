@@ -387,6 +387,21 @@ stateDiagram-v2
 
 ## Senior / Staff / Architect-Level Questions
 
+### At a glance (one line each, for quick revision)
+
+| Q | Topic | One-line answer |
+| --- | --- | --- |
+| 11 | Hierarchical FSM | Substates inherit shared transitions from a superstate, defined once |
+| 12 | Formal verification | Check reachability, deadlocks, and completeness on the graph; model-check safety properties |
+| 13 | Unit testing | Cover every (state, event) pair including illegal ones, faults, and timeouts with a fake clock |
+| 14 | ISR and task sharing | The ISR posts events to a queue; only the task touches the FSM state |
+| 15 | Versioning | Append enum values at the end, version persisted state, migrate or reset on mismatch |
+| 16 | Concurrent FSMs | Independent tables and queues; talk only through events or published state |
+| 17 | switch vs table vs generated | Switch for small, table-driven as the default for safety, generated for certification |
+| 18 | Entry/exit vs transition actions | Entry and exit for what is always true on that state; transition actions for specific paths |
+| 19 | Fail-operational | Separate health FSM (nominal, degraded, safe stop) from the operating FSM |
+| 20 | Reviewing an FSM | Check the source of truth, implicit state, bounded exits, fault paths, and tests first |
+
 ## 11. What is a hierarchical (nested) state machine, and why would you use one over a flat FSM?
 
 ```mermaid

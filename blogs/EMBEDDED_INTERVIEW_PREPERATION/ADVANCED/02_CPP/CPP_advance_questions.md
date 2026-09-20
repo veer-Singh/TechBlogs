@@ -1,575 +1,791 @@
-# Advanced 02 Cpp Interview Questions
+# Advanced C++ Interview Questions (for Embedded)
 
-> 50-question deep-dive track. Use each Q&A as a flashcard: first answer aloud, then compare with the model answer.
+How to use this file: this is a 75-question flashcard track in numbered order. Answer each question aloud first, then compare with the **Short answer**, the commented example, and the **Follow-up**. Each question has a **Topic** tag.
+
+Topic tags: Basics, OOP, Memory, Modern C++, Templates, Errors, Concurrency, Design, Testing, Cost.
+
+## The one idea behind most answers
+
+Interviewers want to hear that you know the **cost** of each C++ feature (flash, RAM, time, determinism) and can say why it is acceptable for your product.
+
+| Feature | Typical cost | Cheaper alternative |
+| --- | --- | --- |
+| Virtual function | vtable pointer per object, indirect call | Template, function table |
+| Exceptions | Extra tables and code, harder stack analysis | Status codes, `expected` |
+| RTTI | Extra type data | Tagged types, enums |
+| `std::function` | Type erasure, possible allocation | Function pointer |
+| `std::vector` | Heap, reallocation | `std::array`, fixed capacity |
+| Templates | Code per instantiation | Shared non-template core |
+
+---
 
 ## 1. Why use C++ for firmware instead of C?
 
-C++ can add stronger type safety, RAII, generic programming, namespaces, and abstraction while still allowing low-level control. The cost model must be understood.
+**Topic:** Basics
+
+**Short answer:** Stronger type safety, RAII, generics, and namespaces, with the same low-level control. Understand the cost model.
 
 ## 2. What is RAII?
 
-Resource Acquisition Is Initialization ties resource ownership to object lifetime, enabling deterministic cleanup for resources such as locks or peripheral ownership.
+**Topic:** Basics
+
+**Short answer:** Resource Acquisition Is Initialization: a resource is owned by an object and released when the object dies.
+
+```cpp
+class LockGuard {
+public:
+    explicit LockGuard(Mutex& m) : m_(m) { m_.lock(); }     // acquire in the constructor
+    ~LockGuard() { m_.unlock(); }                           // release in the destructor, always
+private:
+    Mutex& m_;
+};
+
+void update() {
+    LockGuard g(mutex);      // locked here
+    shared_value++;
+}                            // unlocked here, even on early return
+```
 
 ## 3. Why prefer constructor initializer lists?
 
-Members are initialized directly, avoiding unnecessary default construction and reassignment. It is also required for some members such as references and const members.
+**Topic:** Basics
+
+**Short answer:** Members are initialized directly, not default-constructed and then reassigned. Required for references and `const` members.
+
+```cpp
+class Uart {
+public:
+    Uart(uint32_t baud, Registers& regs) : baud_(baud), regs_(regs) {}   // initializer list
+private:
+    const uint32_t baud_;      // const member: MUST be in the initializer list
+    Registers& regs_;          // reference member: MUST be in the initializer list
+};
+```
 
 ## 4. What is a virtual function?
 
-A virtual function enables dynamic dispatch through a base-class interface. It typically introduces a runtime dispatch structure and may have memory/runtime cost.
+**Topic:** OOP
+
+**Short answer:** Dynamic dispatch through a base-class interface. It usually costs a vtable pointer per object and an indirect call.
 
 ## 5. What is a pure virtual function?
 
-A member declared with =0 that contributes to making the class abstract. Derived classes can provide the implementation.
+**Topic:** OOP
+
+**Short answer:** A member declared `= 0`. It makes the class abstract, and derived classes implement it.
+
+```cpp
+class Transport {
+public:
+    virtual bool send(const uint8_t* data, size_t len) = 0;   // pure virtual: no body here
+    virtual ~Transport() = default;
+};
+```
 
 ## 6. Why should a polymorphic base class often have a virtual destructor?
 
-Deleting a derived object through a base pointer should invoke the derived destructor. Without a virtual destructor, that usage is unsafe.
+**Topic:** OOP
+
+**Short answer:** Deleting a derived object through a base pointer must run the derived destructor. Without `virtual`, that is undefined behaviour.
 
 ## 7. What is object slicing?
 
-Copying a derived object into a base object by value discards the derived part. Use references/pointers when polymorphic behavior is intended.
+**Topic:** OOP
+
+**Short answer:** Copying a derived object into a base object by value throws away the derived part.
+
+```cpp
+void log(Sensor s);          // by value: slices
+void log(const Sensor& s);   // by reference: keeps the derived type
+```
 
 ## 8. What is the Rule of Five?
 
-If a class manages a resource and defines one of destructor, copy constructor, copy assignment, move constructor, or move assignment, it may need an appropriate set of all five.
+**Topic:** Memory
+
+**Short answer:** If a class manages a resource and defines one of destructor, copy constructor, copy assignment, move constructor, or move assignment, it probably needs all five.
 
 ## 9. What is the Rule of Zero?
 
-Prefer member types that manage resources so the class itself needs no custom special member functions.
+**Topic:** Memory
+
+**Short answer:** Let member types manage resources, so the class needs no custom special member functions.
 
 ## 10. What is move semantics?
 
-Move operations transfer ownership/resources from a temporary or expiring object rather than copying the underlying resource.
+**Topic:** Memory
+
+**Short answer:** Move operations transfer a resource from a temporary or expiring object instead of copying it.
+
+```cpp
+Buffer make();                // returns a big buffer
+Buffer b = make();            // moved (or elided), not copied
+```
 
 ## 11. Why can dynamic allocation be risky in embedded C++?
 
-Heap fragmentation and non-deterministic allocation behavior can violate timing or memory constraints. Policies may restrict or isolate allocations.
+**Topic:** Memory
 
-## 12. What is noexcept useful for?
+**Short answer:** Heap fragmentation and non-deterministic timing can break timing or memory limits. Policies may restrict or isolate allocation.
 
-It documents and enforces that a function does not propagate exceptions. It can also affect optimization and move/certain library behavior.
+## 12. What is `noexcept` useful for?
+
+**Topic:** Errors
+
+**Short answer:** It states that a function will not throw. It can also affect optimization and container behaviour (see Q68).
 
 ## 13. Why disable exceptions in some firmware projects?
 
-Projects may want bounded control flow, smaller runtime support, or compliance with coding standards. The decision is architectural, not a universal C++ rule.
+**Topic:** Errors
+
+**Short answer:** Bounded control flow, smaller runtime support, or coding standards. It is an architectural decision, not a universal rule.
 
 ## 14. What is RTTI?
 
-Run-time type information supports features such as dynamic_cast and typeid. It can add binary/data overhead and may be disabled in constrained systems.
+**Topic:** Basics
 
-## 15. What is constexpr?
+**Short answer:** Run-time type information, used by `dynamic_cast` and `typeid`. It adds binary and data overhead and is often disabled (`-fno-rtti`).
 
-It enables compile-time evaluation when inputs and the expression permit it. It is useful for fixed configuration values and generated lookup tables.
+## 15. What is `constexpr`?
 
-## 16. What is consteval?
+**Topic:** Modern C++
 
-It requires a function invocation to be evaluated at compile time. It is stronger than constexpr and requires compiler support for the C++ version used.
+**Short answer:** It allows compile-time evaluation when the inputs and expression permit.
 
-## 17. Why use enum class?
+```cpp
+constexpr uint32_t kBaud = 115200;
+constexpr uint32_t bit_time_us(uint32_t baud) { return 1000000u / baud; }
+constexpr uint32_t kBitTime = bit_time_us(kBaud);   // computed by the compiler, no runtime cost
+```
 
-It provides scoped, strongly typed enumerators and avoids unintended implicit conversion to int in many contexts.
+## 16. What is `consteval`?
+
+**Topic:** Modern C++
+
+**Short answer:** A function that **must** be evaluated at compile time. Stronger than `constexpr`, and needs C++20.
+
+## 17. Why use `enum class`?
+
+**Topic:** Modern C++
+
+**Short answer:** Scoped, strongly typed enumerators with no silent conversion to `int`.
+
+```cpp
+enum class State : uint8_t { Idle, Busy, Error };
+State s = State::Idle;          // must be qualified
+// int x = s;                   // error: no implicit conversion
+```
 
 ## 18. What is template metaprogramming useful for in embedded?
 
-It can move decisions to compile time, create zero-overhead abstractions, and encode fixed capacities without runtime polymorphism.
+**Topic:** Templates
 
-## 19. What is std::array useful for?
+**Short answer:** Moving decisions to compile time, zero-overhead abstractions, and fixed capacities without runtime polymorphism.
 
-It provides a fixed-size array with STL semantics and no dynamic allocation, making it a good embedded-friendly container.
+## 19. What is `std::array` useful for?
+
+**Topic:** Modern C++
+
+**Short answer:** A fixed-size array with STL features and no dynamic allocation. An embedded-friendly container.
 
 ## 20. What is a span-like view?
 
-A non-owning view over contiguous storage. It can pass buffer and length together without copying data.
+**Topic:** Modern C++
+
+**Short answer:** A non-owning view of contiguous data. It passes pointer and length together without copying.
+
+```cpp
+void parse(std::span<const uint8_t> bytes);      // C++20
+std::array<uint8_t, 16> buf{};
+parse(buf);                                      // no copy, size travels with the pointer
+```
 
 ## 21. What is ownership?
 
-Ownership defines which object/component is responsible for a resource lifetime. Explicit ownership prevents leaks, double frees, and unclear concurrency.
+**Topic:** Design
 
-## 22. Unique_ptr in embedded?
+**Short answer:** Which object or component is responsible for a resource's lifetime. Explicit ownership prevents leaks, double frees, and unclear concurrency.
 
-std::unique_ptr expresses exclusive ownership. It can be useful when dynamic lifetime is justified, but allocation and deleter behavior must fit system constraints.
+## 22. `unique_ptr` in embedded?
 
-## 23. Shared_ptr in embedded?
+**Topic:** Memory
 
-shared_ptr expresses shared ownership but adds reference counting and often allocation/control-block overhead. It is usually unnecessary for deterministic low-level drivers.
+**Short answer:** Exclusive ownership. Useful when dynamic lifetime is justified, but check allocation and deleter behaviour.
+
+## 23. `shared_ptr` in embedded?
+
+**Topic:** Memory
+
+**Short answer:** Shared ownership adds reference counting and often a control-block allocation. Usually unnecessary for deterministic low-level drivers.
 
 ## 24. What is dependency injection in embedded?
 
-Provide collaborators such as transports or register interfaces through constructors or interfaces so logic can be tested without real hardware.
+**Topic:** Testing
+
+**Short answer:** Pass collaborators (transport, register access) in through constructors or interfaces, so logic can be tested without hardware.
+
+```cpp
+class Sensor {
+public:
+    explicit Sensor(Transport& bus) : bus_(bus) {}     // the bus is injected
+private:
+    Transport& bus_;
+};
+// Production: Sensor s(real_i2c);    Test: Sensor s(fake_i2c);
+```
 
 ## 25. Why prefer composition over deep inheritance?
 
-Composition often keeps dependencies explicit and reduces hidden runtime behavior and fragile hierarchies.
+**Topic:** Design
+
+**Short answer:** Explicit dependencies, less hidden runtime behaviour, fewer fragile hierarchies.
 
 ## 26. How would you design a hardware interface in C++?
 
-Separate a stable semantic interface from MCU-specific implementation, keep ownership explicit, and avoid exposing register details to higher layers.
+**Topic:** Design
 
-## 27. What is a constexpr configuration object?
+**Short answer:** A stable semantic interface separated from the MCU-specific implementation, explicit ownership, and no register details exposed upward.
 
-A compile-time initialized structure holding fixed parameters such as pin mappings or buffer capacities. It can avoid runtime initialization.
+## 27. What is a `constexpr` configuration object?
+
+**Topic:** Modern C++
+
+**Short answer:** A compile-time initialized struct with fixed parameters such as pin maps or buffer sizes. No runtime initialization.
+
+```cpp
+struct UartConfig { uint32_t baud; uint8_t tx_pin; uint8_t rx_pin; };
+constexpr UartConfig kDebugUart{115200, 9, 10};    // lives in flash, no startup code
+```
 
 ## 28. Why can templates increase flash usage?
 
-Different template instantiations may generate separate code for different types/configurations unless the compiler can merge or optimize them.
+**Topic:** Templates
+
+**Short answer:** Each instantiation for a different type or size can generate separate code, unless the compiler merges it.
 
 ## 29. What is an inline namespace?
 
-A namespace mechanism mainly for versioning APIs. It is more relevant to large libraries than typical MCU code, but can help maintain interfaces.
+**Topic:** Basics
+
+**Short answer:** A namespace mainly for API versioning. More relevant to large libraries than to typical MCU code.
 
 ## 30. What is copy elision?
 
-A compiler optimization, also permitted/required in certain C++ language cases, that avoids unnecessary object copies/moves.
+**Topic:** Modern C++
+
+**Short answer:** The compiler avoids unnecessary copies or moves. Required in some cases in C++17.
 
 ## 31. Why avoid global constructors in constrained systems?
 
-They add startup work and hidden initialization ordering. Some projects restrict dynamic/global object initialization to keep startup deterministic.
+**Topic:** Design
 
-## 32. What is static initialization order risk?
+**Short answer:** They add startup work and hidden initialization order. Some projects restrict them to keep startup deterministic.
 
-Objects with static storage in different translation units can have unspecified initialization order dependencies. Prefer function-local statics or explicit initialization where appropriate.
+## 32. What is the static initialization order risk?
+
+**Topic:** Design
+
+**Short answer:** Static objects in different files can be initialized in an unspecified order. Prefer function-local statics or explicit initialization.
 
 ## 33. How does C++ interact with C drivers?
 
-Use extern "C" when C linkage is required so C++ name mangling does not change symbols expected by C code or linker scripts.
+**Topic:** Basics
+
+**Short answer:** Use `extern "C"` so C++ name mangling does not change the symbol names C code expects.
+
+```cpp
+extern "C" {
+    #include "vendor_hal.h"      // C header: symbols keep their C names
+}
+```
 
 ## 34. What is ABI compatibility?
 
-It covers binary-level conventions such as name mangling, calling conventions, object layout, and exception/RTTI mechanisms. Compiler/toolchain changes can break ABI assumptions.
+**Topic:** Basics
+
+**Short answer:** Binary-level conventions: name mangling, calling convention, object layout, and exception and RTTI mechanisms. A toolchain change can break them.
 
 ## 35. What is placement new?
 
-It constructs an object in already-provided storage. It is useful for static memory arenas but requires careful object lifetime management.
+**Topic:** Memory
+
+**Short answer:** Constructing an object in storage you provide. Good for static arenas, but lifetime is manual.
 
 ## 36. Why can exceptions affect stack analysis?
 
-Exception handling mechanisms may add metadata and alternate control-flow paths, making bounded execution and memory analysis more complex.
+**Topic:** Errors
 
-## 37. What is a virtual call cost?
+**Short answer:** Exception handling adds metadata and alternate control-flow paths, which complicates bounded execution and memory analysis.
 
-Typically an indirect function call through a dispatch mechanism plus any associated table/storage. Exact cost depends on compiler and target.
+## 37. What is the cost of a virtual call?
+
+**Topic:** Cost
+
+**Short answer:** An indirect call through a dispatch table, plus the table and pointer storage. The exact cost depends on the compiler and target.
+
+```text
+Object:  [vptr | members...]      vptr -> vtable: [&method1, &method2, ...]
+Call:    load vptr, load slot, indirect jump
+```
 
 ## 38. How do you avoid runtime polymorphism?
 
-Use templates, tagged unions/variants, function tables, or compile-time configuration when dynamic dispatch is not required.
+**Topic:** Design
 
-## 39. What is std::variant useful for?
+**Short answer:** Templates, tagged unions or variants, function tables, or compile-time configuration, when dynamic dispatch is not needed.
 
-It represents one of several typed alternatives and can model explicit states without inheritance. It may add code/data overhead depending on use.
+## 39. What is `std::variant` useful for?
 
-## 40. Why is std::function sometimes avoided in low-level firmware?
+**Topic:** Modern C++
 
-It can have type-erasure machinery, storage overhead, and potential allocation depending on the callable. A raw function pointer or lightweight delegate may be cheaper.
+**Short answer:** One of several typed alternatives, modelling explicit states without inheritance. It may add code and data overhead.
+
+```cpp
+std::variant<Idle, Running, Fault> state;
+std::visit([](auto& s) { s.tick(); }, state);     // call tick() on whichever is active
+```
+
+## 40. Why is `std::function` sometimes avoided in low-level firmware?
+
+**Topic:** Cost
+
+**Short answer:** Type erasure, storage overhead, and possible allocation. A raw function pointer or small delegate is cheaper.
 
 ## 41. What is a lambda in embedded C++?
 
-A lambda creates a callable object. Non-capturing lambdas can often convert to function pointers; capturing lambdas carry state and have object-size implications.
+**Topic:** Modern C++
+
+**Short answer:** A callable object. A non-capturing lambda converts to a function pointer; a capturing lambda carries state and has a size.
+
+```cpp
+void (*cb)(uint32_t) = [](uint32_t e) { handle(e); };   // OK: non-capturing
+```
 
 ## 42. How would you write a zero-allocation message queue wrapper?
 
-Use a fixed-size array/ring buffer with compile-time capacity and explicit ownership rules rather than allocating messages dynamically.
+**Topic:** Design
+
+**Short answer:** A fixed-size array or ring buffer with compile-time capacity and explicit ownership, instead of allocating messages.
 
 ## 43. What makes an embedded C++ API reviewable?
 
-Small interfaces, explicit ownership, clear lifetime, bounded memory, deterministic error paths, minimal hidden work, and a clear hardware abstraction boundary.
+**Topic:** Design
+
+**Short answer:** Small interfaces, explicit ownership, clear lifetime, bounded memory, deterministic error paths, minimal hidden work, and a clear hardware boundary.
 
 ## 44. What is the benefit of strong types for units?
 
-Distinct types for volts, milliseconds, bytes, or hertz can prevent accidental mixing of quantities that share the same underlying integer type.
+**Topic:** Design
+
+**Short answer:** Distinct types for volts, milliseconds, bytes, or hertz prevent mixing quantities that share the same integer type.
+
+```cpp
+struct Milliseconds { uint32_t value; };
+struct Hertz        { uint32_t value; };
+void set_period(Milliseconds ms);
+// set_period(Hertz{50});    // compile error: wrong unit
+```
 
 ## 45. How would you make a driver mockable?
 
-Depend on an interface or injected function table representing register/transport operations, then provide a fake implementation for tests.
+**Topic:** Testing
+
+**Short answer:** Depend on an interface or injected function table for register and transport operations, then provide a fake for tests.
 
 ## 46. Why can default arguments be undesirable in library interfaces?
 
-They are compile-time substitutions at call sites, so changing a default may require clients to be rebuilt. Explicit configuration can be clearer in long-lived firmware.
+**Topic:** Design
+
+**Short answer:** Defaults are substituted at the call site, so changing one requires rebuilding clients. Explicit configuration is clearer in long-lived firmware.
 
 ## 47. How do templates support fixed-capacity buffers?
 
-The capacity becomes a template parameter, allowing compile-time storage sizing and bounds checks without dynamic allocation.
+**Topic:** Templates
+
+**Short answer:** Capacity becomes a template parameter, so storage size and bounds checks are known at compile time, with no heap.
 
 ## 48. What is the embedded C++ trade-off question interviewers want?
 
-Can you explain the generated/runtime cost of the abstraction you chose and why it is acceptable for the timing, flash, RAM, and reliability requirements?
+**Topic:** Cost
+
+**Short answer:** Can you explain the runtime cost of your abstraction and why it is acceptable for the timing, flash, RAM, and reliability requirements?
 
 ## 49. How would you replace a virtual interface in a hard real-time path?
 
-Consider a function table, templates, tagged dispatch, or compile-time policy when runtime polymorphism is not required. Compare code size, flexibility, testability, and timing.
+**Topic:** Cost
+
+**Short answer:** A function table, templates, tagged dispatch, or a compile-time policy. Compare code size, flexibility, testability, and timing.
 
 ## 50. How do you keep C++ drivers deterministic?
 
-Prefer bounded containers, explicit lifetimes, controlled allocation, predictable error handling, and clear ISR/task boundaries; inspect generated code where performance is critical.
+**Topic:** Design
+
+**Short answer:** Bounded containers, explicit lifetimes, controlled allocation, predictable error handling, and clear ISR and task boundaries. Inspect generated code where speed matters.
 
 ## 51. What is the difference between `std::vector` and `std::array` in firmware?
 
-`std::array` stores a fixed number of elements inline and does not allocate. `std::vector` owns a resizable allocation and may reallocate as it grows.
+**Topic:** Memory
 
-**Example:**
+**Short answer:** `std::array` stores a fixed number of elements inline and never allocates. `std::vector` owns a resizable heap allocation.
 
 ```cpp
-std::array<uint8_t, 32> packet{};
-std::vector<uint8_t> dynamic_packet;
+std::array<uint8_t, 32> packet{};      // 32 bytes inline, no heap
+std::vector<uint8_t> dynamic_packet;   // heap, may reallocate as it grows
 ```
 
-**Interview follow-up:** Which is easier to bound for a hard real-time path? `std::array`.
+**Follow-up:** Which is easier to bound for a hard real-time path? `std::array`.
 
 ## 52. How can you prevent accidental heap allocation in a driver?
 
-Use fixed-capacity containers, static storage, deleted allocation operators where appropriate, and code-review or linker checks for allocation symbols.
+**Topic:** Memory
 
-**Example:**
+**Short answer:** Fixed-capacity containers, static storage, deleted allocation operators where appropriate, and review or linker checks for allocation symbols.
 
 ```cpp
 template <std::size_t Capacity>
 class PacketBuffer {
-	std::array<std::byte, Capacity> storage_{};
+    std::array<std::byte, Capacity> storage_{};    // capacity known at compile time
 };
 ```
 
-**Interview follow-up:** Is banning `new` enough? No; library calls and hidden allocations must also be checked.
+**Follow-up:** Is banning `new` enough? No. Library calls and hidden allocations must be checked too.
 
 ## 53. What is `std::optional` useful for in embedded C++?
 
-It represents a value that may be absent without using a sentinel value that could be confused with valid data.
+**Topic:** Modern C++
 
-**Example:**
+**Short answer:** A value that may be absent, without a sentinel that could be mistaken for valid data.
 
 ```cpp
 std::optional<uint16_t> read_temperature();
 
 auto temperature = read_temperature();
-if (temperature.has_value()) {
-	use_temperature(*temperature);
+if (temperature.has_value()) {                 // check before using
+    use_temperature(*temperature);
 }
 ```
 
-**Interview follow-up:** What cost should be checked? Object size, code generation, and whether the contained type is cheap to move.
+**Follow-up:** What cost should be checked? Object size, code generation, and whether the contained type is cheap to move.
 
 ## 54. When would you use `std::expected` or an equivalent result type?
 
-Use it when an operation needs to return either a value or a structured error without exceptions.
+**Topic:** Errors
 
-**Example:**
+**Short answer:** When an operation returns either a value or a structured error, without exceptions.
 
 ```cpp
 using ReadResult = expected<uint8_t, DriverError>;
-
 ReadResult read_register(uint8_t address);
 ```
 
-**Interview follow-up:** Why is it preferable to a global error variable? The error travels with the result and is safer for concurrency.
+**Follow-up:** Why is it better than a global error variable? The error travels with the result and is safer for concurrency.
 
 ## 55. What is the difference between `volatile` and `std::atomic`?
 
-`volatile` controls compiler treatment of accesses but does not provide atomicity or synchronization. `std::atomic` provides language-level atomic operations and memory-ordering semantics.
+**Topic:** Concurrency
 
-**Example:**
+**Short answer:** `volatile` controls compiler treatment of accesses only. `std::atomic` gives atomic operations and memory-ordering semantics.
 
 ```cpp
 std::atomic<bool> conversion_done{false};
-
 conversion_done.store(true, std::memory_order_release);
 ```
 
-**Interview follow-up:** Is `volatile` appropriate for a memory-mapped register? Often yes, but it does not replace synchronization between tasks.
+**Follow-up:** Is `volatile` right for a memory-mapped register? Often yes, but it does not replace synchronization between tasks.
 
 ## 56. What is a memory order in an atomic operation?
 
-It defines how operations are ordered and observed between execution contexts. Choose the weakest order that satisfies the synchronization contract.
+**Topic:** Concurrency
 
-**Example:**
+**Short answer:** It defines how operations are ordered and seen between contexts. Use the weakest order that satisfies the contract.
 
 ```cpp
-data_ready.store(true, std::memory_order_release);
-if (data_ready.load(std::memory_order_acquire)) {
-	consume_data();
+data_ready.store(true, std::memory_order_release);        // producer: publish
+if (data_ready.load(std::memory_order_acquire)) {         // consumer: observe
+    consume_data();                                       // sees everything written before the release
 }
 ```
 
-**Interview follow-up:** What does release/acquire establish? Writes before the release become visible after a matching acquire.
+**Follow-up:** What do release and acquire establish? Writes before the release become visible after a matching acquire.
 
 ## 57. How do you make a C++ class safe for ISR and task use?
 
-Define the execution-context contract, keep ISR methods short and non-blocking, and use ISR-safe synchronization at the boundary.
+**Topic:** Concurrency
 
-**Example:**
+**Short answer:** Define the execution-context contract, keep ISR methods short and non-blocking, and use ISR-safe synchronization at the boundary.
 
 ```cpp
 void UartDriver::on_rx_irq() {
-	rx_events_.give_from_isr();
+    rx_events_.give_from_isr();       // signal only; no parsing, no allocation
 }
 ```
 
-**Interview follow-up:** Should an ISR call a method that can allocate? No, unless allocation is proven bounded and explicitly permitted.
+**Follow-up:** Should an ISR call a method that can allocate? No, unless allocation is proven bounded and explicitly allowed.
 
 ## 58. What is a `constexpr` lookup table useful for?
 
-It moves fixed transformations and validation data to compile time, avoiding runtime initialization and computation.
+**Topic:** Modern C++
 
-**Example:**
+**Short answer:** Fixed data computed at compile time, avoiding runtime initialization.
 
 ```cpp
-constexpr auto crc_table = make_crc_table();
+constexpr auto crc_table = make_crc_table();        // built by the compiler
 
 constexpr uint8_t nibble_value(uint8_t value) {
-	return crc_table[value & 0x0f];
+    return crc_table[value & 0x0f];
 }
 ```
 
-**Interview follow-up:** Where should the table live? Choose flash or RAM deliberately based on access speed and platform attributes.
+**Follow-up:** Where should the table live? Choose flash or RAM deliberately, based on access speed and platform attributes.
 
-## 59. What is the cost of virtual inheritance or multiple inheritance?
+## 59. What is the cost of virtual or multiple inheritance?
 
-It can add pointer adjustments, extra object metadata, more complex layout, and larger generated code. Use it only when the design benefit is clear.
+**Topic:** Cost
 
-**Example:**
+**Short answer:** Pointer adjustments, extra object metadata, complex layout, and larger code. Use only when the benefit is clear.
 
 ```cpp
 struct Device : virtual Bus, virtual Clock {
-	void start();
+    void start();
 };
 ```
 
-**Interview follow-up:** What should you inspect? Object size, construction order, generated calls, and ABI requirements.
+**Follow-up:** What should you inspect? Object size, construction order, generated calls, and ABI requirements.
 
 ## 60. Why should embedded classes avoid owning raw pointers?
 
-Raw pointers do not express ownership and make lifetime, cleanup, and copying rules ambiguous.
+**Topic:** Memory
 
-**Example:**
+**Short answer:** A raw pointer does not say who owns the object, which makes lifetime, cleanup, and copying ambiguous.
 
 ```cpp
 class Driver {
 public:
-	explicit Driver(RegisterBlock& registers) : registers_(registers) {}
-
+    explicit Driver(RegisterBlock& registers) : registers_(registers) {}   // borrowed, not owned
 private:
-	RegisterBlock& registers_;
+    RegisterBlock& registers_;
 };
 ```
 
-**Interview follow-up:** When is a raw pointer acceptable? For a non-owning nullable handle with a documented lifetime contract.
+**Follow-up:** When is a raw pointer acceptable? As a non-owning, nullable handle with a documented lifetime.
 
 ## 61. How do you implement a fixed-capacity ring buffer?
 
-Use bounded storage, head and tail indices, and an explicit full/empty invariant. Avoid allocation and make overflow behavior deliberate.
+**Topic:** Templates
 
-**Example:**
+**Short answer:** Bounded storage, head and tail indices, and an explicit full and empty rule. No allocation, deliberate overflow behaviour.
 
 ```cpp
 template <typename T, std::size_t Capacity>
 class RingBuffer {
-	std::array<T, Capacity> values_{};
-	std::size_t head_{0};
-	std::size_t tail_{0};
+    std::array<T, Capacity> values_{};     // storage sized at compile time
+    std::size_t head_{0};                  // next write position
+    std::size_t tail_{0};                  // next read position
 };
 ```
 
-**Interview follow-up:** How do you distinguish full from empty? Use a count or reserve one slot.
+**Follow-up:** How do you distinguish full from empty? Keep a count, or reserve one slot.
 
-## 62. What is false sharing and can it matter on an MCU?
+## 62. What is false sharing, and can it matter on an MCU?
 
-False sharing occurs when independent variables share a cache line and updates cause unnecessary coherence traffic. It is mainly relevant on cached multicore systems.
+**Topic:** Concurrency
 
-**Example:**
+**Short answer:** Independent variables sharing a cache line cause needless coherence traffic. Mainly relevant on cached multicore systems.
 
 ```cpp
-struct alignas(32) Counter {
-	std::atomic<uint32_t> value{0};
+struct alignas(32) Counter {              // one counter per cache line
+    std::atomic<uint32_t> value{0};
 };
 ```
 
-**Interview follow-up:** Is it usually the first concern on a small Cortex-M? No; ownership and interrupt latency usually matter first.
+**Follow-up:** Is it usually the first concern on a small Cortex-M? No. Ownership and interrupt latency come first.
 
 ## 63. How do you avoid static initialization order problems?
 
-Prefer constant initialization, function-local statics with known behavior, or explicit system initialization in a controlled order.
+**Topic:** Design
 
-**Example:**
+**Short answer:** Constant initialization, function-local statics with known behaviour, or explicit initialization in a controlled order.
 
 ```cpp
 Logger& logger() {
-	static Logger instance{debug_uart};
-	return instance;
+    static Logger instance{debug_uart};    // created on first use
+    return instance;
 }
 ```
 
-**Interview follow-up:** What risk remains? First-use initialization can still add hidden startup or locking behavior.
+**Follow-up:** What risk remains? First-use initialization can still add hidden startup or locking behaviour.
 
 ## 64. What is placement `new` useful for?
 
-It constructs an object in caller-provided storage, which can support static arenas and deterministic allocation.
+**Topic:** Memory
 
-**Example:**
+**Short answer:** Constructing an object in storage you provide, supporting static arenas and deterministic allocation.
 
 ```cpp
-std::array<std::byte, sizeof(Sensor)> storage{};
-auto* sensor = new (storage.data()) Sensor{config};
-sensor->~Sensor();
+alignas(Sensor) std::array<std::byte, sizeof(Sensor)> storage{};   // correct size AND alignment
+auto* sensor = new (storage.data()) Sensor{config};                // construct in place
+sensor->~Sensor();                                                 // destroy by hand: no delete
 ```
 
-**Interview follow-up:** What must be handled manually? Alignment, lifetime, destruction, and reuse of the storage.
+**Follow-up:** What must be handled manually? Alignment, lifetime, destruction, and reuse of the storage.
 
 ## 65. How do you enforce alignment for DMA buffers?
 
-Declare the required alignment and place the buffer in a memory region compatible with the DMA controller and cache policy.
+**Topic:** Design
 
-**Example:**
+**Short answer:** Declare the alignment and place the buffer in a memory region the DMA controller and cache policy allow.
 
 ```cpp
 alignas(32) std::array<std::byte, 256> dma_buffer{};
 ```
 
-**Interview follow-up:** Is alignment sufficient on a cached MCU? No; cache maintenance or non-cacheable memory may also be required.
+**Follow-up:** Is alignment enough on a cached MCU? No. Cache maintenance or non-cacheable memory may also be needed.
 
-## 66. What is a strong exception guarantee?
+## 66. What is the strong exception guarantee?
 
-It means an operation either completes successfully or leaves the observable state unchanged. It is useful for transactional updates but may require extra storage or work.
+**Topic:** Errors
 
-**Example:**
+**Short answer:** An operation either fully succeeds or leaves the observable state unchanged.
 
 ```cpp
-auto candidate = settings;
-candidate.apply(new_value);
-settings = candidate;
+auto candidate = settings;         // work on a copy
+candidate.apply(new_value);        // if this fails, 'settings' is untouched
+settings = candidate;              // commit only on success
 ```
 
-**Interview follow-up:** Is this always appropriate in firmware? Only when the copy cost and failure model are acceptable.
+**Follow-up:** Always appropriate in firmware? Only when the copy cost and failure model are acceptable.
 
 ## 67. How do you design error handling when exceptions are disabled?
 
-Return explicit status types, use `expected`-style results, document recoverable failures, and keep error paths bounded.
+**Topic:** Errors
 
-**Example:**
+**Short answer:** Explicit status types, `expected`-style results, documented recoverable failures, and bounded error paths.
 
 ```cpp
 enum class Status { ok, timeout, invalid_state };
-
 Status start_conversion();
 ```
 
-**Interview follow-up:** What should not happen? Silent failure or error handling through undocumented global state.
+**Follow-up:** What should not happen? Silent failure, or error handling through undocumented global state.
 
 ## 68. What is a `noexcept` move constructor useful for?
 
-A non-throwing move allows standard containers and generic code to move objects safely instead of falling back to copying.
+**Topic:** Errors
 
-**Example:**
+**Short answer:** A non-throwing move lets containers and generic code move objects instead of falling back to copying.
 
 ```cpp
 Buffer(Buffer&& other) noexcept
-	: data_(other.data_), size_(other.size_) {
-	other.data_ = nullptr;
-	other.size_ = 0;
+    : data_(other.data_), size_(other.size_) {
+    other.data_ = nullptr;      // leave the source valid but empty
+    other.size_ = 0;
 }
 ```
 
-**Interview follow-up:** What must the moved-from object guarantee? It must remain valid for destruction and reassignment.
+**Follow-up:** What must the moved-from object guarantee? It must stay valid for destruction and reassignment.
 
 ## 69. How can you make a class non-copyable?
 
-Delete copying when duplicating the underlying hardware resource would be unsafe or meaningless.
+**Topic:** Design
 
-**Example:**
+**Short answer:** Delete copying when duplicating the underlying hardware resource would be unsafe or meaningless.
 
 ```cpp
 class Uart {
 public:
-	Uart(const Uart&) = delete;
-	Uart& operator=(const Uart&) = delete;
+    Uart(const Uart&) = delete;                // no copy construction
+    Uart& operator=(const Uart&) = delete;     // no copy assignment
 };
 ```
 
-**Interview follow-up:** Can it still be movable? Yes, if ownership transfer is valid and implemented safely.
+**Follow-up:** Can it still be movable? Yes, if ownership transfer is valid and implemented safely.
 
-## 70. What is the pImpl pattern and is it useful on MCUs?
+## 70. What is the pImpl pattern, and is it useful on MCUs?
 
-pImpl hides implementation details behind a pointer, reducing header dependencies and rebuilds, but it may add indirection and allocation.
+**Topic:** Design
 
-**Example:**
+**Short answer:** It hides implementation behind a pointer, cutting header dependencies and rebuilds, but adds indirection and often allocation.
 
 ```cpp
 class Driver {
 public:
-	void start();
-
+    void start();
 private:
-	struct Impl;
-	Impl* impl_;
+    struct Impl;          // defined only in the .cpp file
+    Impl* impl_;
 };
 ```
 
-**Interview follow-up:** When should it be avoided? In tight real-time paths or when dynamic allocation is prohibited.
+**Follow-up:** When avoid it? In tight real-time paths, or when dynamic allocation is prohibited.
 
 ## 71. How do you expose a register block safely?
 
-Wrap volatile registers in a small type that exposes meaningful operations and prevents unrelated code from manipulating fields directly.
+**Topic:** Design
 
-**Example:**
+**Short answer:** Wrap volatile registers in a small type that exposes meaningful operations, so unrelated code cannot poke fields directly.
 
 ```cpp
 struct Registers {
-	volatile uint32_t control;
-	volatile uint32_t status;
+    volatile uint32_t control;
+    volatile uint32_t status;
 };
 
 void enable(Registers& registers) {
-	registers.control |= 1u;
+    registers.control |= 1u;       // named operation instead of a raw write
 }
 ```
 
-**Interview follow-up:** What does `volatile` not solve? Atomic read-modify-write races and hardware access ordering.
+**Follow-up:** What does `volatile` not solve? Atomic read-modify-write races and hardware access ordering.
 
 ## 72. How do you test a C++ driver without hardware?
 
-Inject register, transport, clock, and interrupt collaborators, then use fakes to control responses and verify calls.
+**Topic:** Testing
 
-**Example:**
+**Short answer:** Inject register, transport, clock, and interrupt collaborators, then use fakes to control responses and verify calls.
 
 ```cpp
 FakeSpi spi;
 Sensor sensor{spi};
 sensor.read_id();
-assert(spi.last_command() == ReadId);
+assert(spi.last_command() == ReadId);     // verify what the driver sent
 ```
 
-**Interview follow-up:** What should tests avoid? Depending on timing or real peripheral side effects.
+**Follow-up:** What should tests avoid? Depending on timing or real peripheral side effects.
 
 ## 73. What is the cost of `std::function` in embedded code?
 
-It provides type erasure but may increase object size, code size, and allocation risk. A function pointer or fixed delegate can be cheaper.
+**Topic:** Cost
 
-**Example:**
+**Short answer:** Type erasure can grow object and code size and risk allocation. A function pointer or fixed delegate is cheaper.
 
 ```cpp
 using Callback = void (*)(uint32_t event);
 void register_callback(Callback callback);
 ```
 
-**Interview follow-up:** When is `std::function` acceptable? When its storage and allocation behavior are proven acceptable.
+**Follow-up:** When is `std::function` acceptable? When its storage and allocation behaviour are proven acceptable.
 
 ## 74. How do you use a function table instead of virtual functions?
 
-Store operation pointers in a fixed table and pass an explicit context pointer. This gives runtime dispatch without a C++ vtable.
+**Topic:** Design
 
-**Example:**
+**Short answer:** Keep operation pointers in a fixed table and pass an explicit context pointer. It gives runtime dispatch without a vtable.
 
 ```cpp
 struct Operations {
-	bool (*read)(void* context, uint8_t* value);
-	void* context;
+    bool (*read)(void* context, uint8_t* value);
+    void* context;                        // the "this" that a virtual call would supply
 };
 ```
 
-**Interview follow-up:** What trade-off exists? More manual safety and context management in exchange for explicit layout and dispatch.
+**Follow-up:** What is the trade-off? More manual safety and context management in exchange for explicit layout and dispatch.
 
 ## 75. How do you review C++ for zero-cost abstractions?
 
-Check generated code, object size, allocations, startup work, exception/RTTI settings, and worst-case timing. Keep abstractions when their cost is understood and acceptable.
+**Topic:** Cost
+
+**Short answer:** Check generated code, object size, allocations, startup work, exception and RTTI settings, and worst-case timing.
 
 **Example:** A templated fixed-capacity queue can compile to the same loop as a hand-written C ring buffer.
 
-**Interview follow-up:** What is the final engineering question? Does the abstraction improve correctness without violating flash, RAM, timing, or safety requirements?
-
+**Follow-up:** What is the final engineering question? Does the abstraction improve correctness without violating flash, RAM, timing, or safety requirements?

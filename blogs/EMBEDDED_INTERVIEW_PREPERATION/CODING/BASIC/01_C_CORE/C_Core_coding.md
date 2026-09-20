@@ -1,6 +1,21 @@
-# Basic Embedded Coding Questions — C Core
+# Basic Embedded Coding Questions: C Core
 
-## 1. Reverse a string
+How to use this file: read the **Idea** first, try to write the code yourself, then compare with the commented solution. Every code block explains what each step does and why.
+
+## Contents
+
+| Part | Topic | Questions |
+| --- | --- | --- |
+| A | Strings, bits, arrays, pointers, callbacks | A1-A15 |
+| B | Structures, unions, bit-fields, serialization, registers | B1-B35 |
+
+---
+
+## Part A: Strings, bits, arrays, pointers, and callbacks
+
+## A1. Reverse a string
+
+**Idea:** Swap the first and last characters, then move both ends inward until they meet.
 
 ```c
 #include <stdio.h>
@@ -8,47 +23,55 @@
 
 void reverse_string(char *str)
 {
-    size_t len = strlen(str);
-    for (size_t i = 0; i < len / 2; i++) {
-        char tmp = str[i];
-        str[i] = str[len - 1 - i];
-        str[len - 1 - i] = tmp;
+    size_t len = strlen(str);                  /* number of characters, not counting '\0' */
+
+    for (size_t i = 0; i < len / 2; i++) {     /* only go halfway, or we would swap back */
+        char tmp = str[i];                     /* keep the left character */
+        str[i] = str[len - 1 - i];             /* copy the mirrored right character to the left */
+        str[len - 1 - i] = tmp;                /* put the saved character on the right */
     }
 }
 
 int main(void)
 {
-    char s[] = "rajbir is my name";
+    char s[] = "rajbir is my name";            /* must be a writable array, not a string literal pointer */
     reverse_string(s);
-    printf("%s\n", s);
+    printf("%s\n", s);                         /* eman ym si ribjar */
     return 0;
 }
 ```
 
-**Follow-up:** Explain the time complexity and why the extra space remains constant.
+**Follow-up:** Time is O(n). Extra space is O(1), because only one temporary character is used.
 
-## 2. Reverse words in a sentence
+**Remember:** loop to `len / 2`, and use a writable `char[]`.
 
-"Reverse words" has two common readings. State which one you mean before you code.
+## A2. Reverse words in a sentence
 
-### 2.1 Reverse the letters of each word (word order unchanged)
+**Idea:** "Reverse words" has two common meanings. Ask which one is meant before coding.
+
+| Meaning | Input | Output |
+| --- | --- | --- |
+| A. Reverse the letters of each word | `rajbir is my name` | `ribjar si ym eman` |
+| B. Reverse the order of the words | `rajbir is my name` | `name my is rajbir` |
+
+### A2.1 Reverse the letters of each word (word order unchanged)
 
 ```c
 #include <stdio.h>
 #include <string.h>
 
-/* Reverses the letters inside every word in place; word order is unchanged. */
-void reverse_words(char *str)
+/* Reverses the letters inside every word, in place. Word order stays the same. */
+void reverse_each_word(char *str)
 {
     int len = (int)strlen(str);
-    int start = 0;
+    int start = 0;                             /* index where the current word begins */
 
-    /* i == len reads the terminating '\0', so the last word is flushed too. */
+    /* i == len reads the terminating '\0', which flushes the last word too. */
     for (int i = 0; i <= len; i++) {
-        if (str[i] == ' ' || str[i] == '\0') {
-            int end = i - 1;
+        if (str[i] == ' ' || str[i] == '\0') { /* end of a word */
+            int end = i - 1;                   /* last letter of the word */
 
-            while (start < end) {
+            while (start < end) {              /* reverse str[start..end] */
                 char temp = str[start];
                 str[start] = str[end];
                 str[end] = temp;
@@ -56,44 +79,75 @@ void reverse_words(char *str)
                 end--;
             }
 
-            start = i + 1;
+            start = i + 1;                     /* the next word starts after the space */
         }
     }
-
-    printf("Reverse string = %s\n", str);
 }
 
 int main(void)
 {
     char s[] = "rajbir is my name";
-    reverse_words(s);
+    reverse_each_word(s);
+    printf("%s\n", s);                         /* ribjar si ym eman */
     return 0;
 }
 ```
 
-Output:
+### A2.2 Reverse the order of the words
 
-```text
-name my is rajbir
+**Idea:** Reverse the whole string first, then reverse each word back to reading order.
+
+```c
+static void reverse_range(char *s, int left, int right)
+{
+    while (left < right) {                     /* swap the ends and move inward */
+        char t = s[left];
+        s[left++] = s[right];
+        s[right--] = t;
+    }
+}
+
+void reverse_word_order(char *str)
+{
+    int len = (int)strlen(str);
+
+    reverse_range(str, 0, len - 1);            /* step 1: "eman ym si ribjar" */
+
+    int start = 0;
+    for (int i = 0; i <= len; i++) {
+        if (str[i] == ' ' || str[i] == '\0') {
+            reverse_range(str, start, i - 1);  /* step 2: fix each word: "name my is rajbir" */
+            start = i + 1;
+        }
+    }
+}
 ```
 
-**Follow-up:** Time complexity is `O(n)` (one full pass plus one pass over the word characters, both linear), and extra space is `O(1)` because the two pointers and the swap temporaries are reused for every element. Note that pass 1 relocates separators as well, so leading, trailing, or repeated spaces are preserved in count but may move position. If the caller needs exactly one space between words, compact the string in a separate pass. Also note that string literals are read-only, so the input must be a writable `char[]`, not a `const char *`.
+**Follow-up:** Both versions are O(n) time and O(1) extra space. Each character is swapped a constant number of times. Repeated or leading spaces keep their positions in A2.1; if exactly one space between words is required, compact the string in a separate pass. The input must be a writable `char[]`, not a `const char *`.
 
-## 3. Count set bits
+**Remember:** whole-string reverse plus per-word reverse gives word order reversal.
+
+## A3. Count set bits
+
+**Idea:** `x & (x - 1)` clears the lowest set bit. Count how many times you can do that.
 
 ```c
 unsigned count_set_bits(unsigned x)
 {
     unsigned count = 0U;
     while (x != 0U) {
-        x &= (x - 1U);
-        ++count;
+        x &= (x - 1U);       /* remove the lowest set bit */
+        ++count;             /* one more bit was set */
     }
-    return count;
+    return count;            /* runs once per set bit */
 }
 ```
 
-## 4. Reverse bits of a 32-bit value
+Example: `x = 0b1011` needs 3 iterations, so the answer is 3.
+
+## A4. Reverse the bits of a 32-bit value
+
+**Idea:** Take the lowest bit of the input and push it into the result from the other side, 32 times.
 
 ```c
 #include <stdint.h>
@@ -101,58 +155,110 @@ unsigned count_set_bits(unsigned x)
 uint32_t reverse_bits32(uint32_t num)
 {
     uint32_t rev = 0U;
-    for (unsigned i = 0U; i < 32U; ++i) 
-    {
-        rev = (rev << 1);
-        rev |= (num & 1U);
-        num >>= 1;
+
+    for (unsigned i = 0U; i < 32U; ++i) {
+        rev <<= 1;               /* make room at the bottom of the result */
+        rev |= (num & 1U);       /* copy the lowest input bit into it */
+        num >>= 1;               /* move to the next input bit */
     }
-    return rev;
+    return rev;                  /* bit 0 of the input is now bit 31 of the result */
 }
 ```
 
-## 5. Rotate an array right by `k`
+Example: `0x00000001` becomes `0x80000000`.
 
-Use the reversal technique: reverse the full array, reverse the first `k` elements, and reverse the remaining elements.
+## A5. Rotate an array right by `k`
 
-## 6. Implement a callback across two C files
+**Idea:** Reverse the whole array, then reverse the first `k` elements, then reverse the rest.
 
 ```c
-/* callback.h */
-typedef void (*callback_t)(void);
-void register_callback(callback_t cb);
+static void reverse_part(int *a, int left, int right)
+{
+    while (left < right) {
+        int t = a[left];
+        a[left++] = a[right];
+        a[right--] = t;
+    }
+}
+
+void rotate_right(int *a, int n, int k)
+{
+    if (n <= 1) { return; }
+    k %= n;                          /* rotating by n or more is the same as k % n */
+    if (k == 0) { return; }
+
+    reverse_part(a, 0, n - 1);       /* {1,2,3,4,5}, k=2 -> {5,4,3,2,1} */
+    reverse_part(a, 0, k - 1);       /* first k elements       -> {4,5,3,2,1} */
+    reverse_part(a, k, n - 1);       /* remaining elements     -> {4,5,1,2,3} */
+}
+```
+
+**Follow-up:** O(n) time, O(1) space.
+
+## A6. Implement a callback across two C files
+
+**Idea:** One module stores a function pointer; another module supplies the function.
+
+```c
+/* callback.h : the public interface */
+typedef void (*callback_t)(void);            /* a pointer to a function with no arguments and no return */
+void register_callback(callback_t cb);       /* the caller hands in its function */
+void fire_callback(void);                    /* calls it when the event happens */
 ```
 
 ```c
-/* callback.c */
-static callback_t g_callback;
+/* callback.c : the implementation */
+#include "callback.h"
+
+static callback_t g_callback;                /* private to this file; NULL until registered */
 
 void register_callback(callback_t cb)
 {
-    g_callback = cb;
+    g_callback = cb;                         /* remember which function to call later */
+}
+
+void fire_callback(void)
+{
+    if (g_callback != NULL) {                /* never call a NULL function pointer */
+        g_callback();
+    }
 }
 ```
 
-## 7. Macro vs. inline function
+**Remember:** always check the pointer for `NULL` before calling.
 
-Prefer an inline function for type-safe behavior when possible. Macros are useful for token substitution and compile-time logic, but they can have side effects and no type checking.
+## A7. Macro vs inline function
+
+**Idea:** Prefer an inline function. It is type-checked and evaluates its arguments once.
+
+```c
+#define SQUARE_MACRO(x)  ((x) * (x))          /* no type check; SQUARE_MACRO(i++) increments twice */
+static inline int square_inline(int x) { return x * x; }   /* typed, evaluated once */
+```
+
+Macros are still useful for token pasting, conditional compilation, and constants.
 
 ---
 
-# Pointer and array coding questions
+## Pointer and array questions
 
-## 8. Swap two numbers using pointers
+## A8. Swap two numbers using pointers
+
+**Idea:** Pass addresses, so the function can change the caller's variables.
 
 ```c
 void swap(int *a, int *b)
 {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
+    int temp = *a;      /* save the value a points to */
+    *a = *b;            /* overwrite it with the value b points to */
+    *b = temp;          /* put the saved value where b points */
 }
+/* Call as: swap(&x, &y); */
 ```
 
-## 9. Print an array using pointer arithmetic
+## A9. Print an array using pointer arithmetic
+
+**Idea:** `*(ptr + i)` means the same as `arr[i]`.
 
 ```c
 #include <stdio.h>
@@ -160,24 +266,26 @@ void swap(int *a, int *b)
 int main(void)
 {
     int arr[3] = {1, 2, 3};
-    int *ptr = arr;
+    int *ptr = arr;                       /* the array name decays to a pointer to its first element */
 
     for (int i = 0; i < 3; ++i) {
-        printf("%d ", *(ptr + i));
+        printf("%d ", *(ptr + i));        /* ptr + i advances by i ints, not i bytes */
     }
     return 0;
 }
 ```
 
-## 10. Reverse an array using pointers
+## A10. Reverse an array using pointers
+
+**Idea:** Two pointers, one at each end, swap and move inward.
 
 ```c
 void reverse(int *arr, int size)
 {
-    int *start = arr;
-    int *end = arr + size - 1;
+    int *start = arr;                     /* first element */
+    int *end = arr + size - 1;            /* last element */
 
-    while (start < end) {
+    while (start < end) {                 /* stop when they meet or cross */
         int temp = *start;
         *start = *end;
         *end = temp;
@@ -187,7 +295,7 @@ void reverse(int *arr, int size)
 }
 ```
 
-## 11. What is the output?
+## A11. What is the output?
 
 ```c
 int x = 10;
@@ -201,211 +309,172 @@ Output:
 10 10
 ```
 
-## 12. Find the maximum value using pointers
+**Why:** `p` holds the address of `x`, so `*p` reads the same value.
+
+## A12. Find the maximum value using pointers
 
 ```c
-int find_max(const int *arr, int size)
+int find_max(const int *arr, int size)     /* const: the function only reads the array */
 {
-    int max = arr[0];
+    int max = arr[0];                      /* assume the first element is the largest */
 
     for (int i = 1; i < size; ++i) {
         if (arr[i] > max) {
-            max = arr[i];
+            max = arr[i];                  /* found a bigger one */
         }
     }
     return max;
 }
 ```
 
-## 13. Calculate the length of an array using `sizeof`
+**Watch out:** the array must not be empty, or `arr[0]` is out of bounds.
+
+## A13. Calculate the length of an array using `sizeof`
 
 ```c
 int arr[] = {10, 20, 30, 40, 50};
-size_t size = sizeof(arr) / sizeof(arr[0]);
+size_t size = sizeof(arr) / sizeof(arr[0]);    /* total bytes / bytes per element = 5 */
 ```
 
-## 14. Copy an array using pointer arithmetic
+**Watch out:** this only works where `arr` is a real array. Inside a function that received it as a parameter, `sizeof` gives the pointer size.
+
+## A14. Copy an array using pointer arithmetic
 
 ```c
 void copy_array(const int *src, int *dst, int size)
 {
     for (int i = 0; i < size; ++i) {
-        *(dst + i) = *(src + i);
+        *(dst + i) = *(src + i);          /* same as dst[i] = src[i] */
     }
 }
 ```
 
-## 15. What is a double pointer?
+## A15. What is a double pointer?
 
-A double pointer is a pointer to a pointer. It is used when a function must modify the caller's pointer value itself.
+**Idea:** A pointer to a pointer. Use it when a function must change the caller's pointer itself.
 
 ```c
 void set_pointer(int **pp, int *new_addr)
 {
-    *pp = new_addr;
+    *pp = new_addr;            /* change what the caller's pointer points to */
 }
+
+/* int a = 1; int *p = NULL; set_pointer(&p, &a);   ->   p now points to a */
 ```
 
 ---
-# Structure and Union Coding Interview Questions — Embedded C
 
-## 1. Find the size of a structure
+## Part B: Structures, unions, bit-fields, serialization, and registers
 
-**Question:** What is the likely size of this structure on a typical 32-bit MCU?
+## B1. Find the size of a structure
+
+**Idea:** Each member is aligned, and the total is rounded up to the structure's alignment.
 
 ```c
 struct Test {
-    char c;
-    int i;
-    char d;
-};
+    char c;      /* offset 0 */
+    int  i;      /* offset 4 (3 bytes of padding before it) */
+    char d;      /* offset 8 */
+};               /* total 12: 3 bytes of tail padding so arrays stay aligned */
 ```
 
-**Answer:** It is commonly 12 bytes because of alignment and tail padding, but the exact size is implementation-dependent.
+**Answer:** Commonly 12 bytes on a 32-bit MCU. The exact size is implementation-dependent. Verify with `sizeof`.
 
----
+## B2. Reduce structure padding
 
-## 2. Reduce structure padding
-
-**Question:** Which structure is generally more memory-efficient?
+**Idea:** Put larger members first.
 
 ```c
-struct A {
-    char a;
-    int b;
-    char c;
-};
-
-struct B {
-    int b;
-    char a;
-    char c;
-};
+struct A { char a; int b; char c; };    /* typically 12 bytes */
+struct B { int b; char a; char c; };    /* typically 8 bytes: 4 + 1 + 1 + 2 tail padding */
 ```
 
-**Answer:** `struct B` is generally more compact because related alignment requirements can reduce padding.
+**Answer:** `struct B` is usually smaller because the small members share one padded region.
 
----
-
-## 3. Print member offsets
+## B3. Print member offsets
 
 ```c
 #include <stdio.h>
 #include <stddef.h>
 
 struct Sensor {
-    char id;
-    int value;
+    char  id;
+    int   value;
     float temperature;
 };
 
 int main(void)
 {
-    printf("id = %zu\n", offsetof(struct Sensor, id));
-    printf("value = %zu\n", offsetof(struct Sensor, value));
-    printf("temperature = %zu\n", offsetof(struct Sensor, temperature));
-
+    printf("id = %zu\n",          offsetof(struct Sensor, id));           /* 0 */
+    printf("value = %zu\n",       offsetof(struct Sensor, value));        /* 4 (after padding) */
+    printf("temperature = %zu\n", offsetof(struct Sensor, temperature));  /* 8 */
     return 0;
 }
 ```
 
-**Concept tested:** Structure memory layout and padding.
+**Concept tested:** structure layout and padding.
 
----
-
-## 4. Swap two structures
+## B4. Swap two structures
 
 ```c
-struct Data {
-    int a;
-    int b;
-};
+struct Data { int a; int b; };
 
 void swap(struct Data *x, struct Data *y)
 {
-    struct Data temp = *x;
+    struct Data temp = *x;     /* structures can be assigned as whole objects */
     *x = *y;
     *y = temp;
 }
 ```
 
-**Concept tested:** Structure assignment and pointers.
-
----
-
-## 5. Pass structure to a function
+## B5. Pass a structure to a function
 
 ```c
-struct Sensor {
-    int id;
-    float value;
-};
+struct Sensor { int id; float value; };
 
 void print_sensor(const struct Sensor *s)
 {
-    printf("%d %.2f\n", s->id, s->value);
+    printf("%d %.2f\n", s->id, s->value);      /* '->' reads a member through a pointer */
 }
 ```
 
-**Why use a pointer?** Avoids copying the entire structure and allows `const` protection when modification is not required.
+**Why a pointer?** It avoids copying the whole structure, and `const` protects it from changes.
 
----
-
-## 6. Find the largest member of a union
+## B6. Find the largest member of a union
 
 ```c
-union Data {
-    char c;
-    int i;
-    double d;
-};
+union Data { char c; int i; double d; };
 ```
 
-**Answer:** `double` is the largest declared member, but `sizeof(union Data)` should be used to determine actual storage size.
+**Answer:** `double` is the largest declared member, but use `sizeof(union Data)` for the real storage size.
 
----
-
-## 7. Demonstrate shared union memory
+## B7. Demonstrate shared union memory
 
 ```c
 #include <stdio.h>
 
-union Data {
-    int i;
-    float f;
-};
+union Data { int i; float f; };
 
 int main(void)
 {
     union Data d;
-
-    printf("%p\n", (void *)&d.i);
-    printf("%p\n", (void *)&d.f);
-
+    printf("%p\n", (void *)&d.i);      /* same address... */
+    printf("%p\n", (void *)&d.f);      /* ...as this one: all members share storage */
     return 0;
 }
 ```
 
-**Expected concept:** Both members have the same starting address.
-
----
-
-## 8. Union type-punning question
+## B8. Union type-punning
 
 ```c
-union Data {
-    uint32_t u32;
-    float f;
-};
+union Data { uint32_t u32; float f; };
 ```
 
 **Question:** Can you write `u32` and read `f`?
 
-**Answer:** The representation is implementation-dependent; do not use this as a portable way to reinterpret object representations. For portable byte-level conversion, use `memcpy()`.
+**Answer:** The result depends on the representation, so it is not a portable way to reinterpret bytes. Use `memcpy()` (B9).
 
----
-
-## 9. Portable representation conversion
+## B9. Portable representation conversion
 
 ```c
 #include <stdint.h>
@@ -414,72 +483,49 @@ union Data {
 float uint32_to_float(uint32_t value)
 {
     float result;
-    memcpy(&result, &value, sizeof(result));
+    memcpy(&result, &value, sizeof result);    /* copy the raw bytes: always well defined */
     return result;
 }
 ```
 
-**Concept tested:** Object representation and safe copying.
+## B10. Implement a tagged union
 
----
-
-## 10. Implement a tagged union
+**Idea:** A union plus a tag that says which member is valid.
 
 ```c
 #include <stdint.h>
 
-typedef enum {
-    TYPE_INT,
-    TYPE_FLOAT
-} DataType;
+typedef enum { TYPE_INT, TYPE_FLOAT } DataType;
 
 typedef struct {
-    DataType type;
-
+    DataType type;                 /* the tag */
     union {
         int32_t i;
-        float f;
+        float   f;
     } value;
 } Data;
-```
 
-Usage:
-
-```c
+/* Usage */
 Data d;
-
-d.type = TYPE_INT;
+d.type = TYPE_INT;                 /* set the tag together with the value */
 d.value.i = 100;
 ```
 
-**Concept tested:** Safe union usage with a discriminator.
-
----
-
-## 11. Set and clear structure flags
+## B11. Set and clear structure flags (bit-fields)
 
 ```c
 struct Status {
-    unsigned int ready : 1;
-    unsigned int error : 1;
+    unsigned int ready : 1;        /* 1 bit */
+    unsigned int error : 1;        /* 1 bit */
 };
 
-void set_ready(struct Status *s)
-{
-    s->ready = 1;
-}
-
-void clear_ready(struct Status *s)
-{
-    s->ready = 0;
-}
+void set_ready(struct Status *s)   { s->ready = 1; }
+void clear_ready(struct Status *s) { s->ready = 0; }
 ```
 
-**Concept tested:** Bit-fields.
+**Watch out:** bit-field layout is compiler-dependent. Prefer masks for hardware (B12).
 
----
-
-## 12. Implement flags without bit-fields
+## B12. Implement flags without bit-fields
 
 ```c
 #include <stdint.h>
@@ -489,230 +535,171 @@ void clear_ready(struct Status *s)
 
 uint32_t status;
 
-status |= FLAG_READY;       // Set
-status &= ~FLAG_READY;      // Clear
-status ^= FLAG_ERROR;       // Toggle
+status |= FLAG_READY;       /* set */
+status &= ~FLAG_READY;      /* clear */
+status ^= FLAG_ERROR;       /* toggle */
 ```
 
-**Why prefer this in many embedded cases?** Explicit masks and shifts provide predictable bit operations and avoid bit-field layout dependencies.
+**Why?** Explicit masks and shifts are predictable and avoid bit-field layout dependencies.
 
----
-
-## 13. Extract a bit-field using masks
+## B13. Extract a bit-field using masks
 
 ```c
-uint32_t reg = 0x0000001Au;
+uint32_t reg = 0x0000001Au;               /* binary 1 1010 */
 
-uint32_t mode = (reg >> 1) & 0x7u;
+uint32_t mode = (reg >> 1) & 0x7u;        /* shift bit 1 down to bit 0, then keep 3 bits */
 ```
 
-**Answer:** Bits 1 through 3 are extracted into `mode`.
+**Answer:** Bits 1 to 3 are extracted. Here `mode = 0b101 = 5`.
 
----
-
-## 14. Modify selected bits without affecting others
+## B14. Modify selected bits without affecting others
 
 ```c
-#define MODE_MASK  (0x7u << 1)
+#define MODE_MASK  (0x7u << 1)                                   /* bits 1..3 */
 
-reg = (reg & ~MODE_MASK) | ((mode & 0x7u) << 1);
+reg = (reg & ~MODE_MASK)                 /* 1. clear the old field */
+    | ((mode & 0x7u) << 1);              /* 2. insert the new value, masked so it cannot spill */
 ```
 
-**Concept tested:** Read-modify-write and bit masking.
-
----
-
-## 15. Serialize a 16-bit value in little-endian format
+## B15. Serialize a 16-bit value in little-endian format
 
 ```c
 #include <stdint.h>
 
 void write_u16_le(uint8_t *buf, uint16_t value)
 {
-    buf[0] = (uint8_t)(value & 0xFFu);
-    buf[1] = (uint8_t)((value >> 8) & 0xFFu);
+    buf[0] = (uint8_t)(value & 0xFFu);          /* low byte first */
+    buf[1] = (uint8_t)((value >> 8) & 0xFFu);   /* then the high byte */
 }
 ```
 
----
-
-## 16. Deserialize a 16-bit little-endian value
+## B16. Deserialize a 16-bit little-endian value
 
 ```c
 uint16_t read_u16_le(const uint8_t *buf)
 {
-    return (uint16_t)buf[0] |
-           ((uint16_t)buf[1] << 8);
+    return (uint16_t)buf[0] |                   /* low byte */
+           ((uint16_t)buf[1] << 8);             /* high byte shifted into place */
 }
 ```
 
-**Concept tested:** Structure-independent serialization and endianness.
+**Concept tested:** structure-independent serialization and endianness.
 
----
-
-## 17. Why should you not directly send this structure?
+## B17. Why should you not directly send this structure?
 
 ```c
-struct Packet {
-    uint8_t id;
-    uint32_t value;
-};
+struct Packet { uint8_t id; uint32_t value; };
+
+send((uint8_t *)&packet, sizeof(packet));      /* bad idea */
 ```
 
-Bad approach:
+**Answer:** Padding, alignment, endianness, and ABI differences make the bytes unsuitable for a portable protocol.
+
+## B18. Create an explicit packet serializer
 
 ```c
-send((uint8_t *)&packet, sizeof(packet));
-```
-
-**Answer:** Padding, alignment, endianness, and ABI differences can make the byte representation unsuitable for a portable protocol.
-
----
-
-## 18. Create an explicit packet serializer
-
-```c
-typedef struct {
-    uint8_t id;
-    uint16_t value;
-} Packet;
+typedef struct { uint8_t id; uint16_t value; } Packet;
 
 void serialize_packet(const Packet *p, uint8_t *buf)
 {
-    buf[0] = p->id;
-    buf[1] = (uint8_t)(p->value & 0xFFu);
-    buf[2] = (uint8_t)((p->value >> 8) & 0xFFu);
+    buf[0] = p->id;                                  /* wire byte 0 */
+    buf[1] = (uint8_t)(p->value & 0xFFu);            /* wire byte 1: value low byte */
+    buf[2] = (uint8_t)((p->value >> 8) & 0xFFu);     /* wire byte 2: value high byte */
 }
 ```
 
----
+The wire format is exactly 3 bytes, no matter what `sizeof(Packet)` is.
 
-## 19. Array of structures access
+## B19. Array of structures access
 
 ```c
-struct Sensor {
-    int id;
-    float value;
-};
-
+struct Sensor { int id; float value; };
 struct Sensor sensors[5];
 
 sensors[2].value = 25.5f;
 ```
 
-**Question:** How is the address of `sensors[2]` determined?
+**Question:** How is the address of `sensors[2]` found?
 
-**Answer:** Conceptually, it is the base address plus `2 * sizeof(struct Sensor)`.
+**Answer:** Base address plus `2 * sizeof(struct Sensor)`.
 
----
-
-## 20. Structure pointer access
+## B20. Structure pointer access
 
 ```c
 struct Sensor s;
 struct Sensor *ptr = &s;
 
-ptr->id = 10;
+ptr->id = 10;             /* same as (*ptr).id = 10 */
 ptr->value = 25.5f;
 ```
 
----
-
-## 21. Nested structure access
+## B21. Nested structure access
 
 ```c
-struct Date {
-    int day;
-    int month;
-};
-
-struct Employee {
-    int id;
-    struct Date date;
-};
+struct Date { int day; int month; };
+struct Employee { int id; struct Date date; };
 
 struct Employee e;
-
-e.date.day = 10;
+e.date.day = 10;          /* chain the dots: outer.inner.member */
 e.date.month = 9;
 ```
 
----
-
-## 22. Structure containing a union
+## B22. Structure containing a union
 
 ```c
 struct Message {
-    uint8_t type;
-
+    uint8_t type;                    /* which payload is in use */
     union {
         uint32_t value;
-        float temperature;
+        float    temperature;
     } payload;
 };
-```
 
-Usage:
-
-```c
 struct Message msg;
-
 msg.type = 1;
 msg.payload.value = 100;
 ```
 
----
-
-## 23. Implement a circular buffer using a structure
+## B23. Implement a circular buffer using a structure
 
 ```c
 #define BUFFER_SIZE 16
 
 struct RingBuffer {
-    uint8_t data[BUFFER_SIZE];
-    uint16_t head;
-    uint16_t tail;
+    uint8_t  data[BUFFER_SIZE];
+    uint16_t head;                 /* next write position */
+    uint16_t tail;                 /* next read position */
 };
 
 int push(struct RingBuffer *rb, uint8_t value)
 {
-    uint16_t next = (uint16_t)((rb->head + 1u) % BUFFER_SIZE);
+    uint16_t next = (uint16_t)((rb->head + 1u) % BUFFER_SIZE);   /* wrap around */
 
-    if (next == rb->tail)
+    if (next == rb->tail) {        /* buffer full (one slot is left unused) */
         return 0;
+    }
 
-    rb->data[rb->head] = value;
-    rb->head = next;
-
+    rb->data[rb->head] = value;    /* store first... */
+    rb->head = next;               /* ...then publish the new head */
     return 1;
 }
 ```
 
-**Concept tested:** Structure-based state management and memory access patterns.
-
----
-
-## 24. Structure for memory-mapped peripheral registers
+## B24. Structure for memory-mapped peripheral registers
 
 ```c
 typedef struct {
-    volatile uint32_t CTRL;
-    volatile uint32_t STATUS;
-    volatile uint32_t DATA;
+    volatile uint32_t CTRL;        /* offset 0x00 */
+    volatile uint32_t STATUS;      /* offset 0x04 */
+    volatile uint32_t DATA;        /* offset 0x08 */
 } UART_Regs;
+
+#define UART0 ((UART_Regs *)0x40000000u)     /* the base address comes from the reference manual */
 ```
 
-A vendor-specific base address may then be mapped:
+**Important:** addresses and offsets must match the MCU reference manual.
 
-```c
-#define UART0 ((UART_Regs *)0x40000000u)
-```
-
-**Important:** The address and register offsets must match the MCU reference manual.
-
----
-
-## 25. Set a register bit using a structure
+## B25. Set a register bit using a structure
 
 ```c
 #define UART_ENABLE (1u << 0)
@@ -720,115 +707,82 @@ A vendor-specific base address may then be mapped:
 UART0->CTRL |= UART_ENABLE;
 ```
 
----
-
-## 26. Clear a register bit
+## B26. Clear a register bit
 
 ```c
 UART0->CTRL &= ~UART_ENABLE;
 ```
 
----
-
-## 27. Read a status bit
+## B27. Read a status bit
 
 ```c
 #define UART_RX_READY (1u << 1)
 
 if (UART0->STATUS & UART_RX_READY) {
-    /* Data available */
+    /* data is available */
 }
 ```
 
----
-
-## 28. Find the difference between two structures
+## B28. Compare two structures
 
 ```c
-struct Data {
-    int a;
-    int b;
-};
+struct Data { int a; int b; };
 
 int equal(const struct Data *x, const struct Data *y)
 {
-    return (x->a == y->a) && (x->b == y->b);
+    return (x->a == y->a) && (x->b == y->b);     /* compare member by member */
 }
 ```
 
 **Why not `memcmp()`?** Padding bytes can differ even when all logical fields are equal.
 
----
-
-## 29. Reverse an array of structures
+## B29. Reverse an array of structures
 
 ```c
-struct Data {
-    int value;
-};
+struct Data { int value; };
 
 void reverse(struct Data arr[], int n)
 {
     for (int i = 0; i < n / 2; i++) {
-        struct Data temp = arr[i];
+        struct Data temp = arr[i];          /* whole-structure assignment */
         arr[i] = arr[n - 1 - i];
         arr[n - 1 - i] = temp;
     }
 }
 ```
 
----
-
-## 30. Array of structures vs structure of arrays
-
-### Array of structures
+## B30. Array of structures vs structure of arrays
 
 ```c
-struct Sensor {
-    float temperature;
-    float pressure;
-};
-
+/* Array of structures (AoS) */
+struct Sensor { float temperature; float pressure; };
 struct Sensor sensors[100];
+
+/* Structure of arrays (SoA) */
+struct Sensors { float temperature[100]; float pressure[100]; };
 ```
 
-### Structure of arrays
+**Interview answer:** AoS suits processing whole objects. SoA can be faster when processing one field across many objects, because memory access is more contiguous.
+
+## B31. Find the largest value in an array of structures
 
 ```c
-struct Sensors {
-    float temperature[100];
-    float pressure[100];
-};
-```
-
-**Interview answer:** Use AoS when processing complete sensor objects; SoA can be better when processing one field across many objects because memory access can be more contiguous.
-
----
-
-## 31. Find the largest value in an array of structures
-
-```c
-struct Sensor {
-    int id;
-    float value;
-};
+struct Sensor { int id; float value; };
 
 int max_sensor_index(const struct Sensor arr[], int n)
 {
-    int index = 0;
+    int index = 0;                             /* index of the best so far */
 
     for (int i = 1; i < n; i++) {
-        if (arr[i].value > arr[index].value)
+        if (arr[i].value > arr[index].value) {
             index = i;
+        }
     }
-
     return index;
 }
 ```
 
----
-
-## 32. Use `const` with a structure pointer
+## B32. Use `const` with a structure pointer
 
 ```c
 void print_sensor(const struct Sensor *s)
@@ -839,9 +793,7 @@ void print_sensor(const struct Sensor *s)
 
 **Answer:** `const` prevents the function from modifying the structure through that pointer.
 
----
-
-## 33. Use `volatile` with a hardware structure
+## B33. Use `volatile` with a hardware structure
 
 ```c
 typedef struct {
@@ -852,62 +804,45 @@ typedef struct {
 
 **Question:** Why `volatile`?
 
-**Answer:** Hardware can change register values independently of normal program execution, so the compiler must perform the accesses as specified.
+**Answer:** Hardware can change register values independently of program flow, so the compiler must perform every access as written.
 
----
-
-## 34. Coding question: Identify the padding issue
+## B34. Identify the padding issue
 
 ```c
-struct Example {
-    char a;
-    int b;
-    short c;
-};
+struct Example { char a; int b; short c; };
 ```
 
-**Answer:** Padding may be inserted after `a` before `b`, and possibly at the end to satisfy alignment. Use `sizeof()` and `offsetof()` on the target compiler to verify the actual layout.
+**Answer:** Padding is likely after `a` (before `b`) and at the end (to align the whole structure). Confirm with `sizeof()` and `offsetof()` on the target compiler.
 
----
+## B35. Design a protocol structure
 
-## 35. Coding question: Design a protocol structure
+**Question:** A packet has a 1-byte command, a 2-byte length, and a 4-byte sequence number.
 
-**Question:** You have a packet containing:
-
-- 1 byte command
-- 2 byte length
-- 4 byte sequence number
-
-**Answer:** Define logical fields in a structure, but serialize them explicitly:
+**Answer:** Keep logical fields in a structure, but serialize explicitly:
 
 ```c
-struct Packet {
-    uint8_t command;
-    uint16_t length;
-    uint32_t sequence;
-};
-```
+struct Packet { uint8_t command; uint16_t length; uint32_t sequence; };
 
-Do not assume `sizeof(struct Packet)` equals the protocol's wire size.
+/* Wire size is 1 + 2 + 4 = 7 bytes. sizeof(struct Packet) is probably 8 or 12, so never assume they match. */
+```
 
 ---
 
-# Quick Coding Revision
+## Quick revision
 
-| Topic | Key Concept |
-|---|---|
+| Topic | Key concept |
+| --- | --- |
 | Structure | Separate storage for members |
 | Union | Shared storage |
 | Padding | Compiler-inserted alignment bytes |
 | Alignment | Address requirements of types |
 | `offsetof()` | Member offset |
-| Bit-field | Compact bit-level members |
-| Tagged union | Discriminator + union |
-| `.` | Structure/union object access |
-| `->` | Pointer to structure/union access |
+| Bit-field | Compact bit-level members, layout is compiler-dependent |
+| Tagged union | Tag plus union |
+| `.` | Access through an object |
+| `->` | Access through a pointer |
 | `memcpy()` | Copy object representation |
-| `memcmp()` | Not reliable for structure logical equality |
+| `memcmp()` | Not reliable for structure equality |
 | Serialization | Explicit byte conversion |
-| AoS | Array of complete objects |
-| SoA | Separate arrays for each field |
-| `volatile` | Important for hardware register accesses |
+| AoS / SoA | Array of objects / separate array per field |
+| `volatile` | Needed for hardware register accesses |

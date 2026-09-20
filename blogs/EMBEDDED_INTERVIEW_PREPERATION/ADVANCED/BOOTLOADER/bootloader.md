@@ -1,455 +1,461 @@
 # Bootloader Interview Questions and Answers
 
-> Embedded systems study notes with examples, code, and update-flow diagrams.
+Study notes with examples, commented code, and update-flow diagrams.
+
+How to use this file: read the **Short answer**, then the details. Q1 to Q45 are the numbered questions. After them come the OTA walkthrough and the SHA-256 and AES notes, which are the most-asked topics.
+
+## Contents
+
+| Section | Topic | Questions |
+| --- | --- | --- |
+| Basics | What a bootloader is and why it exists | 1-5 |
+| STM32 specifics | MSP, VTOR | 6-10 |
+| Firmware validation | Checksum, CRC, hash, signature | 11-14 |
+| Jumping to the application | The jump sequence | 15-17 |
+| Firmware update | Interfaces, flash programming, power loss | 18-22 |
+| OTA | Over-the-air updates, A/B, rollback | 23-26 |
+| Secure boot | Integrity vs authentication | 27-31 |
+| Advanced | Dual bank, chain loading, cleanup, flash protection | 32-40 |
+| Real-project | Production design questions | 41-45 |
+| Study notes | Jump sequence, 16-step OTA, SHA-256, AES | - |
+
+---
 
 ## Basic Questions
 
 ### 1. What is a bootloader?
 
-A bootloader is a small program that runs immediately after reset and before the main application. It initializes hardware, verifies firmware integrity, supports firmware updates, and transfers execution to the application.
+**Short answer:** A small program that runs right after reset, before the main application.
+
+It initializes hardware, verifies firmware integrity, supports firmware updates, and transfers execution to the application.
 
 ### 2. Why do we need a bootloader?
-Firmware updates without debugger
-Recovery from corrupted firmware
-Secure firmware validation
-OTA updates
-Manufacturing/programming support
+
+**Short answer:** To update, recover, and validate firmware without special tools.
+
+- Firmware updates without a debugger
+- Recovery from corrupted firmware
+- Secure firmware validation
+- OTA updates
+- Manufacturing and programming support
+
 ### 3. What happens after MCU reset?
-```text
-Reset
- |
-CPU loads MSP
- |
-CPU loads Reset Handler
- |
-Bootloader starts
- |
-Initialize HW
- |
-Validate firmware
- |
-Jump to Application
+
+```mermaid
+flowchart TD
+    A["Reset"] --> B["CPU loads MSP from vector table word 0"]
+    B --> C["CPU loads Reset Handler from word 1"]
+    C --> D["Bootloader starts"]
+    D --> E["Initialize hardware"]
+    E --> F["Validate firmware"]
+    F --> G["Jump to application"]
 ```
+
 ### 4. What is the difference between Boot ROM and a bootloader?
+
 | Boot ROM | Bootloader |
 | --- | --- |
 | Factory programmed | User programmed |
-| Cannot modify | Can modify |
+| Cannot be modified | Can be modified |
 | Limited functionality | Custom functionality |
 | Permanent | Upgradeable |
 
-Example:
-STM32 ROM Bootloader supports UART/USB flashing.
+Example: the STM32 ROM bootloader supports flashing over UART and USB.
 
 ### 5. Where is the bootloader stored?
 
-Usually in a protected Flash region.
+**Short answer:** Usually in a protected flash region at the start of flash.
 
-Example:
+```text
+0x08000000 - 0x0800FFFF   Bootloader
+0x08010000 - end          Application
+```
 
-0x08000000 - 0x0800FFFF  Bootloader
-0x08010000 - End         Application
+---
+
 ## STM32-Specific Questions
 
 ### 6. What is MSP?
 
-MSP = Main Stack Pointer.
-
-First word of vector table contains MSP value.
+**Short answer:** MSP is the Main Stack Pointer. The first word of the vector table holds its initial value.
 
 ```c
-__set_MSP(*(uint32_t*)APP_ADDR);
+__set_MSP(*(uint32_t *)APP_ADDR);     /* load the application's initial stack pointer from its vector table */
 ```
+
 ### 7. Why must MSP be changed before jumping to the application?
 
-The application has its own stack location.
+**Short answer:** The application has its own stack location.
 
-Without updating MSP:
+Without updating MSP, the application keeps using the bootloader's stack, which can corrupt memory.
 
-Application uses Bootloader stack
-Stack corruption occurs
 ### 8. What is VTOR?
 
-VTOR = Vector Table Offset Register.
-
-Points to interrupt vector table.
+**Short answer:** The Vector Table Offset Register. It points to the interrupt vector table.
 
 ```c
-SCB->VTOR = APP_ADDR;
+SCB->VTOR = APP_ADDR;       /* make interrupts use the application's vector table */
 ```
+
 ### 9. Why update VTOR before jumping?
 
-Otherwise interrupts will still use bootloader ISR addresses.
+**Short answer:** Otherwise interrupts still use the bootloader's handlers.
 
-```text
-Interrupt
- |
-Bootloader ISR
- |
-Crash
+```mermaid
+flowchart LR
+    A["Interrupt"] --> B["Bootloader ISR (wrong table)"] --> C["Crash"]
 ```
+
 ### 10. What happens if VTOR is not updated?
 
-Interrupts execute wrong handlers.
+**Short answer:** Interrupts run the wrong handlers.
 
-Common symptoms:
+Common symptoms: HardFault, random resets, unexpected behaviour.
 
-HardFault
-Random resets
-Unexpected behavior
+---
+
 ## Firmware Validation
 
 ### 11. How do you verify firmware before execution?
 
-Methods:
+| Method | Detects | Security |
+| --- | --- | --- |
+| Checksum | Simple errors | None |
+| CRC | Corruption, burst errors | None |
+| SHA hash | Any modification | None by itself |
+| Digital signature | Modification and untrusted source | Yes |
 
-Checksum
-CRC
-SHA Hash
-Digital Signature
 ### 12. What is the difference between a checksum and CRC?
 
-Checksum:
+| Checksum | CRC |
+| --- | --- |
+| Simple addition | Polynomial based |
+| Fast | Fast with hardware or tables |
+| Weak detection | Strong error detection |
+| Two errors can cancel out | Widely used in protocols and storage |
 
-Simple addition
-Fast
-Weak detection
-
-CRC:
-
-Polynomial based
-Strong error detection
-Widely used
 ### 13. Why is CRC preferred?
 
-Better detection of:
+**Short answer:** It detects single-bit errors, burst errors, and communication corruption much better than a plain sum.
 
-Single-bit errors
-Burst errors
-Communication corruption
 ### 14. Can CRC provide security?
 
-No.
+**Short answer:** No. CRC checks integrity only, and anyone can recompute it.
 
-CRC checks integrity only.
+For security use SHA-256 with an RSA or ECC signature.
 
-For security use:
+---
 
-SHA256
-RSA
-ECC
 ## Jumping to the Application
 
 ### 15. How does a bootloader jump to the application?
-```c
-uint32_t resetHandler =
-    *(uint32_t*)(APP_ADDR + 4);
 
-((void (*)(void))resetHandler)();
+```c
+typedef void (*app_entry_t)(void);
+
+void jump_to_app(uint32_t app_addr)
+{
+    uint32_t app_msp   = *(volatile uint32_t *)(app_addr);        /* word 0: application's stack pointer */
+    uint32_t app_reset = *(volatile uint32_t *)(app_addr + 4u);   /* word 1: application's reset handler */
+
+    __disable_irq();                    /* no interrupt may fire during the switch */
+    SCB->VTOR = app_addr;               /* use the application's vector table */
+    __set_MSP(app_msp);                 /* switch to the application's stack */
+    ((app_entry_t)app_reset)();         /* branch to the reset handler; never returns */
+}
 ```
+
 ### 16. Why is `APP_ADDR + 4` used?
 
-Vector table:
+**Short answer:** The vector table layout puts the reset handler in word 1.
 
-Offset 0 = MSP
-Offset 4 = Reset Handler
+| Offset | Content |
+| --- | --- |
+| 0 | Initial MSP |
+| 4 | Reset handler address |
+
 ### 17. What checks should be performed before jumping?
 
-Verify:
+- Valid stack pointer
+- Valid reset handler
+- CRC (or hash and signature) OK
+- Application exists (flash is not erased)
 
-Valid Stack Pointer
-Valid Reset Handler
-CRC OK
-Application Exists
-
-Example:
-
-if((*APP_ADDR & 0x2FFE0000)==0x20000000)
+```c
+bool app_looks_valid(uint32_t app_addr)
 {
-   Jump();
+    uint32_t msp   = *(volatile uint32_t *)app_addr;
+    uint32_t reset = *(volatile uint32_t *)(app_addr + 4u);
+
+    /* The stack pointer must point into RAM (0x2000xxxx on many STM32 parts). */
+    if ((msp & 0x2FFE0000u) != 0x20000000u) return false;
+
+    /* The reset handler must lie inside flash, and have the Thumb bit set. */
+    if (reset < app_addr || reset >= FLASH_END || (reset & 1u) == 0u) return false;
+
+    return true;   /* then verify CRC or signature before jumping */
 }
+```
+
+---
+
 ## Firmware Update Questions
 
 ### 18. What interfaces can be used for bootloader updates?
-UART
-CAN
-USB
-SPI
-Ethernet
-BLE
-WiFi
-LTE
-### 19. Explain the UART bootloader flow.
-Enter Boot Mode
-Receive Image
-Erase Flash
-Write Flash
-Verify CRC
-Reset MCU
+
+UART, CAN, USB, SPI, Ethernet, BLE, Wi-Fi, LTE.
+
+### 19. Explain the UART bootloader flow
+
+```mermaid
+flowchart LR
+    A["Enter boot mode"] --> B["Receive image"] --> C["Erase flash"] --> D["Write flash"] --> E["Verify CRC"] --> F["Reset MCU"]
+```
+
 ### 20. How is flash programmed?
 
-Steps:
+```mermaid
+flowchart LR
+    A["Unlock flash"] --> B["Erase sector"] --> C["Program data"] --> D["Verify data"] --> E["Lock flash"]
+```
 
-Unlock Flash
-Erase Sector
-Program Data
-Verify Data
-Lock Flash
+```c
+HAL_FLASH_Unlock();                                       /* 1. unlock the flash controller */
+/* 2. erase the sector (HAL_FLASHEx_Erase) */
+HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, addr, data);    /* 3. program one word */
+/* 4. read back and compare */
+HAL_FLASH_Lock();                                         /* 5. lock again so stray writes fail */
+```
+
 ### 21. Why erase flash before programming?
 
-Flash bits:
+**Short answer:** Programming can only change bits from 1 to 0. Only an erase sets them back to 1.
 
-1 → 0 possible
-0 → 1 impossible
-
-Need erase first.
+```text
+1 -> 0 is possible by programming
+0 -> 1 is impossible without erasing the whole sector
+```
 
 ### 22. What happens if power fails during an update?
 
-Firmware may become corrupted.
+**Short answer:** The firmware may be corrupted, so design for it.
 
-Solutions:
+Solutions: dual bank, backup image, rollback.
 
-Dual bank
-Backup image
-Rollback
+---
+
 ## OTA Questions
 
 ### 23. What is OTA?
 
-Over-The-Air update.
+**Short answer:** Over-The-Air update. Firmware is downloaded remotely over Wi-Fi, LTE, or BLE.
 
-Firmware downloaded remotely via:
-
-WiFi
-LTE
-BLE
 ### 24. How do you prevent a device from being bricked during OTA?
 
-Use:
+- A/B partitions
+- Rollback
+- Image validation
+- Watchdog recovery
 
-A/B partitions
-Rollback
-Image validation
-Watchdog recovery
 ### 25. What is A/B partitioning?
-Bootloader
- |
-App A (Current)
-App B (New)
 
-Update inactive partition first.
+**Short answer:** Two application slots. Update the inactive one first.
+
+```text
+Flash
++--------------------+
+| Bootloader         |
++--------------------+
+| App A (current)    |
++--------------------+
+| App B (new image)  |
++--------------------+
+```
 
 ### 26. What is rollback?
 
-If new firmware fails:
+**Short answer:** If the new firmware fails, the bootloader restores the old image.
 
-Bootloader restores old image
+---
+
 ## Secure Boot Questions
 
 ### 27. What is Secure Boot?
 
-Only authenticated firmware is allowed to execute.
+**Short answer:** Only authenticated firmware is allowed to execute.
 
 ### 28. What is the difference between integrity and authentication?
 
-Integrity:
+| Property | Question it answers |
+| --- | --- |
+| Integrity | Was the firmware modified? |
+| Authentication | Is the firmware source trusted? |
 
-Firmware modified?
-
-Authentication:
-
-Firmware source trusted?
 ### 29. How is firmware authentication implemented?
-SHA256 Hash
-RSA Signature
-ECC Signature
+
+SHA-256 hash of the image, signed with an RSA or ECC private key. The device verifies with the public key.
+
 ### 30. Why is CRC not enough for Secure Boot?
 
-Attacker can recalculate CRC.
+**Short answer:** An attacker can recalculate the CRC, and CRC does not verify who created the firmware.
 
-CRC doesn't verify source authenticity.
+### 31. Explain the Secure Boot flow
 
-### 31. Explain the Secure Boot flow.
-Power On
- |
-Verify Signature
- |
-Valid ?
- /    \
-Yes   No
- |      |
-Run    Halt
+```mermaid
+flowchart TD
+    A["Power on"] --> B["Verify signature"]
+    B --> C{"Valid?"}
+    C -->|Yes| D["Run firmware"]
+    C -->|No| E["Halt (or recovery mode)"]
+```
+
+---
+
 ## Advanced Questions
 
 ### 32. What is a dual-bank bootloader?
-Bootloader
- |
-Bank A
-Bank B
 
-One bank runs while other is updated.
+**Short answer:** Two flash banks. One runs while the other is updated.
 
-### 33. What are the benefits of a dual-bank update?
-No downtime
-Rollback possible
-Safer OTA
-### 34. What is chain loading?
-
-One bootloader loads another bootloader.
-
-ROM Bootloader
- |
-Stage 1
- |
-Stage 2
- |
-Application
-### 35. What is a second-stage bootloader?
-
-Advanced bootloader loaded by ROM bootloader.
-
-Example:
-
-ESP32 ROM Bootloader
- |
-Second Stage Bootloader
- |
-Application
-### 36. Why disable interrupts before the jump?
-```c
-__disable_irq();
+```mermaid
+flowchart TB
+    BL["Bootloader"] --- A["Bank A (running)"]
+    BL --- B["Bank B (being updated)"]
 ```
 
-To avoid ISR execution during transition.
+### 33. What are the benefits of a dual-bank update?
+
+- No downtime during the update
+- Rollback is possible
+- Safer OTA
+
+### 34. What is chain loading?
+
+**Short answer:** One bootloader loads another.
+
+```mermaid
+flowchart LR
+    A["ROM bootloader"] --> B["Stage 1"] --> C["Stage 2"] --> D["Application"]
+```
+
+### 35. What is a second-stage bootloader?
+
+**Short answer:** A larger, more capable bootloader loaded by the small ROM bootloader.
+
+Example: the ESP32 ROM bootloader loads a second-stage bootloader, which then loads the application.
+
+### 36. Why disable interrupts before the jump?
+
+```c
+__disable_irq();       /* stop any ISR from running during the transition */
+```
+
+To avoid an ISR running while the stack and vector table are half-switched.
 
 ### 37. What should be cleaned before jumping?
-Interrupts
-Pending IRQs
-SysTick
-DMA
-Peripherals
+
+- Interrupts and pending IRQs
+- SysTick
+- DMA
+- Peripherals the bootloader used
+
 ### 38. Why stop SysTick?
 
-Bootloader SysTick configuration may conflict with application.
+**Short answer:** The bootloader's SysTick configuration can conflict with the application's (for example a tick interrupt firing into the wrong handler).
 
 ### 39. What happens if the watchdog expires during an update?
 
-MCU resets.
-
-Bootloader should resume update or rollback.
+**Short answer:** The MCU resets. The bootloader should resume the update or roll back.
 
 ### 40. How do you protect the bootloader from accidental overwrite?
 
-Using Flash protection:
+Use flash protection: write protection, read protection, and option bytes.
 
-Write Protection
-Read Protection
-Option Bytes
-## Real-Project Questions (6-8 Years Experience)
+---
+
+## Real-Project Questions (6 to 8 Years of Experience)
 
 ### 41. How would you design a production OTA bootloader?
 
 Expected answer:
 
-Secure Boot
-AES Encryption
-SHA256 Verification
-Dual Bank Firmware
-Rollback
-Watchdog Recovery
-Version Control
+- Secure boot
+- AES encryption
+- SHA-256 verification
+- Dual-bank firmware
+- Rollback
+- Watchdog recovery
+- Version control
+
 ### 42. How would you detect corrupted firmware?
-CRC
-SHA Hash
-Signature Verification
+
+CRC, SHA hash, and signature verification.
+
 ### 43. How would you recover if firmware is corrupted?
-Stay in Bootloader
-Recovery Mode
-UART/USB Update
-Rollback
+
+- Stay in the bootloader (recovery mode)
+- UART or USB update
+- Rollback
+
 ### 44. How would you update 1000 deployed devices remotely?
-OTA Server
-Version Management
-A/B Images
-Rollback
-Secure Boot
+
+- OTA server
+- Version management
+- A/B images
+- Rollback
+- Secure boot
+- Staged rollout (small group first, then wider)
+
 ### 45. Why do automotive ECUs require robust bootloaders?
 
-Because failed firmware can affect:
+Because failed firmware can affect engine control, braking, steering, and safety systems.
 
-Engine Control
-Braking
-Steering
-Safety Systems
+Hence they use secure boot, dual-bank update, rollback, and CAN or Ethernet flashing.
 
-Hence they use:
+---
 
-Secure Boot
-Dual-bank update
-Rollback
-CAN/Ethernet flashing
-## Interview Favorite
+## Interview Favorite: Explain the Bootloader Jump Sequence
 
-### Explain the Bootloader Jump Sequence
-```text
-Disable Interrupts
-
-Validate Firmware
-
-Set MSP
-
-SCB->VTOR = APP_ADDR
-
-Read Reset Handler
-
-Jump to Application
+```mermaid
+flowchart TD
+    A["Disable interrupts"] --> B["Validate firmware"] --> C["Set MSP"] --> D["Set SCB->VTOR = APP_ADDR"] --> E["Read reset handler from APP_ADDR + 4"] --> F["Jump to application"]
 ```
 
 A concise answer:
 
-"The bootloader validates the firmware, disables interrupts, updates MSP and VTOR to the application's vector table, fetches the application's reset handler address from APP_ADDR + 4, and branches to it. After that, the application runs as if it had booted directly after reset."
+> "The bootloader validates the firmware, disables interrupts, updates MSP and VTOR to the application's vector table, fetches the application's reset handler address from APP_ADDR + 4, and branches to it. After that, the application runs as if it had booted directly after reset."
+
+---
 
 ## Detailed OTA Walkthrough
 
-### OTA Firmware Update Process
+### What OTA is
 
 OTA allows a device to update its firmware remotely without physical access.
 
-Examples:
+Examples: smart TVs, smart watches, ESP32 devices, IoT sensors, automotive ECUs, cameras.
 
-Smart TVs
-Smart Watches
-ESP32 Devices
-IoT Sensors
-Automotive ECUs
-Cameras (like GoPro)
-#### High-Level OTA Flow
-Developer
-    |
-Build Firmware
-    |
-Upload to Server
-    |
-Cloud/OTA Server
-    |
-Internet/WiFi/LTE
-    |
-Device Downloads Firmware
-    |
-Verify Image
-    |
-Store in Inactive Partition
-    |
-Reboot
-    |
-Bootloader Verification
-    |
-Switch Partition
-    |
-New Firmware Runs
-#### Flash Layout for OTA
-Single Image (Unsafe)
+### High-level OTA flow
+
+```mermaid
+flowchart TD
+    A["Developer builds firmware"] --> B["Upload to OTA server"]
+    B --> C["Cloud / OTA server"]
+    C --> D["Internet / Wi-Fi / LTE"]
+    D --> E["Device downloads firmware"]
+    E --> F["Verify image"]
+    F --> G["Store in inactive partition"]
+    G --> H["Reboot"]
+    H --> I["Bootloader verification"]
+    I --> J["Switch partition"]
+    J --> K["New firmware runs"]
+```
+
+### Flash layout for OTA
+
+**Single image (unsafe):**
+
+```text
 Flash
 +------------------+
 | Bootloader       |
@@ -457,1274 +463,537 @@ Flash
 | Application      |
 +------------------+
 
-Problem:
+Power failure during update -> device bricked
+```
 
-Power Failure During Update
-        ↓
-Device Bricked
-Dual Partition (Recommended)
+**Dual partition (recommended):**
+
+```text
 Flash
-
 +------------------+
 | Bootloader       |
 +------------------+
-| App A (Running)  |
+| App A (running)  |
 +------------------+
 | App B (OTA)      |
 +------------------+
 
-Current Firmware:
+App A = active, App B = empty. New firmware goes into App B.
+```
 
-App A → Active
-App B → Empty
+### Step 1: Firmware creation
 
-New firmware goes into App B.
+The developer builds `app_v1.0.bin` with a toolchain such as `arm-none-eabi-gcc`, producing `firmware.bin`.
 
-#### Step 1: Firmware Creation
+### Step 2: Generate metadata
 
-Developer builds firmware:
+Information created with the image:
 
-app_v1.0.bin
-
-Example:
-
-arm-none-eabi-gcc
-
-Produces:
-
-firmware.bin
-#### Step 2: Generate Metadata
-
-Additional information created:
-
-Version
-Size
-CRC
-Hash
-Signature
-
-Example:
-
-Version = 2.0
-Size    = 512KB
-CRC     = 0xABCD1234
-SHA256  = xxxxxx
-#### Step 3: Upload Firmware to the OTA Server
-
-Stored on:
-
-AWS
-Azure
-GCP
-Private Server
-
-Example:
-
-https://server.com/fw/v2.bin
-#### Step 4: Device Checks for an Update
-
-Periodic task:
+- Version
+- Size
+- CRC
+- Hash
+- Signature
 
 ```c
-void ota_task()
+typedef struct {
+    uint32_t magic;          /* identifies a valid image header, e.g. 0x46574D44 */
+    uint32_t version;        /* e.g. 2.0 encoded as 0x00020000 */
+    uint32_t size;           /* image size in bytes, e.g. 512 KB */
+    uint32_t crc32;          /* quick corruption check */
+    uint8_t  sha256[32];     /* hash of the image */
+    uint8_t  signature[64];  /* ECDSA signature over the hash */
+} image_header_t;
+```
+
+### Step 3: Upload firmware to the OTA server
+
+Stored on AWS, Azure, GCP, or a private server, for example `https://server.com/fw/v2.bin`.
+
+### Step 4: Device checks for an update
+
+```c
+void ota_task(void *arg)
 {
-    check_server();
+    for (;;) {
+        check_server();                               /* HTTP GET to the update server */
+        vTaskDelay(pdMS_TO_TICKS(CHECK_INTERVAL_MS));
+    }
 }
 ```
 
-Flow:
+```mermaid
+sequenceDiagram
+    participant Device
+    participant Server
+    Device->>Server: HTTP GET {"device":"camera01","version":"1.0"}
+    Server-->>Device: {"latest":"2.0","url":"firmware.bin"}
+```
 
-Device
-  |
-HTTP GET
-  |
-Server
-
-Request:
-
-{
-  "device":"camera01",
-  "version":"1.0"
-}
-
-Server Response:
-
-{
-  "latest":"2.0",
-  "url":"firmware.bin"
-}
-#### Step 5: Version Comparison
-
-Current:
-
-1.0
-
-Server:
-
-2.0
-
-Check:
+### Step 5: Version comparison
 
 ```c
-if(server_version > current_version)
-{
+if (server_version > current_version) {     /* compare as numbers, not text: "1.10" > "1.9" */
     start_update();
 }
 ```
-#### Step 6: Download Firmware
 
-Protocols:
+### Step 6: Download the firmware
 
-HTTP
-HTTPS
-MQTT
-FTP
+Protocols: HTTP, HTTPS, MQTT, FTP. Mostly **HTTPS**, for security.
 
-Mostly:
+Download in chunks (for example 1024 bytes each), because firmware may be 500 KB, 1 MB, or 10 MB and cannot be held entirely in RAM.
 
-HTTPS
+### Step 7: Store the image in the inactive partition
 
-for security.
-
-Download occurs in chunks.
-
-Example:
-
-Chunk 1 → 1024 bytes
-Chunk 2 → 1024 bytes
-Chunk 3 → 1024 bytes
-...
-
-Reason:
-
-Firmware may be:
-
-500 KB
-1 MB
-10 MB
-
-Cannot keep entire image in RAM.
-
-#### Step 7: Store the Image in the Inactive Partition
-
-Current:
-
-App A Running
-
-New Image:
-
-Write to App B
-
-Example:
-
-Bootloader
-
-App A
-0x08010000
-
-App B
-0x08100000
-
-Write flow:
-
-Erase Flash
-Write Chunk
-Verify Chunk
-Repeat
-#### Step 8: Verify the Downloaded Firmware
-CRC Check
-
-Calculate:
-
-crc = CalculateCRC();
-
-Compare:
-
-if(crc == received_crc)
-SHA256 Check
-Generated Hash
-Stored Hash
-
-Must match.
-
-Digital Signature Check
-
-Verify:
-
-RSA
-ECC
-
-Ensures firmware is from trusted source.
-
-Why Signature Verification?
-
-Without signature:
-
-Attacker Uploads Fake Firmware
-
-Device installs malware.
-
-With signature:
-
-Invalid Signature
-      ↓
-Rejected
-#### Step 9: Mark the Update as Pending
-
-Store flag:
-
-```c
-OTA_PENDING = TRUE;
+```text
+Current:  App A running at 0x08010000
+New:      write to App B at 0x08100000
 ```
 
-Stored in:
+```mermaid
+flowchart LR
+    A["Erase flash"] --> B["Write chunk"] --> C["Verify chunk"] --> D["Repeat"]
+```
 
-Flash
-EEPROM
-NVS
+### Step 8: Verify the downloaded firmware
 
-Example:
+**CRC check:**
 
 ```c
-ota_flag = PENDING;
+uint32_t crc = CalculateCRC();
+if (crc == received_crc) { /* image intact */ }
 ```
-#### Step 10: Reboot the Device
+
+**SHA-256 check:** the generated hash must match the stored hash.
+
+**Digital signature check:** verify with RSA or ECC to ensure the firmware is from a trusted source.
+
+```mermaid
+flowchart LR
+    A["Without a signature: attacker uploads fake firmware"] --> B["Device installs malware"]
+    C["With a signature: invalid signature"] --> D["Rejected"]
+```
+
+### Step 9: Mark the update as pending
+
+```c
+ota_flag = OTA_PENDING;      /* stored in flash, EEPROM, or NVS so it survives reset */
+```
+
+### Step 10: Reboot the device
+
 ```c
 NVIC_SystemReset();
 ```
 
-Device resets.
+### Step 11: Bootloader starts
 
-#### Step 11: Bootloader Starts
-Power ON
-   |
-Bootloader
+```mermaid
+flowchart TD
+    A["Power on"] --> B["Bootloader"] --> C{"OTA pending?"}
+    C -->|No| D["Boot App A"]
+    C -->|Yes| E["Continue OTA verification"]
+```
 
-Checks:
+### Step 12: Validate the new firmware again
 
-OTA Pending?
-
-If:
-
-NO
-
-Boot App A.
-
-If:
-
-YES
-
-Continue OTA verification.
-
-#### Step 12: Validate the New Firmware Again
-
-Bootloader checks:
-
-CRC
-SHA256
-Signature
-Header
-Version
-
-Example:
+The bootloader checks CRC, SHA-256, signature, header, and version.
 
 ```c
-if(image_valid())
-{
+if (image_valid()) {
     activate_image();
 }
 ```
-#### Step 13: Switch the Active Partition
 
-Before:
+### Step 13: Switch the active partition
 
-Active = App A
+```text
+Before: Active = App A
+After:  Active = App B
+```
 
-After:
+Stored in a flash config area, EEPROM, or a metadata sector.
 
-Active = App B
+### Step 14: Jump to the new firmware
 
-Stored in:
+Set MSP, set VTOR, jump to the reset handler. The new firmware starts.
 
-Flash Config
-EEPROM
-Metadata Sector
-#### Step 14: Jump to the New Firmware
+### Step 15: Self-test
 
-Bootloader:
-
-Set MSP
-
-Set VTOR
-
-Jump Reset Handler
-New Firmware Starts
-#### Step 15: Self-Test
-
-New firmware runs diagnostics:
-
-RAM Test
-Sensor Test
-Network Test
-Filesystem Test
-
-Example:
+The new firmware runs diagnostics: RAM test, sensor test, network test, filesystem test.
 
 ```c
-if(all_tests_pass())
-{
+if (all_tests_pass()) {
     OTA_SUCCESS = TRUE;
 }
 ```
-#### Step 16: Confirm the Firmware
 
-New firmware informs bootloader:
+### Step 16: Confirm the firmware
 
-Firmware Healthy
+The new firmware tells the bootloader it is healthy by storing `BOOT_OK = TRUE`.
 
-Store:
+### Rollback mechanism
 
-BOOT_OK = TRUE
-#### Rollback Mechanism
+If the new firmware crashes before confirmation, the bootloader sees `BOOT_OK = FALSE` and rolls back.
 
-Suppose:
+```mermaid
+flowchart TD
+    A["Bootloader"] --> B["New firmware"] --> C["Crash"] --> D["Reset"] --> E["Bootloader sees BOOT_OK = FALSE"] --> F["Rollback"] --> G["Old firmware"]
+```
 
-New Firmware Crashes
+### A/B OTA update example
 
-before confirmation.
+```text
+Before:  App A <- running    App B <- empty
+Download: write the new firmware to App B
+After verification:  App B <- active
+```
 
-Bootloader sees:
+### Security in OTA
 
-BOOT_OK = FALSE
+| Mechanism | Protects against |
+| --- | --- |
+| HTTPS | Man-in-the-middle attack |
+| SHA-256 | Corruption |
+| RSA or ECC signature | Unauthorized firmware |
+| AES encryption | Loss of firmware confidentiality |
 
-then:
+### Failure scenarios
 
-Rollback
+| Case | Result |
+| --- | --- |
+| Wi-Fi lost during download | Resume the download |
+| Power failure during download | App A is still active; the device is safe |
+| Corrupted firmware (CRC fail) | Reject the update |
+| New firmware crashes | Rollback |
 
-Flow:
+### OTA state machine
 
-Bootloader
-      |
-New Firmware
-      |
-Crash
-      |
-Reset
-      |
-Bootloader
-      |
-Rollback
-      |
-Old Firmware
-#### A/B OTA Update Example
-Bootloader
+```mermaid
+stateDiagram-v2
+    [*] --> IDLE
+    IDLE --> CHECK_VERSION
+    CHECK_VERSION --> DOWNLOAD
+    DOWNLOAD --> VERIFY
+    VERIFY --> STORE
+    STORE --> REBOOT
+    REBOOT --> BOOTLOADER_VERIFY
+    BOOTLOADER_VERIFY --> ACTIVATE
+    ACTIVATE --> SELF_TEST
+    SELF_TEST --> CONFIRM
+    CONFIRM --> SUCCESS
+    SUCCESS --> [*]
+```
 
-App A  ← Running
-App B  ← Empty
-
-Download:
-
-Write New Firmware to App B
-
-After verification:
-
-Bootloader
-
-App A
-App B ← Active
-#### Security in OTA
-HTTPS
-
-Protects:
-
-Man-in-the-middle attack
-SHA256
-
-Protects:
-
-Corruption Detection
-RSA/ECC Signature
-
-Protects:
-
-Unauthorized Firmware
-AES Encryption
-
-Protects:
-
-Firmware Confidentiality
-#### Failure Scenarios
-Case 1: WiFi Lost During Download
-Resume Download
-Case 2: Power Failure During Download
-App A still active
-
-Device safe.
-
-Case 3: Corrupted Firmware
-CRC Fail
-
-Reject update.
-
-Case 4: Firmware Crash
-Rollback
-#### OTA State Machine
-IDLE
- |
-CHECK_VERSION
- |
-DOWNLOAD
- |
-VERIFY
- |
-STORE
- |
-REBOOT
- |
-BOOTLOADER_VERIFY
- |
-ACTIVATE
- |
-SELF_TEST
- |
-CONFIRM
- |
-SUCCESS
-### Production OTA Design Summary
+### Production OTA design summary
 
 Expected answer:
 
-Bootloader
-A/B Partition
-HTTPS Download
-SHA256 Verification
-RSA Signature Check
-AES Encryption
-Watchdog Recovery
-Rollback Support
-Version Control
-Power Failure Recovery
-### 6-8 Years Experience Interview Answer
+- Bootloader with A/B partitions
+- HTTPS download
+- SHA-256 verification
+- RSA or ECC signature check
+- AES encryption
+- Watchdog recovery
+- Rollback support
+- Version control
+- Power-failure recovery
 
-"In OTA, the device periodically checks a server for a newer firmware version. If available, it downloads the image in chunks and stores it in an inactive partition. After download, the image is verified using CRC, SHA256, and digital signature checks. An OTA pending flag is set and the device reboots. The bootloader validates the new image again, switches the active partition, and boots the new firmware. The application performs self-tests and confirms successful boot. If confirmation is not received due to crashes or resets, the bootloader rolls back to the previous firmware, ensuring the device never becomes unusable."
+### The 6 to 8 years experience answer
+
+> "In OTA, the device periodically checks a server for a newer firmware version. If available, it downloads the image in chunks and stores it in an inactive partition. After download, the image is verified using CRC, SHA-256, and digital signature checks. An OTA pending flag is set and the device reboots. The bootloader validates the new image again, switches the active partition, and boots the new firmware. The application performs self-tests and confirms successful boot. If confirmation is not received due to crashes or resets, the bootloader rolls back to the previous firmware, ensuring the device never becomes unusable."
+
+---
 
 ## SHA-256 and AES Study Notes
 
 ### SHA-256 versus AES: the key difference
 
-Absolutely. For an embedded/IoT interview, the most important thing is to understand that SHA-256 and AES solve different security problems.
+They solve different security problems.
 
-#### SHA-256 versus AES
-Feature	SHA-256	AES
-Type	Cryptographic hash	Symmetric encryption
-Main purpose	Integrity / fingerprint	Confidentiality
-Reversible?	No	Yes, with the key
-Key required?	No	Yes
-Output	256 bits = 32 bytes	Same size as plaintext for block encryption
-Typical use	Firmware verification, passwords, signatures	Encrypt firmware/data
-Example	SHA256(firmware)	AES(key, firmware)
-Simple analogy
+| Feature | SHA-256 | AES |
+| --- | --- | --- |
+| Type | Cryptographic hash | Symmetric encryption |
+| Main purpose | Integrity, fingerprint | Confidentiality |
+| Reversible? | No | Yes, with the key |
+| Key required? | No | Yes |
+| Output | 256 bits (32 bytes) | Same size as the input (block cipher) |
+| Typical use | Firmware verification, signatures | Encrypt firmware or data |
+| Example | `SHA256(firmware)` | `AES(key, firmware)` |
 
-Suppose your firmware is a document.
+**Analogy:** suppose your firmware is a document.
 
-SHA-256:
+- SHA-256: "Give me a unique fingerprint of this document."
+- AES: "Lock this document so only someone with the key can read it."
 
-"Give me a unique fingerprint of this document."
+So SHA-256 answers "has the data changed?" and AES answers "can someone read the data?".
 
-AES:
+### SHA-256 in detail
 
-"Lock this document so only someone with the key can read it."
+SHA-256 is the Secure Hash Algorithm with a 256-bit output, from the SHA-2 family. It takes an input of practically any length and produces exactly 256 bits, which is 32 bytes or 64 hexadecimal characters.
 
-So:
+Changing the input even slightly (for example `Hello` versus `hello`) changes the hash dramatically.
 
-SHA-256 → "Has the data changed?"
-AES     → "Can someone read the data?"
-#### SHA-256 in Detail
+### SHA-256 properties
 
-SHA-256 stands for:
+- **Fixed-size output:** 10 bytes or 10 MB in, 256 bits out.
+- **One-way:** you cannot practically recover the data from `SHA256(data)`.
+- **Avalanche effect:** one changed bit gives a completely different hash.
 
-Secure Hash Algorithm – 256 bit
+```mermaid
+flowchart LR
+    A["Firmware V1"] --> B["SHA-256"] --> C["ABC123..."]
+    D["Firmware V1 + 1 bit changed"] --> E["SHA-256"] --> F["91F8A2... (completely different)"]
+```
 
-It belongs to the SHA-2 family.
+### How SHA-256 works internally
 
-It takes an input of practically any length and produces exactly:
+```mermaid
+flowchart TD
+    A["Input"] --> B["Padding"] --> C["512-bit blocks"] --> D["Initialize hash state"] --> E["Message schedule"] --> F["64 compression rounds"] --> G["256-bit hash"]
+```
 
-256 bits
-= 32 bytes
-= 64 hexadecimal characters
+SHA-256 operates on 512-bit blocks. Its internal state is eight 32-bit words, H0 to H7 (8 x 32 = 256 bits).
 
-For example:
+**Padding:** append a 1 bit, then 0 bits, then the original message length, so the total is a multiple of 512 bits.
 
-Input:
-Hello
+**Compression:** each block goes through 64 rounds using XOR, AND, NOT, right rotation, right shift, and addition modulo 2^32. Two key functions:
 
-produces a 256-bit hash.
-
-If the input changes even slightly:
-
-Hello
-
-vs
-
-hello
-
-the resulting hash changes dramatically.
-
-#### SHA-256 Properties
-Fixed-size output
-
-Whether input is:
-
-10 bytes
-
-or:
-
-10 MB
-
-SHA-256 produces:
-
-256 bits
-One-way
-
-You cannot practically take:
-
-SHA256(data)
-
-and recover the original data.
-
-That's why SHA-256 is called a one-way cryptographic hash.
-
-Avalanche effect
-
-A tiny change in input causes a very different hash.
-
-Conceptually:
-
-Firmware V1
-     |
-     v
-SHA-256
-     |
-     v
-ABC123.........
-
-
-Firmware V1 + 1 bit changed
-     |
-     v
-SHA-256
-     |
-     v
-91F8A2.........
-
-The hashes should be drastically different.
-
-#### How SHA-256 Works Internally
-
-For an interview, know the high-level pipeline:
-
-Input
-  |
-  v
-Padding
-  |
-  v
-512-bit blocks
-  |
-  v
-Initialize hash state
-  |
-  v
-Message schedule
-  |
-  v
-64 compression rounds
-  |
-  v
-256-bit hash
-
-SHA-256 operates on 512-bit message blocks.
-
-Its internal state consists of eight 32-bit words:
-
-H0
-H1
-H2
-H3
-H4
-H5
-H6
-H7
-
-Together:
-
-8 × 32 = 256 bits
-#### SHA-256 Padding
-
-The input is padded before processing.
-
-Conceptually:
-
-Original message
-      |
-      v
-Append 1 bit
-      |
-      v
-Append 0 bits
-      |
-      v
-Append original message length
-
-The resulting message is divided into:
-
-512-bit blocks
-#### SHA-256 Compression
-
-Each 512-bit block goes through 64 rounds.
-
-The algorithm uses operations such as:
-
-XOR
-AND
-NOT
-Right rotation
-Right shift
-Addition modulo 2³²
-
-Two important functions are:
-
-Ch(x,y,z)  = (x AND y) XOR (~x AND z)
-
+```text
+Ch(x,y,z)  = (x AND y) XOR (NOT x AND z)
 Maj(x,y,z) = (x AND y) XOR (x AND z) XOR (y AND z)
+```
 
-There are also the Σ and σ functions involving bit rotations and shifts.
+There are also the Sigma functions built from rotations and shifts. You do not need to memorize all 64 rounds unless you implement cryptography yourself.
 
-You normally do not need to memorize all 64 rounds for an embedded interview unless you're implementing cryptography yourself.
+### SHA-256 in OTA
 
-#### SHA-256 in OTA
+The server computes `SHA256(firmware.bin)` and stores the expected hash. The device downloads the image, computes `SHA256(downloaded_firmware)`, and compares.
 
-This is particularly important for your bootloader/OTA preparation.
+- Expected equals calculated: the image is unaltered with respect to that hash
+- Not equal: reject the image
 
-Suppose the server has:
+### Interview trap: is SHA-256 enough for secure OTA?
 
-firmware.bin
+**No.** An attacker can replace the firmware **and** the expected hash. Then `SHA256(malicious firmware)` equals the attacker's hash, and the comparison passes.
 
-The server calculates:
+A plain hash does not authenticate who created the firmware. Use a digital signature:
 
-SHA256(firmware.bin)
+```mermaid
+flowchart LR
+    A["Firmware"] --> B["SHA-256"] --> C["Hash"] --> D["Sign with private key"] --> E["Digital signature"]
+```
 
-and stores:
+The device verifies the signature using the manufacturer's **public key**.
 
-Expected Hash
+### SHA-256 versus encryption
 
-The device downloads the firmware.
-
-Then the device calculates:
-
-SHA256(downloaded_firmware)
-
-Comparison:
-
-Expected Hash
-      |
-      | compare
-      v
-Calculated Hash
-
-If:
-
-Expected == Calculated
-
-the image has not been altered/corrupted with respect to that hash.
-
-If:
-
-Expected != Calculated
-
-reject the image.
-
-#### Interview Trap: Is SHA-256 Enough for Secure OTA?
-
-No.
-
-This is a very important answer.
-
-Suppose an attacker replaces:
-
-Original firmware
-
-with:
-
-Malicious firmware
-
-and also replaces the expected SHA-256 hash with the malicious firmware's hash.
-
-Then:
-
-SHA256(malicious firmware)
-=
-attacker's supplied hash
-
-The hash comparison passes.
-
-Therefore, a plain SHA-256 hash does not authenticate who created the firmware.
-
-For secure firmware authentication, use a digital signature, for example:
-
-Firmware
-   |
-SHA-256
-   |
-Hash
-   |
-Private Key
-   |
-Digital Signature
-
-The device uses the manufacturer's public key to verify the signature.
-
-#### SHA-256 versus Encryption
-
-This is a very common interview question.
-
-SHA-256
-Data
- |
- v
-SHA256
- |
- v
-Hash
-
-You cannot decrypt the hash.
-
-AES
-Plaintext
- |
-AES + Key
- |
- v
-Ciphertext
-
-Using the appropriate key, ciphertext can be decrypted.
-
-Therefore:
+```mermaid
+flowchart LR
+    A["Data"] --> B["SHA-256"] --> C["Hash (cannot be decrypted)"]
+    D["Plaintext"] --> E["AES + key"] --> F["Ciphertext (can be decrypted with the key)"]
+```
 
 Hashing is not encryption.
 
-#### AES in Detail
+### AES in detail
 
-AES means:
+AES is the Advanced Encryption Standard, a **symmetric-key block cipher**. The same secret key encrypts and decrypts.
 
-Advanced Encryption Standard
+```mermaid
+flowchart LR
+    A["Plaintext"] -->|"AES + key"| B["Ciphertext"] -->|"AES + same key"| C["Plaintext"]
+```
 
-It is a symmetric-key block cipher.
+### AES key sizes and block size
 
-Symmetric means:
-
-Same secret key
-     |
-Encrypt
-     |
-Decrypt
-
-Conceptually:
-
-Plaintext
-    |
-    | AES + Key
-    v
-Ciphertext
-    |
-    | AES + Same Key
-    v
-Plaintext
-#### AES Key Sizes
-
-AES supports:
-
-AES-128 → 128-bit key
-AES-192 → 192-bit key
-AES-256 → 256-bit key
-
-A very common embedded choice is:
-
-AES-128
-
-or:
-
-AES-256
-#### AES Block Size
-
-An important interview point:
-
-AES always has a 128-bit block size.
-
-That means:
-
-128 bits = 16 bytes
-
-This is independent of whether the key is:
-
-128 bits
-192 bits
-256 bits
-
-For example:
-
-AES-256
-
-Key size   = 256 bits
-Block size = 128 bits
-
-Don't confuse these two.
-
-#### AES Encryption Structure
-
-At a high level:
-
-Plaintext
-    |
-    v
-Initial AddRoundKey
-    |
-    v
-Round 1
-    |
-    v
-Round 2
-    |
-    v
-...
-    |
-    v
-Final Round
-    |
-    v
-Ciphertext
-
-The number of rounds depends on the key size:
-
-| AES | Key | Rounds |
+| Variant | Key size | Rounds |
 | --- | --- | --- |
 | AES-128 | 128 bits | 10 |
 | AES-192 | 192 bits | 12 |
 | AES-256 | 256 bits | 14 |
-#### AES Main Operations
 
-Each AES round primarily uses:
+**Block size is always 128 bits (16 bytes), regardless of key size.** AES-256 means a 256-bit key, not a 256-bit block.
 
-##### 1. SubBytes
+### AES encryption structure
 
-Each byte is substituted using the AES S-box.
+```mermaid
+flowchart TD
+    A["Plaintext"] --> B["Initial AddRoundKey"] --> C["Round 1"] --> D["Round 2"] --> E["..."] --> F["Final round"] --> G["Ciphertext"]
+```
 
-Input byte
-    |
-    v
-S-box
-    |
-    v
-Substituted byte
-##### 2. ShiftRows
+### AES main operations
 
-Rows of the AES state are cyclically shifted.
+Each round uses four operations:
 
-Before:
+1. **SubBytes:** each byte is substituted using the S-box.
+2. **ShiftRows:** rows are cyclically shifted (row 0 by 0, row 1 by 1, row 2 by 2, row 3 by 3).
 
-A B C D
-E F G H
-I J K L
-M N O P
+   ```text
+   Before:        After:
+   A B C D        A B C D
+   E F G H        F G H E
+   I J K L        K L I J
+   M N O P        P M N O
+   ```
 
-After shifting:
+3. **MixColumns:** bytes within each column are mixed for diffusion. The final round omits this step.
+4. **AddRoundKey:** the state is XORed with a round key. This is where the key directly influences the state.
 
-A B C D
-F G H E
-K L I J
-P M N O
+### AES modes of operation
 
-Conceptually, this spreads information across the block.
+AES works on a 16-byte block. To encrypt more data securely you need a **mode**: ECB, CBC, CTR, GCM, CCM.
 
-##### 3. MixColumns
+**ECB (avoid):** each block is encrypted independently, so identical plaintext blocks give identical ciphertext blocks and reveal patterns. Not recommended for structured data.
 
-Bytes within each column are mathematically mixed.
+**CBC (Cipher Block Chaining):** each plaintext block is XORed with the previous ciphertext block before encryption. It needs an **IV** (initialization vector). The IV need not be secret, but must be unpredictable or unique as the scheme requires. CBC gives confidentiality only, not authentication.
 
-This provides diffusion.
+**CTR (Counter mode):** AES encrypts a counter to make a keystream, which is XORed with the plaintext. It behaves like a stream cipher. The counter or nonce must **never repeat** with the same key.
 
-The final AES round omits MixColumns.
+**AES-GCM:** provides confidentiality, integrity, and authentication together. It is an AEAD mode (Authenticated Encryption with Associated Data).
 
-##### 4. AddRoundKey
+```mermaid
+flowchart LR
+    P["Plaintext"] --> G["AES-GCM + key + nonce"]
+    G --> C["Ciphertext"]
+    G --> T["Authentication tag"]
+```
 
-The state is XORed with a round key.
+On decryption, the tag is verified first. If valid, the plaintext is returned. If invalid, reject.
 
-State
-  XOR
-Round Key
-  =
-New State
+### Why AES-GCM is useful for OTA
 
-This is where the encryption key directly influences the state.
+The firmware is encrypted and produces an authentication tag. The device decrypts only after successful authentication. That protects confidentiality and detects modification of the encrypted data.
 
-#### AES Modes of Operation
+For firmware **authenticity** (who made it), production secure-boot designs commonly also use a digital signature.
 
-This is extremely important.
+### AES and SHA-256 together in OTA
 
-AES itself works on a 16-byte block. To securely encrypt larger amounts of data, you generally use a mode of operation.
-
-Common modes:
-
-ECB
-CBC
-CTR
-GCM
-CCM
-#### ECB: Generally Avoid It
-
-ECB encrypts each block independently:
-
-Block 1 → AES → Cipher 1
-Block 2 → AES → Cipher 2
-Block 3 → AES → Cipher 3
-
-Problem:
-
-Identical plaintext blocks produce identical ciphertext blocks.
-
-This can reveal patterns.
-
-Therefore:
-
-ECB is generally not recommended for encrypting structured data.
-
-#### CBC
-
-CBC = Cipher Block Chaining.
-
-Conceptually:
-
-Plaintext 1
-    XOR
-    IV
-    |
-   AES
-    |
-Ciphertext 1
-
-Then:
-
-Plaintext 2
-    XOR
-Ciphertext 1
-    |
-   AES
-    |
-Ciphertext 2
-
-CBC requires an IV (Initialization Vector).
-
-Important:
-
-IV does not need to be secret, but it should be unpredictable/unique according to the scheme's requirements.
-
-CBC by itself provides confidentiality, not authentication/integrity.
-
-#### CTR
-
-CTR = Counter mode.
-
-Conceptually:
-
-Key + Counter
-     |
-    AES
-     |
-Keystream
-     |
-     XOR
-     |
-Plaintext
-     |
-     v
-Ciphertext
-
-CTR turns a block cipher into a stream-like construction.
-
-The counter/nonce must never repeat with the same key.
-
-#### AES-GCM
-
-For modern embedded/IoT systems, AES-GCM is particularly important.
-
-GCM provides:
-
-Confidentiality
-+
-Integrity
-+
-Authentication
-
-Conceptually:
-
-Plaintext
-    |
-AES-GCM + Key + Nonce
-    |
-    +----> Ciphertext
-    |
-    +----> Authentication Tag
-
-During decryption:
-
-Ciphertext
-    |
-AES-GCM + Key + Nonce
-    |
-Verify Tag
-    |
-    +---- Valid → Plaintext
-    |
-    +---- Invalid → Reject
-
-This is called an AEAD mode:
-
-Authenticated Encryption with Associated Data.
-
-#### Why AES-GCM Is Useful for OTA
-
-Suppose firmware is:
-
-firmware.bin
-
-You can encrypt it:
-
-Firmware
-   |
-AES-GCM
-   |
-Encrypted Firmware + Authentication Tag
-
-The device decrypts only after successful authentication.
-
-This protects the firmware's confidentiality and detects unauthorized modification of the encrypted data.
-
-For firmware authenticity, production secure-boot designs commonly also use a digital signature or another authenticated trust mechanism.
-
-#### AES and SHA-256 Together in OTA
-
-A common conceptual architecture is:
-
-             OTA SERVER
-                 |
-        Firmware Image
-                 |
-          SHA-256 Hash
-                 |
-       Digital Signature
-                 |
-              Encrypt
-                 |
-                 v
-              Internet
-                 |
-                 v
-              DEVICE
-                 |
-            Download
-                 |
-        AES Decryption
-                 |
-          SHA-256 / Signature
-             Verification
-                 |
-             Bootloader
-                 |
-             Application
+```mermaid
+flowchart TD
+    subgraph Server
+        A["Firmware image"] --> B["SHA-256 hash"] --> C["Digital signature"] --> D["Encrypt"]
+    end
+    D --> E["Internet"] --> F["Device downloads"]
+    F --> G["AES decryption"] --> H["SHA-256 / signature verification"] --> I["Bootloader"] --> J["Application"]
+```
 
 The exact order depends on the product's security architecture.
 
-#### AES versus SHA-256 in OTA
+### AES versus SHA-256 in OTA
+
 | Requirement | SHA-256 | AES |
 | --- | --- | --- |
 | Detect modification | Yes, as a hash primitive | Not by encryption alone |
 | Encrypt firmware | No | Yes |
 | Decrypt firmware | No | Yes |
 | Hide firmware contents | No | Yes |
-| Requires secret key | No | Yes |
-| Used for digital signatures | Hash is part of signature process | No |
+| Requires a secret key | No | Yes |
+| Used for digital signatures | The hash is part of the signature process | No |
 | Confidentiality | No | Yes |
-#### Important: Hashing Is Not Authentication
 
-Interviewers often ask:
+### Important: hashing is not authentication
 
-"If I calculate SHA-256 on firmware, is the firmware secure?"
+"If I calculate SHA-256 on firmware, is the firmware secure?" **Not by itself.** A publicly known or attacker-replaceable hash does not authenticate the firmware source. For secure boot and OTA, use a digital signature or another properly designed authenticated mechanism.
 
-Answer:
+### Important: AES does not provide integrity by itself
 
-Not by itself. SHA-256 provides a cryptographic digest, but a publicly known or attacker-replaceable hash does not authenticate the firmware source. For secure boot/OTA, use a digital signature or a properly designed authenticated mechanism.
+"If firmware is encrypted using AES, is it automatically secure?" **No.** Encryption provides confidentiality. You also need integrity and authentication, such as AES-GCM or CCM, or a separate signature.
 
-#### Important: AES Does Not Provide Integrity by Itself
-
-Another interview question:
-
-"If firmware is encrypted using AES, is it automatically secure?"
-
-Answer:
-
-No. Encryption primarily provides confidentiality. You also need integrity/authentication, such as AES-GCM/CCM or a separate authenticated signature mechanism.
-
-#### Where Are Keys Stored in an Embedded System?
-
-This is a major embedded security question.
+### Where are keys stored in an embedded system?
 
 Possible locations:
 
-Secure Element
-OTP Memory
-eFuse
-Protected Flash
-TPM
-Hardware Security Module
-MCU Security/Key Storage
+- Secure element
+- OTP memory
+- eFuse
+- Protected flash
+- TPM
+- Hardware security module
+- MCU key storage
 
-Ideally, secret keys should not be stored as ordinary plaintext constants in application Flash.
-
-For example, avoid simply doing:
+Secret keys should not be ordinary plaintext constants in application flash. Avoid this in production:
 
 ```c
-#define AES_KEY "1234567890123456"
+#define AES_KEY "1234567890123456"     /* bad: readable by anyone who dumps the flash */
 ```
 
-in production firmware.
+### Hardware crypto acceleration
 
-#### Hardware Crypto Acceleration
+Many MCUs have a crypto accelerator. Instead of software AES on the CPU, the CPU hands the work to crypto hardware for AES and SHA.
 
-Many modern MCUs have a cryptographic accelerator.
+Benefits: lower CPU usage, better performance, lower energy, and sometimes stronger key isolation. The exact capabilities depend on the MCU.
 
-Instead of performing everything using software:
+### Embedded example
 
-CPU
- |
-Software AES
+The device receives `firmware_v2.bin`. The OTA metadata says: Version 2, Size 512 KB, SHA-256 `ABCD...`, Signature `XYZ...`.
 
-you may have:
+1. Download the encrypted firmware
+2. Decrypt and authenticate it with the configured AES scheme
+3. Check the firmware hash and signature
+4. Store it in the inactive flash partition
+5. The bootloader verifies the image again
+6. The bootloader starts the firmware
+7. The firmware performs a self-test
+8. The firmware marks the update successful
 
-CPU
- |
-Crypto Hardware
- |
-AES/SHA
+If anything fails: rollback to the previous firmware.
 
-Benefits can include:
+---
 
-Lower CPU usage
-Better performance
-Lower energy consumption
-Sometimes stronger key isolation
+## Quick Interview Review
 
-The exact capabilities depend on the MCU.
+### Q1. What is SHA-256?
 
-#### Embedded Example
+A cryptographic hash function from the SHA-2 family that maps input of any length to a fixed 256-bit digest. Used for integrity checking and as part of digital signatures.
 
-Suppose your device receives:
-
-firmware_v2.bin
-
-The OTA metadata says:
-
-Version = 2
-Size = 512 KB
-SHA256 = ABCD...
-Signature = XYZ...
-
-Device:
-
-Step 1
-
-Downloads encrypted firmware.
-
-Step 2
-
-Decrypts/authenticates it using the configured AES scheme.
-
-Step 3
-
-Checks firmware hash/signature.
-
-Step 4
-
-Stores it in inactive Flash partition.
-
-Step 5
-
-Bootloader verifies image again.
-
-Step 6
-
-Bootloader starts firmware.
-
-Step 7
-
-Firmware performs self-test.
-
-Step 8
-
-Firmware marks update successful.
-
-If anything fails:
-
-Rollback → Previous Firmware
-### Quick Interview Review
-#### Q1. What is SHA-256?
-
-Answer: SHA-256 is a cryptographic hash function from the SHA-2 family that maps arbitrary-length input to a fixed 256-bit digest. It is primarily used for integrity checking and as a component of digital signatures.
-
-#### Q2. Is SHA-256 encryption?
+### Q2. Is SHA-256 encryption?
 
 No. It is hashing and is not reversible.
 
-#### Q3. What is AES?
+### Q3. What is AES?
 
-AES is a symmetric block cipher with a 128-bit block size and 128-, 192-, or 256-bit keys.
+A symmetric block cipher with a 128-bit block size and 128-, 192-, or 256-bit keys.
 
-#### Q4. What does AES-256 mean?
+### Q4. What does AES-256 mean?
 
-It means:
+A 256-bit key, not a 256-bit block.
 
-256-bit key
-
-not a 256-bit block.
-
-#### Q5. How many rounds does AES-256 have?
+### Q5. How many rounds does AES-256 have?
 
 14 rounds.
 
-#### Q6. What is an IV or nonce?
+### Q6. What is an IV or nonce?
 
-It is additional per-operation input used by many encryption modes. Its required properties depend on the mode. For GCM, nonce reuse with the same key is especially dangerous and must be prevented.
+Extra per-operation input used by many encryption modes. Its required properties depend on the mode. For GCM, reusing a nonce with the same key is especially dangerous and must be prevented.
 
-#### Q7. Why use AES-GCM?
+### Q7. Why use AES-GCM?
 
-Because it provides authenticated encryption—confidentiality plus integrity/authentication.
+It provides authenticated encryption: confidentiality plus integrity and authentication.
 
-#### Q8. Can SHA-256 protect against a malicious firmware replacement?
+### Q8. Can SHA-256 protect against a malicious firmware replacement?
 
 A bare hash comparison cannot authenticate the firmware source. Use a digital signature or another authenticated mechanism.
 
-#### Q9. Can AES alone guarantee firmware authenticity?
+### Q9. Can AES alone guarantee firmware authenticity?
 
 No. Encryption alone does not establish who created the firmware.
 
-#### Q10. SHA-256 plus AES: why use both?
+### Q10. SHA-256 plus AES: why use both?
 
-A typical design may use:
+A typical design uses:
 
-AES       → confidentiality
-SHA-256   → cryptographic digest
-Signature → firmware authenticity
+| Tool | Job |
+| --- | --- |
+| AES | Confidentiality |
+| SHA-256 | Cryptographic digest |
+| Signature | Firmware authenticity |
 
-or use an authenticated encryption mode such as AES-GCM for confidentiality + data authentication, while still using a digital signature for firmware publisher authenticity.
+Or it uses an authenticated encryption mode such as AES-GCM for confidentiality and data authentication, while still using a digital signature for publisher authenticity.
 
-The 30-second interview answer
+---
 
-"SHA-256 and AES are fundamentally different. SHA-256 is a one-way 256-bit cryptographic hash used to create a fingerprint of data and is commonly used for integrity checking and as part of digital signatures. AES is a symmetric encryption algorithm used to provide confidentiality using a secret key. AES supports 128-, 192-, and 256-bit keys and always has a 128-bit block size. In a secure OTA system, AES can protect firmware confidentiality, while SHA-256 can be used as part of firmware integrity verification, and a digital signature is normally used to authenticate that the firmware came from a trusted manufacturer. For authenticated encryption, AES-GCM is commonly used."
+## The 30-Second Interview Answer
+
+> "A bootloader is a small program that runs first after reset. It checks that the application image is valid, using a CRC for corruption and a signature for authenticity. It also handles firmware updates: for OTA I keep two slots, download into the inactive one, verify it, mark it pending, and reboot. The bootloader then re-verifies it, sets MSP and the vector table offset to the new image, and jumps to its reset handler. The new firmware must confirm it is healthy, and if it crashes first, the bootloader rolls back to the old image. That way a power loss or a bad update never bricks the device."

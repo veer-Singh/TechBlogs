@@ -1,169 +1,353 @@
 # Advanced Networking and Embedded Security Questions
 
-## 1. TCP vs UDP in firmware?
+How to use this file: read the **Short answer** first, then the details and the commented example. Each question ends with a **Remember** line.
 
-TCP provides a connection-oriented byte stream with retransmission/congestion behavior. UDP is datagram-oriented and leaves delivery/reliability to the application. Choose based on latency, reliability, connection management, and protocol requirements.
+## Contents
 
-## 2. What is a socket?
-
-A socket is an OS API abstraction for network communication. Typical client/server steps are create -> configure -> bind/listen/accept or connect -> send/receive -> close, depending on protocol and role.
-
-## 3. Why can a TCP receive return fewer bytes than requested?
-
-TCP is a byte stream, not a message protocol. A receive call can return any positive number of available bytes up to the requested size. Applications need framing on top of TCP.
-
-## 4. HTTP vs HTTPS?
-
-HTTPS is HTTP carried over TLS, providing encryption and server authentication when certificates/trust anchors are validated correctly.
-
-## 5. What is TLS doing in an IoT device?
-
-TLS can provide confidentiality, integrity, and peer authentication. Embedded implementation must consider certificate storage, entropy, session lifecycle, memory footprint, algorithm availability, credential provisioning, and failure handling.
-
-## 6. Symmetric vs asymmetric cryptography?
-
-Symmetric algorithms such as AES use shared secret keys and are efficient for bulk encryption. Asymmetric algorithms use key pairs and are useful for authentication/key establishment, but are generally more computationally expensive.
-
-## 7. What is SHA-256?
-
-SHA-256 is a cryptographic hash function producing a 256-bit digest. It provides integrity properties but is not an encryption algorithm.
-
-## 8. How should device credentials be protected?
-
-Do not hard-code reusable secrets into public source code. Prefer secure provisioning and protected key storage when the hardware supports it. Limit credentials to required permissions and define rotation/revocation procedures.
-
-## 9. How would you secure firmware OTA?
-
-Authenticate the image before activation, protect transport with appropriate security, use version/rollback protection, keep an interrupted update recoverable, and log failures without exposing secrets. Product security requirements should determine the exact design.
-
-## 10. Why is entropy important?
-
-Randomness is required for many security operations such as nonce generation and key generation. A cryptographically secure RNG/entropy source is preferable to predictable counters or timestamps alone for security-sensitive randomness.
-
-## 11. What is a MAC (Message Authentication Code) and how does it differ from a hash?
-
-A MAC (e.g., HMAC-SHA256) combines a secret key with the message to produce a tag that verifies both integrity and authenticity — only someone with the key can produce a valid tag. A plain hash (e.g., SHA-256 alone) only verifies integrity; anyone can compute it, so it cannot prove who sent the data. HMAC is commonly used to authenticate firmware update packets or sensor payloads over unauthenticated transports like UDP.
-
-## 12. What is AEAD (Authenticated Encryption with Associated Data), and what is an embedded example
-
-AEAD (e.g., AES-GCM, ChaCha20-Poly1305) provides confidentiality and integrity/authenticity in a single primitive, avoiding the pitfalls of combining encryption and MAC separately (e.g., padding oracle issues). It also supports "associated data" — fields authenticated but not encrypted, such as a packet header or sequence number. AES-GCM is widely used in embedded TLS stacks (mbedTLS, wolfSSL) because it's efficient with hardware AES acceleration, but it requires a unique nonce per encryption — nonce reuse with the same key catastrophically breaks confidentiality.
-
-## 13. Why is nonce/IV reuse dangerous in stream ciphers and counter-mode block ciphers?
-
-In modes like AES-CTR or AES-GCM, the keystream is derived from key + nonce. Reusing the same (key, nonce) pair produces the same keystream, so XOR-ing two ciphertexts cancels the keystream and leaks the XOR of the two plaintexts — often enough to recover both messages. In constrained devices this can happen after a reset if the nonce counter isn't persisted in non-volatile storage, so designs must either persist counters, derive nonces from a monotonic source, or use random nonces sized to keep collision probability negligible.
-
-## 14. What is a replay attack, and how would you prevent it in an embedded protocol?
-
-An attacker captures a valid, legitimately signed/encrypted message and re-sends it later to cause an unintended repeated action (e.g., replaying an "unlock door" command). Mitigations include monotonically increasing sequence numbers or timestamps included in the authenticated data, short validity windows, and rejecting/tracking recently seen message IDs. This matters even when messages are encrypted and authenticated, since AEAD alone doesn't prevent replay of a captured ciphertext.
-
-## 15. Explain a TLS handshake at a level relevant to an MCU with limited RAM/flash
-
-The handshake negotiates a cipher suite, exchanges/validates certificates (or uses pre-shared keys, PSK, for constrained devices), performs a key exchange (e.g., ECDHE) to derive a shared session key, then switches to symmetric encryption for application data. On MCUs, full X.509 chain validation and RSA are expensive in RAM/flash and time, so embedded TLS often prefers ECC (smaller keys, less compute) or TLS-PSK/session resumption to avoid the full asymmetric handshake on every connection, trading off some forward-secrecy/flexibility for footprint.
-
-## 16. What is Perfect Forward Secrecy (PFS) and why does it matter for IoT fleets?
-
-PFS means that if a long-term private key is compromised later, past captured session traffic still cannot be decrypted, because each session uses an ephemeral key (e.g., ECDHE) that's discarded afterward. For IoT fleets where a device key might eventually be extracted (physical access, side-channel attack), PFS limits the damage to future/active sessions rather than exposing an entire history of recorded traffic.
-
-## 17. How do you defend against buffer overflows in a network-facing parser on an MCU?
-
-Validate all length fields against buffer capacity before copying, avoid unbounded functions (`strcpy`, `sprintf`, unchecked `memcpy`), use fixed-size buffers with explicit bounds checks, and prefer a state-machine parser that consumes bytes incrementally rather than requiring the whole packet in one buffer. Where available, enable stack canaries, MPU-based stack/heap separation, and compiler flags like `-fstack-protector`. Because embedded systems often lack ASLR/DEP, a single overflow in a network parser is a much higher-severity bug than on a general-purpose OS.
-
-## 18. What is a side-channel attack, and how does it apply to embedded crypto?
-
-A side-channel attack extracts secret information (keys) from physical characteristics of execution — timing, power consumption, electromagnetic emissions — rather than breaking the algorithm mathematically. Example: a naive AES implementation with data-dependent branch timing or table lookups can leak key bits through timing variance measurable on the device's power rail. Mitigations include constant-time crypto implementations, avoiding secret-dependent branches/array indices, and power-analysis-resistant hardware crypto accelerators for high-assurance products.
-
-## 19. Secure Boot vs Secure/Authenticated OTA — how do they relate?
-
-Secure Boot ensures the bootloader only executes firmware images signed by a trusted key, establishing a chain of trust rooted in immutable/protected boot code. Authenticated OTA ensures a firmware update received over the network is verified (signature/hash check) before being written and marked bootable. They're complementary: OTA authentication stops an attacker from delivering malicious firmware over the air, while secure boot stops a malicious image from running even if it somehow got onto the device (e.g., via a debug port or fallback update path).
-
-## 20. What is a Root of Trust (RoT) in an embedded security architecture?
-
-The RoT is the minimal set of hardware and/or immutable code that is inherently trusted and cannot be bypassed — e.g., an on-chip secure element, a hardware unique key (HUK) burned in fuses, or a boot ROM that cannot be reflashed. All higher-level security guarantees (secure boot, secure storage, attestation) are built on top of it, since if the RoT itself is compromised, the whole chain of trust collapses.
+| Questions | Topic |
+| --- | --- |
+| 1-10 | Sockets, TCP and UDP, TLS, crypto basics, credentials, OTA |
+| 11-20 | Embedded cryptography and network security |
+| 21-32 | Socket programming |
 
 ---
 
-## Socket Programming Questions and Answers
+## 1. TCP vs UDP in firmware
 
-## 21. Walk through a basic TCP server socket lifecycle (C, POSIX/BSD sockets)
+**Short answer:** TCP is a reliable byte stream. UDP is unreliable datagrams where the application handles reliability.
+
+| | TCP | UDP |
+| --- | --- | --- |
+| Connection | Yes | No |
+| Delivery | Reliable, ordered | No guarantee |
+| Overhead | Higher | Lower |
+| Message boundaries | No (byte stream) | Yes (datagrams) |
+
+Choose by latency, reliability, connection management, and protocol requirements.
+
+## 2. What is a socket?
+
+**Short answer:** An operating-system API abstraction for network communication.
+
+```mermaid
+flowchart LR
+    S["Server: socket()"] --> B["bind()"] --> L["listen()"] --> A["accept()"] --> RW["recv() / send()"] --> C["close()"]
+    CL["Client: socket()"] --> CO["connect()"] --> RW2["send() / recv()"] --> C2["close()"]
+```
+
+## 3. Why can a TCP receive return fewer bytes than requested?
+
+**Short answer:** TCP is a byte stream, not a message protocol. A receive returns any positive number of bytes up to the requested size.
+
+Applications need their own framing on top of TCP.
+
+**Remember:** one `send()` does not equal one `recv()`.
+
+## 4. HTTP vs HTTPS
+
+**Short answer:** HTTPS is HTTP carried over TLS. It gives encryption and server authentication when certificates and trust anchors are validated correctly.
+
+## 5. What is TLS doing in an IoT device?
+
+**Short answer:** It gives confidentiality, integrity, and peer authentication.
+
+Embedded implementation must consider:
+
+- Certificate storage
+- Entropy (random number source)
+- Session lifecycle
+- Memory footprint
+- Algorithm availability
+- Credential provisioning
+- Failure handling
+
+## 6. Symmetric vs asymmetric cryptography
+
+| | Symmetric (AES) | Asymmetric (RSA, ECC) |
+| --- | --- | --- |
+| Keys | One shared secret | A key pair (public and private) |
+| Speed | Fast, good for bulk data | Slower |
+| Typical job | Encrypt the data | Authenticate and establish keys |
+
+## 7. What is SHA-256?
+
+**Short answer:** A cryptographic hash function producing a 256-bit digest. It gives integrity properties, but it is not encryption.
+
+## 8. How should device credentials be protected?
+
+- Do not hard-code reusable secrets into public source code
+- Use secure provisioning and protected key storage when the hardware supports it
+- Limit credentials to the permissions required
+- Define rotation and revocation procedures
+
+## 9. How would you secure firmware OTA?
+
+- Authenticate the image before activation
+- Protect the transport with appropriate security
+- Use version and rollback protection
+- Keep an interrupted update recoverable
+- Log failures without exposing secrets
+
+Product security requirements decide the exact design.
+
+## 10. Why is entropy important?
+
+**Short answer:** Security operations such as nonce and key generation need unpredictable randomness.
+
+Prefer a cryptographically secure RNG or hardware entropy source over counters or timestamps.
+
+## 11. What is a MAC, and how does it differ from a hash?
+
+**Short answer:** A MAC (for example HMAC-SHA256) mixes a secret key into the tag, so it proves integrity **and** authenticity.
+
+| | Plain hash | MAC |
+| --- | --- | --- |
+| Needs a key | No | Yes |
+| Anyone can compute it | Yes | No, only key holders |
+| Proves who sent it | No | Yes |
+
+HMAC is commonly used to authenticate firmware packets or sensor payloads over unauthenticated transports like UDP.
+
+## 12. What is AEAD, and what is an embedded example?
+
+**Short answer:** Authenticated Encryption with Associated Data: confidentiality plus integrity in one primitive.
+
+AES-GCM and ChaCha20-Poly1305 are common. "Associated data" (a packet header, a sequence number) is authenticated but not encrypted. AES-GCM is common in mbedTLS and wolfSSL because it is efficient with hardware AES, but **each encryption needs a unique nonce**. Reusing a nonce with the same key breaks confidentiality.
+
+## 13. Why is nonce or IV reuse dangerous?
+
+**Short answer:** In CTR and GCM the keystream comes from key plus nonce. Reusing both produces the same keystream.
+
+```text
+C1 = P1 XOR keystream
+C2 = P2 XOR keystream      (same nonce and key)
+C1 XOR C2 = P1 XOR P2      the keystream cancels, leaking the plaintexts
+```
+
+On constrained devices this can happen after a reset if the nonce counter was not saved in non-volatile storage. Persist counters, derive nonces from a monotonic source, or use large random nonces.
+
+## 14. What is a replay attack, and how do you prevent it?
+
+**Short answer:** An attacker records a valid message and sends it again later.
+
+Example: replaying an "unlock door" command. Mitigations: sequence numbers or timestamps inside the authenticated data, short validity windows, and tracking recently seen message IDs.
+
+Even encrypted and authenticated messages need this. AEAD alone does not stop replay of a captured ciphertext.
+
+## 15. Explain a TLS handshake for an MCU with limited RAM and flash
+
+**Short answer:** Negotiate, authenticate, exchange keys, then switch to fast symmetric encryption.
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    Client->>Server: ClientHello (supported cipher suites)
+    Server-->>Client: ServerHello + certificate
+    Client->>Client: validate certificate chain
+    Client->>Server: key exchange (for example ECDHE)
+    Note over Client,Server: both derive the same session keys
+    Client->>Server: encrypted application data (AES-GCM)
+```
+
+On MCUs, X.509 chain validation and RSA are costly in RAM, flash, and time. Prefer ECC, or TLS-PSK and session resumption, trading some flexibility for footprint.
+
+## 16. What is Perfect Forward Secrecy, and why does it matter for IoT fleets?
+
+**Short answer:** If a long-term key is stolen later, past recorded traffic still cannot be decrypted.
+
+Each session uses an ephemeral key (for example ECDHE) that is discarded afterwards. For fleets where a device key might eventually be extracted, PFS limits the damage to future sessions instead of exposing recorded history.
+
+## 17. How do you defend against buffer overflows in a network-facing parser?
 
 ```c
-int sfd = socket(AF_INET, SOCK_STREAM, 0);
-setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
-bind(sfd, (struct sockaddr*)&addr, sizeof(addr));
-listen(sfd, backlog);
-int cfd = accept(sfd, NULL, NULL);
-read(cfd, buf, sizeof(buf));
-write(cfd, resp, resp_len);
-close(cfd);
+bool parse_frame(const uint8_t *buf, size_t len)
+{
+    if (buf == NULL || len < HEADER_SIZE) return false;     /* reject short input */
+
+    uint16_t payload_len = read_u16_le(&buf[1]);            /* untrusted length field */
+    if (payload_len > MAX_PAYLOAD || payload_len > len - HEADER_SIZE) {
+        return false;                                       /* validate BEFORE copying */
+    }
+    memcpy(local, &buf[HEADER_SIZE], payload_len);          /* now safe */
+    return true;
+}
+```
+
+- Validate every length against buffer capacity before copying
+- Avoid `strcpy`, `sprintf`, and unchecked `memcpy`
+- Prefer a state-machine parser that consumes bytes incrementally
+- Enable stack canaries (`-fstack-protector`) and MPU stack and heap separation where available
+
+Many embedded targets lack ASLR and DEP, so one overflow in a network parser is a high-severity bug.
+
+## 18. What is a side-channel attack, and how does it apply to embedded crypto?
+
+**Short answer:** It extracts keys from physical behaviour (timing, power, electromagnetic emissions) instead of breaking the maths.
+
+Example: an AES implementation with data-dependent timing can leak key bits through variations measurable on the power rail.
+
+```c
+/* Constant-time comparison: takes the same time whether or not the bytes match. */
+int ct_equal(const uint8_t *a, const uint8_t *b, size_t n)
+{
+    uint8_t diff = 0;
+    for (size_t i = 0; i < n; i++) diff |= a[i] ^ b[i];    /* no early exit */
+    return diff == 0;
+}
+```
+
+Mitigations: constant-time code, no secret-dependent branches or array indexes, and hardware crypto accelerators designed to resist power analysis.
+
+## 19. Secure boot vs secure OTA: how do they relate?
+
+**Short answer:** They are complementary.
+
+| | Secure boot | Authenticated OTA |
+| --- | --- | --- |
+| Checks | The image at startup | The image when it arrives |
+| Stops | Malicious code running, even if it got onto the device another way (debug port) | Malicious firmware delivered over the air |
+
+## 20. What is a Root of Trust?
+
+**Short answer:** The minimal hardware or immutable code that is trusted by definition and cannot be bypassed.
+
+Examples: a secure element, a hardware unique key in fuses, or a boot ROM that cannot be reflashed. Secure boot, secure storage, and attestation are built on top. If the root is compromised, the whole chain of trust collapses.
+
+---
+
+## Socket programming
+
+## 21. TCP server socket lifecycle (C, POSIX)
+
+```c
+int sfd = socket(AF_INET, SOCK_STREAM, 0);                 /* 1. create a TCP socket */
+setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));   /* allow quick restart */
+bind(sfd, (struct sockaddr *)&addr, sizeof(addr));         /* 2. attach to a local address and port */
+listen(sfd, backlog);                                      /* 3. mark as passive, set the pending queue */
+int cfd = accept(sfd, NULL, NULL);                         /* 4. wait for a client; returns a NEW socket */
+read(cfd, buf, sizeof(buf));                               /* 5. receive on the connected socket */
+write(cfd, resp, resp_len);                                /*    and reply */
+close(cfd);                                                /* 6. close the client socket */
+close(sfd);                                                /*    and the listening socket */
+```
+
+`accept()` returns a new file descriptor per connection. The listening socket keeps listening.
+
+## 22. Client-side TCP socket lifecycle
+
+```c
+int sfd = socket(AF_INET, SOCK_STREAM, 0);                 /* create */
+connect(sfd, (struct sockaddr *)&server_addr, sizeof(server_addr));   /* TCP three-way handshake */
+write(sfd, req, req_len);                                  /* send the request */
+read(sfd, buf, sizeof(buf));                               /* read the reply */
 close(sfd);
 ```
 
-`socket()` creates the endpoint, `bind()` assigns a local address/port, `listen()` marks it passive and sets the pending-connection backlog, `accept()` blocks until a client connects and returns a new connected socket (the listening socket keeps listening), and `read`/`write` (or `recv`/`send`) transfer the byte stream. Each accepted connection gets its own file descriptor.
+No `bind()` is needed. The OS assigns an ephemeral local port.
 
-## 22. Client-side TCP socket lifecycle?
+## 23. Blocking vs non-blocking sockets
+
+**Short answer:** A blocking call waits. A non-blocking call returns immediately with `EWOULDBLOCK` or `EAGAIN`.
+
+Non-blocking sockets combined with `select()` or `poll()` (or lwIP's callback API) let one task serve several connections while still doing other work, without a thread per socket.
 
 ```c
-int sfd = socket(AF_INET, SOCK_STREAM, 0);
-connect(sfd, (struct sockaddr*)&server_addr, sizeof(server_addr));
-write(sfd, req, req_len);
-read(sfd, buf, sizeof(buf));
-close(sfd);
+int flags = fcntl(fd, F_GETFL, 0);
+fcntl(fd, F_SETFL, flags | O_NONBLOCK);       /* make the socket non-blocking */
 ```
 
-`connect()` performs the TCP three-way handshake with the server. No `bind()` call is required — the OS auto-assigns an ephemeral local port unless the client needs a specific source port.
+## 24. What do `select()` and `poll()` do?
 
-## 23. Blocking vs non-blocking sockets — when would you use non-blocking on an embedded system?
+**Short answer:** One thread watches many sockets and wakes when at least one is ready.
 
-A blocking socket call (`recv`, `accept`, `connect`) suspends the calling task/thread until the operation completes. Non-blocking sockets (`fcntl(fd, F_SETFL, O_NONBLOCK)` or platform equivalent) return immediately with `EWOULDBLOCK`/`EAGAIN` if no data is ready. On a resource-constrained embedded system without an RTOS or with a single-threaded main loop, non-blocking sockets combined with `select()`/`poll()` (or an OS-specific event API like lwIP's callback/netconn API) let one task service multiple connections or interleave networking with sensor polling without dedicating a thread per socket.
+```c
+fd_set rfds;
+FD_ZERO(&rfds);
+FD_SET(server_fd, &rfds);                      /* watch the listening socket */
+FD_SET(client_fd, &rfds);                      /* and a client socket */
+struct timeval tv = { .tv_sec = 1, .tv_usec = 0 };
+int n = select(max_fd + 1, &rfds, NULL, NULL, &tv);   /* wait up to 1 second */
+if (n > 0 && FD_ISSET(client_fd, &rfds)) { /* client_fd has data */ }
+```
 
-## 24. What does `select()` (or `poll()`) do, and why is it used in embedded network stacks?
+This avoids a thread per connection, which matters with little RAM per stack.
 
-`select()`/`poll()` lets a single thread monitor multiple file descriptors (sockets) simultaneously and block until at least one is ready for read/write/exception, returning which ones. This avoids spinning a thread per connection — important on MCUs with limited RAM per stack — and is the classic pattern for a lightweight single-threaded server handling several clients (e.g., a small HTTP server on lwIP/FreeRTOS+TCP).
+## 25. TCP socket vs UDP socket API
 
-## 25. TCP socket vs UDP socket API differences?
+| | TCP (`SOCK_STREAM`) | UDP (`SOCK_DGRAM`) |
+| --- | --- | --- |
+| Setup | `connect()` and `accept()` | None: `bind()` then `recvfrom()` and `sendto()` |
+| Peer address | Fixed by the connection | Given on every packet (or fixed with `connect()`) |
+| Reliability | Built in | None: datagrams can be lost or reordered |
 
-TCP (`SOCK_STREAM`) requires `connect()` (client) and `accept()` (server) to establish a connection before `send`/`recv` work, and the connection persists across calls. UDP (`SOCK_DGRAM`) has no connection setup — the server just `bind()`s and calls `recvfrom()`/`sendto()`, specifying the peer address on every packet (or optionally `connect()`s a UDP socket to fix the peer address for `send`/`recv`). UDP sockets can also lose or reorder datagrams silently since there is no built-in reliability.
+## 26. Why must you handle partial reads and writes on TCP?
 
-## 26. Why must you handle partial reads/writes on a TCP socket?
-
-Because TCP is a byte stream (see Q3), a single `send()`/`write()` call may write fewer bytes than requested (e.g., if the send buffer is full), and a single `recv()`/`read()` may return fewer bytes than the sender transmitted in one call. Correct code loops until all bytes are sent/received or an error occurs:
+**Short answer:** One `send()` may write fewer bytes than asked, and one `recv()` may return fewer than sent.
 
 ```c
 size_t total = 0;
 while (total < len) {
-    ssize_t n = send(fd, buf + total, len - total, 0);
-    if (n <= 0) { /* handle error/EINTR */ break; }
-    total += n;
+    ssize_t n = send(fd, buf + total, len - total, 0);   /* send the rest */
+    if (n <= 0) { /* handle error or EINTR */ break; }
+    total += n;                                          /* advance by what was really sent */
 }
 ```
 
-## 27. How do you implement message framing over a raw TCP stream?
+## 27. How do you implement message framing over TCP?
 
-Since TCP has no message boundaries, the application protocol must define them. Common approaches: (1) fixed-length messages, (2) a length-prefix header (e.g., a 2 or 4-byte length field before the payload) so the receiver knows exactly how many bytes to read, or (3) a delimiter (e.g., newline for text protocols) that the receiver scans for. Length-prefixing is generally preferred in embedded binary protocols since it avoids scanning and handles arbitrary binary payloads.
+| Method | How | Note |
+| --- | --- | --- |
+| Fixed length | Every message is the same size | Simple, inflexible |
+| Length prefix | A 2 or 4 byte length before the payload | Preferred for binary data |
+| Delimiter | A terminator such as a newline | Good for text protocols |
 
-## 28. What is the difference between `close()` and `shutdown()` on a socket?
+Length-prefixing avoids scanning and handles arbitrary binary payloads.
 
-`close()` releases the file descriptor and, once all references are closed, tears down the connection — it also stops the ability to read or write entirely. `shutdown(fd, SHUT_WR)` half-closes the connection: it sends a TCP FIN so the peer knows no more data is coming, while still allowing this side to read any remaining incoming data. This is useful in protocols where a client sends a request, signals "done sending," and waits to read the full response before actually closing.
+## 28. `close()` vs `shutdown()`
 
-## 29. How do you set socket-level timeouts (important for embedded clients that must not hang forever)?
+**Short answer:** `close()` releases the descriptor. `shutdown()` half-closes the connection.
 
-Use `setsockopt()` with `SO_RCVTIMEO`/`SO_SNDTIMEO`:
+```c
+shutdown(fd, SHUT_WR);        /* send FIN: "I am done sending", but keep reading the reply */
+```
+
+This suits a client that sends a request, signals "done", and then reads the full response.
+
+## 29. How do you set socket timeouts?
 
 ```c
 struct timeval tv = { .tv_sec = 5, .tv_usec = 0 };
-setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
+setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));     /* recv() gives up after 5 s */
 ```
 
-Without this, a `recv()` on a dead peer/dropped Wi-Fi link can block indefinitely, which is unacceptable on a device that must remain responsive (e.g., keep servicing a watchdog or other tasks). Alternatively, use non-blocking sockets with `select()`/`poll()` and an explicit timeout value, which is often preferred in single-threaded embedded stacks.
+Without a timeout, `recv()` on a dead peer or dropped Wi-Fi link can block forever, which is unacceptable on a device that must stay responsive.
 
-## 30. How do you secure a raw socket connection with TLS on an embedded target (e.g., mbedTLS)?
+## 30. How do you secure a raw socket with TLS (for example mbedTLS)?
 
-Rather than encrypting manually, wrap the already-connected TCP socket file descriptor in a TLS context: perform the TLS handshake over that fd (mbedTLS's `mbedtls_ssl_handshake()` with BIO callbacks bound to `send`/`recv` on the socket), validate the peer certificate against a trusted CA (or use a pre-shared key for constrained devices), and then use `mbedtls_ssl_read()`/`mbedtls_ssl_write()` in place of raw `recv`/`send` for all application data. The underlying socket API (create/connect/close) is unchanged — TLS sits as a layer on top of the transport.
+**Short answer:** Wrap the connected socket in a TLS layer. The socket API itself does not change.
 
-## 31. What is the SO_REUSEADDR option and why is it commonly set on embedded servers that restart frequently?
+```mermaid
+flowchart LR
+    A["socket() + connect()"] --> B["mbedtls_ssl_handshake() over the socket"] --> C["Validate peer certificate against a trusted CA (or use PSK)"] --> D["mbedtls_ssl_read() / write() instead of recv() / send()"]
+```
 
-`SO_REUSEADDR` allows a socket to bind to a local address/port that's in the `TIME_WAIT` state from a previous connection using the same port (common right after a server process/task restarts). Without it, `bind()` can fail with "address already in use" for up to a couple of minutes after a restart, which is problematic for an embedded device that reboots or resets its network stack and needs to reopen a listening socket immediately.
+## 31. What is `SO_REUSEADDR`, and why set it on servers that restart?
 
-## 32. What socket error should you specifically handle for a peer that abruptly disconnects, and why does it matter on embedded systems?
+**Short answer:** It lets `bind()` reuse an address in the `TIME_WAIT` state.
 
-`recv()` returning 0 indicates a graceful peer close (FIN received); a negative return with `errno`/error code `ECONNRESET` indicates the peer reset the connection (e.g., it crashed or sent data after closing). Writing to a socket after the peer has reset it can raise `SIGPIPE` on POSIX systems, which by default terminates the process — on an embedded target this can crash the whole application, so servers typically ignore `SIGPIPE` (or use `MSG_NOSIGNAL` on `send()`) and treat `ECONNRESET`/`EPIPE` as a signal to clean up that connection's resources rather than treating it as a fatal error.
+Without it, `bind()` can fail with "address already in use" for a couple of minutes after a restart. That is a problem for a device that reboots its network stack and must reopen its listener immediately.
+
+## 32. How do you handle a peer that disconnects abruptly?
+
+**Short answer:** `recv()` returning 0 means the peer closed cleanly. A negative return with `ECONNRESET` means it reset the connection.
+
+```c
+ssize_t n = recv(fd, buf, sizeof buf, 0);
+if (n == 0)          { /* orderly close from the peer */ }
+else if (n < 0)      { /* error: check errno (ECONNRESET, ETIMEDOUT, ...) */ }
+
+send(fd, data, len, MSG_NOSIGNAL);    /* avoid SIGPIPE killing the process when the peer is gone */
+```
+
+Writing to a reset socket can raise `SIGPIPE`, which kills the process by default. Servers ignore `SIGPIPE` or use `MSG_NOSIGNAL`, and clean up that connection's resources instead of treating it as fatal.

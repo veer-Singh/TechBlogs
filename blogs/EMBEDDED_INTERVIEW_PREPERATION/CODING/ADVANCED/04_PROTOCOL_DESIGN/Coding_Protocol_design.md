@@ -268,6 +268,21 @@ flowchart TB
 
 ## Senior / Staff / Architect-Level Questions
 
+### At a glance (one line each, for quick revision)
+
+| Q | Topic | One-line answer |
+| --- | --- | --- |
+| 11 | Transport-agnostic errors | One application status enum; each transport only serializes it |
+| 12 | Resumable large transfer | Receiver decides the resume point, per-chunk CRC, final hash check |
+| 13 | Fuzzing | An isolated parser entry point; assert bounded memory, progress, and valid states |
+| 14 | Extensibility | Receivers ignore unknown types; type values are append-only |
+| 15 | Where to put security | TLS by default; whole-frame AEAD when there is no TLS; per-field only when required |
+| 16 | Interoperability | A precise spec, shared golden vectors, and live differential decoding |
+| 17 | Diagnostics logging | Compact binary records, redact secrets at the source, bounded ring, export on demand |
+| 18 | Adaptive timeouts | Measure round-trip time, derive the timeout from it, and cap it |
+| 19 | Build vs adopt | Adopt a standard by default; go custom only for a verified constraint |
+| 20 | Design review checklist | One retry owner, pinned wire format, unknown-field rule, bounded parsing, security model, vectors |
+
 ## 11. How do you design a protocol's error/status model so it works consistently across drastically different transports (UART, TCP, MQTT) in the same product line?
 
 ```mermaid

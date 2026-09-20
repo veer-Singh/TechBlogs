@@ -309,6 +309,21 @@ flowchart TB
 
 ## Senior / Staff / Architect-Level Questions
 
+### At a glance (one line each, for quick revision)
+
+| Q | Topic | One-line answer |
+| --- | --- | --- |
+| 11 | Preemptive vs cooperative | Preemptive for mixed criticality; cooperative for small, bounded task sets |
+| 12 | Schedulability analysis | Utilization bound, then response-time analysis; only as good as the WCET inputs |
+| 13 | Stack sizing | Static analysis plus high-water mark plus margin; keep overflow checks on |
+| 14 | Testing RTOS code | Virtual clock, host tests in lockstep, hardware-in-the-loop only where needed |
+| 15 | ISR and task shared data | Lock-free single writer, or a very short interrupt mask; the ISR never waits |
+| 16 | RTOS migration | An OS abstraction layer; prove it on the old RTOS first |
+| 17 | Rare race conditions | Cheap trace, audit read-modify-writes, inject delays, add a regression test |
+| 18 | Task vs callback | A task only for its own timing, priority, or blocking; avoid task-per-feature |
+| 19 | Fault isolation | MPU regions, classify the blast radius, restart isolable tasks, escalate the rest |
+| 20 | Task review checklist | Priority justified, stack measured, sync documented, heartbeat wired, contained |
+
 ## 11. How do you choose between a preemptive and a cooperative (run-to-completion) scheduler for a given embedded product?
 
 ```mermaid

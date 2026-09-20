@@ -233,6 +233,23 @@ flowchart TB
 
 ## Senior / Staff / Architect-Level Questions
 
+### At a glance (one line each, for quick revision)
+
+| Q | Topic | One-line answer |
+| --- | --- | --- |
+| 11 | Product line | One core codebase; a HAL for implementation differences; capability flags for real ones |
+| 12 | MCU, gateway, cloud split | Safety and real-time on the MCU; buffering on the gateway; fleet analytics in the cloud |
+| 13 | System test strategy | Unit, integration, hardware-in-the-loop fault injection, soak, then field trial |
+| 14 | Configuration management | Validate against a schema, fall back to safe defaults, report the config version |
+| 15 | Security from the start | Root of trust, then secure boot, secure storage, secure comms, secure OTA, in that order |
+| 16 | Long-lived decisions | A few candidates, weighted criteria, and an ADR with revisit triggers |
+| 17 | Canary rollouts | Device-side rollback, fast observability, and targeted segments |
+| 18 | Build vs buy | Buy commodity infrastructure; build only differentiating or verified-constraint parts |
+| 19 | Component end-of-life | A HAL abstraction, lifecycle tracking, and early qualification of a replacement |
+| 20 | Architecture review | Failure modes, layer boundaries, testability, field recovery, ownership, smaller path |
+| 21 | Five-layer callback design | No layer knows its neighbour's functions; wire everything once in `system_init()` |
+| 22 | Battery-powered manager tasks | ISR to semaphore to task; mutex for shared state; queues between managers; tiny critical sections only |
+
 ## 11. How do you architect a product line so the same core firmware runs across multiple hardware variants (different MCU, different sensor mix) without fragmenting into divergent codebases?
 
 ```mermaid
