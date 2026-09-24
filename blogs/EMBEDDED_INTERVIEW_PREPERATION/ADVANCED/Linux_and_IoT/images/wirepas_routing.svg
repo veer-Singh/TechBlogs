@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="1000" height="600"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="600" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">Routing in a Wirepas mesh: every node chooses the cheapest path to a sink</text>
+<rect x="20" y="56" width="470" height="400" rx="14" fill="#fbfbfc" stroke="#6b7280" stroke-width="1.2"/>
+<text x="255" y="80" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1f2937">1  Each router advertises its cost to reach a sink</text>
+<line x1="130" y1="230" x2="255" y2="130" stroke="#2e8b57" stroke-width="4"/>
+<circle cx="192.5" cy="180.0" r="11" fill="#ffffff" stroke="#6b7280" stroke-width="1"/>
+<text x="192.5" y="184.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#1f2937">2</text>
+<line x1="380" y1="230" x2="255" y2="130" stroke="#cbd5e1" stroke-width="2"/>
+<circle cx="317.5" cy="180.0" r="11" fill="#ffffff" stroke="#6b7280" stroke-width="1"/>
+<text x="317.5" y="184.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#1f2937">1</text>
+<line x1="130" y1="230" x2="255" y2="330" stroke="#2e8b57" stroke-width="4"/>
+<circle cx="192.5" cy="280.0" r="11" fill="#ffffff" stroke="#6b7280" stroke-width="1"/>
+<text x="192.5" y="284.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#1f2937">1</text>
+<line x1="380" y1="230" x2="255" y2="330" stroke="#cbd5e1" stroke-width="2"/>
+<circle cx="317.5" cy="280.0" r="11" fill="#ffffff" stroke="#6b7280" stroke-width="1"/>
+<text x="317.5" y="284.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#1f2937">3</text>
+<line x1="255" y1="330" x2="255" y2="420" stroke="#2e8b57" stroke-width="4"/>
+<circle cx="255.0" cy="375.0" r="11" fill="#ffffff" stroke="#6b7280" stroke-width="1"/>
+<text x="255.0" y="379.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#1f2937">1</text>
+<rect x="237" y="112" width="36" height="36" rx="6" fill="#fff3e0" stroke="#e08a00" stroke-width="2.5"/>
+<text x="255" y="135" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#e08a00">S</text>
+<circle cx="130" cy="230" r="15" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2.5"/>
+<text x="130" y="234" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#2f6fbe">R</text>
+<circle cx="380" cy="230" r="15" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2.5"/>
+<text x="380" y="234" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#2f6fbe">R</text>
+<circle cx="255" cy="330" r="15" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2.5"/>
+<text x="255" y="334" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#2f6fbe">R</text>
+<circle cx="255" cy="420" r="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="160" y="262" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2f6fbe">A: cost 2</text>
+<text x="350" y="262" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2f6fbe">B: cost 1</text>
+<text x="290" y="336" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2f6fbe">C: via A = 3,</text>
+<text x="290" y="352" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2f6fbe">via B = 4 → uses A</text>
+<text x="275" y="426" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#2e8b57">sensor joins C</text>
+<text x="255" y="446" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">Numbers = link cost (worse link quality or more load = higher cost)</text>
+<rect x="510" y="56" width="470" height="400" rx="14" fill="#fbfbfc" stroke="#6b7280" stroke-width="1.2"/>
+<text x="745" y="80" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1f2937">2  When a link fails, nodes simply re-route</text>
+<line x1="620" y1="230" x2="745" y2="130" stroke="#c0392b" stroke-width="3" stroke-dasharray="6 4"/>
+<text x="660" y="170" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#c0392b">✗ link lost</text>
+<line x1="620" y1="230" x2="745" y2="330" stroke="#cbd5e1" stroke-width="2"/>
+<line x1="870" y1="230" x2="745" y2="130" stroke="#2e8b57" stroke-width="4"/>
+<line x1="745" y1="330" x2="870" y2="230" stroke="#2e8b57" stroke-width="4"/>
+<line x1="745" y1="330" x2="745" y2="420" stroke="#2e8b57" stroke-width="4"/>
+<rect x="727" y="112" width="36" height="36" rx="6" fill="#fff3e0" stroke="#e08a00" stroke-width="2.5"/>
+<text x="745" y="135" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#e08a00">S</text>
+<circle cx="620" cy="230" r="15" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2.5"/>
+<text x="620" y="234" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#2f6fbe">R</text>
+<circle cx="870" cy="230" r="15" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2.5"/>
+<text x="870" y="234" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#2f6fbe">R</text>
+<circle cx="745" cy="330" r="15" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2.5"/>
+<text x="745" y="334" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#2f6fbe">R</text>
+<circle cx="745" cy="420" r="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="820" y="300" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2e8b57">C now routes</text>
+<text x="820" y="316" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2e8b57">via B</text>
+<text x="745" y="446" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">No central re-planning: each node decides locally</text>
+<rect x="20" y="470" width="960" height="116" rx="14" fill="#f6f9fe" stroke="#2f6fbe" stroke-width="1.5"/>
+<text x="500" y="496" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#2f6fbe">Terms you'll meet</text>
+<text x="40" y="522" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">Router + the non-router nodes attached to it</text>
+<text x="575" y="522" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">a "cluster" in mesh terms (NOT a ZCL / Matter cluster)</text>
+<text x="40" y="544" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">Hop count / route cost</text>
+<text x="575" y="544" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">how many relays, and how good the path is; shown in diagnostics</text>
+<text x="40" y="566" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">Uplink = to any sink (anycast) · Downlink = from a sink to one node, or broadcast</text>
+<text x="575" y="566" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">commands, configuration, firmware (OTAP)</text>
+</svg>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 474" width="1000" height="474"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="473.95" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">A Yocto build failed: which stage, and where to look</text>
+<rect x="20.0" y="66.0" width="457.0" height="72.3" rx="12" fill="#0f1b2d"/>
+<text x="248.5" y="106.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#ffffff">Build fails</text>
+<circle cx="22.0" cy="68" r="14" fill="#f0a23b" stroke="#ffffff" stroke-width="2.5"/>
+<text x="22.0" y="73.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">1</text>
+<rect x="523.0" y="66.0" width="457.0" height="72.3" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="751.5" y="94.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Read the FIRST ERROR line</text>
+<text x="751.5" y="120.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">it names the recipe and the task</text>
+<circle cx="525.0" cy="68" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="525.0" y="73.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">2</text>
+<line x1="479.0" y1="102.2" x2="518.0" y2="102.2" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<polyline points="751.5,140.3 751.5,160.3 500.0,160.3 500.0,178.3" fill="none" stroke="#374151" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="220.0" y="182.3" width="560.0" height="48.9" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="500.0" y="211.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15.5" font-weight="700" fill="#1f2937">Which stage failed?</text>
+<polyline points="500.0,233.2 500.0,261.2 109.6,261.2 109.6,323.2" fill="none" stroke="#7b3fbf" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="77.3" y="274.2" width="64.7" height="22" rx="11" fill="#ffffff" stroke="#7b3fbf" stroke-width="1.5"/>
+<text x="109.6" y="289.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#7b3fbf">parsing</text>
+<rect x="20.0" y="327.2" width="179.2" height="120.7" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="109.6" y="355.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Parsing</text>
+<text x="109.6" y="379.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">syntax, layer</text>
+<text x="109.6" y="396.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">compatibility, old</text>
+<text x="109.6" y="413.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">_append syntax, missing</text>
+<text x="109.6" y="430.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">layer</text>
+<polyline points="500.0,233.2 500.0,261.2 304.8,261.2 304.8,323.2" fill="none" stroke="#6b7280" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="269.1" y="274.2" width="71.4" height="22" rx="11" fill="#ffffff" stroke="#6b7280" stroke-width="1.5"/>
+<text x="304.8" y="289.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#6b7280">do_fetch</text>
+<rect x="215.2" y="327.2" width="179.2" height="120.7" rx="12" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="304.8" y="371.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Download</text>
+<text x="304.8" y="396.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">URL, SRCREV, branch,</text>
+<text x="304.8" y="413.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">proxy, mirrors</text>
+<polyline points="500.0,233.2 500.0,261.2 500.0,261.2 500.0,323.2" fill="none" stroke="#2f6fbe" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="407.6" y="274.2" width="184.8" height="22" rx="11" fill="#ffffff" stroke="#2f6fbe" stroke-width="1.5"/>
+<text x="500.0" y="289.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2f6fbe">do_configure / do_compile</text>
+<rect x="410.4" y="327.2" width="179.2" height="120.7" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="500.0" y="363.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Build</text>
+<text x="500.0" y="388.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">open</text>
+<text x="500.0" y="405.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">WORKDIR/temp/log.do_&lt;task&gt;;</text>
+<text x="500.0" y="421.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">try bitbake -c devshell</text>
+<polyline points="500.0,233.2 500.0,261.2 695.2,261.2 695.2,323.2" fill="none" stroke="#d97d00" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="636.2" y="274.2" width="118.0" height="22" rx="11" fill="#ffffff" stroke="#d97d00" stroke-width="1.5"/>
+<text x="695.2" y="289.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#d97d00">do_package / QA</text>
+<rect x="605.6" y="327.2" width="179.2" height="120.7" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="695.2" y="363.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Packaging</text>
+<text x="695.2" y="388.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">files not packaged,</text>
+<text x="695.2" y="405.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">missing LDFLAGS, wrong</text>
+<text x="695.2" y="421.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">paths</text>
+<polyline points="500.0,233.2 500.0,261.2 890.4,261.2 890.4,323.2" fill="none" stroke="#2e8b57" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="824.7" y="274.2" width="131.4" height="22" rx="11" fill="#ffffff" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="890.4" y="289.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2e8b57">do_rootfs / image</text>
+<rect x="800.8" y="327.2" width="179.2" height="120.7" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="890.4" y="363.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Image</text>
+<text x="890.4" y="388.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">Nothing RPROVIDES,</text>
+<text x="890.4" y="405.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">package conflicts,</text>
+<text x="890.4" y="421.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">image too big</text>
+</svg>

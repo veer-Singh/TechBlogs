@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+  </defs>
+
+  <!-- background (keeps it readable in dark themes) -->
+  <rect x="0" y="0" width="1000" height="620" rx="16" fill="#ffffff"/>
+
+  <text x="500" y="45" text-anchor="middle" font-size="22" font-weight="700" fill="#1f2937">How a device boots: the bootloader's job</text>
+
+  <!-- ===== Main chain ===== -->
+  <rect x="30" y="80" width="170" height="90" rx="12" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+  <text x="115" y="112" text-anchor="middle" font-size="16" font-weight="700" fill="#1f2937">1. Power ON</text>
+  <text x="115" y="134" text-anchor="middle" font-size="13" fill="#374151">or reset</text>
+  <text x="115" y="152" text-anchor="middle" font-size="13" fill="#374151">CPU wakes up</text>
+
+  <rect x="250" y="80" width="190" height="90" rx="12" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+  <text x="345" y="112" text-anchor="middle" font-size="16" font-weight="700" fill="#1f2937">2. Boot ROM</text>
+  <text x="345" y="134" text-anchor="middle" font-size="13" fill="#374151">inside the chip, fixed</text>
+  <text x="345" y="152" text-anchor="middle" font-size="13" fill="#374151">reads boot pins</text>
+
+  <rect x="490" y="80" width="220" height="90" rx="12" fill="#fff3e0" stroke="#e08a00" stroke-width="3"/>
+  <text x="600" y="112" text-anchor="middle" font-size="16" font-weight="700" fill="#1f2937">3. Bootloader</text>
+  <text x="600" y="134" text-anchor="middle" font-size="13" fill="#374151">in flash / SD / eMMC</text>
+  <text x="600" y="152" text-anchor="middle" font-size="13" fill="#374151">SPL → U-Boot, or MCU BL</text>
+
+  <rect x="760" y="80" width="210" height="90" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+  <text x="865" y="112" text-anchor="middle" font-size="16" font-weight="700" fill="#1f2937">4. OS / Application</text>
+  <text x="865" y="134" text-anchor="middle" font-size="13" fill="#374151">Linux kernel + rootfs</text>
+  <text x="865" y="152" text-anchor="middle" font-size="13" fill="#374151">or IoT firmware</text>
+
+  <line x1="200" y1="125" x2="246" y2="125" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="440" y1="125" x2="486" y2="125" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="710" y1="125" x2="756" y2="125" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- zoom arrow -->
+  <line x1="600" y1="170" x2="600" y2="203" stroke="#e08a00" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- ===== Inside the bootloader ===== -->
+  <rect x="30" y="205" width="940" height="160" rx="12" fill="#fffaf2" stroke="#e08a00" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="50" y="229" font-size="14" font-weight="700" fill="#b86e00">Inside the bootloader (step 3 zoomed in)</text>
+
+  <rect x="55" y="245" width="190" height="70" rx="10" fill="#ffffff" stroke="#e08a00" stroke-width="2"/>
+  <text x="150" y="274" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2937">A. Init hardware</text>
+  <text x="150" y="296" text-anchor="middle" font-size="13" fill="#374151">clocks, DRAM, console</text>
+
+  <rect x="290" y="245" width="190" height="70" rx="10" fill="#ffffff" stroke="#e08a00" stroke-width="2"/>
+  <text x="385" y="274" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2937">B. Update (if asked)</text>
+  <text x="385" y="296" text-anchor="middle" font-size="13" fill="#374151">OTA / UART, A/B slots</text>
+
+  <rect x="525" y="245" width="190" height="70" rx="10" fill="#ffffff" stroke="#e08a00" stroke-width="2"/>
+  <text x="620" y="274" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2937">C. Verify image</text>
+  <text x="620" y="296" text-anchor="middle" font-size="13" fill="#374151">hash + signature</text>
+
+  <rect x="760" y="245" width="190" height="70" rx="10" fill="#ffffff" stroke="#e08a00" stroke-width="2"/>
+  <text x="855" y="274" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2937">D. Hand over</text>
+  <text x="855" y="296" text-anchor="middle" font-size="13" fill="#374151">jump to kernel / app</text>
+
+  <line x1="245" y1="280" x2="286" y2="280" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="480" y1="280" x2="521" y2="280" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="715" y1="280" x2="756" y2="280" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <text x="620" y="345" text-anchor="middle" font-size="13" font-weight="600" fill="#c0392b">✗ invalid → recovery: boot the backup image or wait for new firmware</text>
+
+  <!-- ===== Crypto panel ===== -->
+  <rect x="30" y="385" width="580" height="215" rx="12" fill="#f8f9fb" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="50" y="410" font-size="14" font-weight="700" fill="#1f2937">Cryptography inside the bootloader</text>
+
+  <rect x="45" y="425" width="265" height="80" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+  <text x="177" y="455" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2937">Hash (SHA-256)</text>
+  <text x="177" y="478" text-anchor="middle" font-size="13" fill="#374151">Integrity: was it changed?</text>
+
+  <rect x="325" y="425" width="270" height="80" rx="10" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+  <text x="460" y="455" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2937">Signature (ECDSA / RSA)</text>
+  <text x="460" y="478" text-anchor="middle" font-size="13" fill="#374151">Authenticity: did WE make it?</text>
+
+  <rect x="45" y="510" width="265" height="80" rx="10" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+  <text x="177" y="540" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2937">Encryption (AES)</text>
+  <text x="177" y="563" text-anchor="middle" font-size="13" fill="#374151">Confidentiality: can others read it?</text>
+
+  <rect x="325" y="510" width="270" height="80" rx="10" fill="#fff3e0" stroke="#e08a00" stroke-width="2"/>
+  <text x="460" y="540" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2937">Security counter</text>
+  <text x="460" y="563" text-anchor="middle" font-size="13" fill="#374151">Freshness: is it an old version?</text>
+
+  <!-- ===== Flash layout panel ===== -->
+  <rect x="630" y="385" width="340" height="215" rx="12" fill="#f8f9fb" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="650" y="410" font-size="14" font-weight="700" fill="#1f2937">Flash layout (IoT device)</text>
+
+  <rect x="650" y="425" width="300" height="38" fill="#e8f6ec" stroke="#2e8b57"/>
+  <text x="800" y="449" text-anchor="middle" font-size="13" fill="#1f2937">Slot B: new firmware (OTA)</text>
+  <rect x="650" y="467" width="300" height="38" fill="#e8f6ec" stroke="#2e8b57"/>
+  <text x="800" y="491" text-anchor="middle" font-size="13" fill="#1f2937">Slot A: running firmware</text>
+  <rect x="650" y="509" width="300" height="38" fill="#eef0f3" stroke="#6b7280"/>
+  <text x="800" y="533" text-anchor="middle" font-size="13" fill="#1f2937">Metadata: active slot, confirmed?</text>
+  <rect x="650" y="551" width="300" height="38" fill="#fff3e0" stroke="#e08a00" stroke-width="2"/>
+  <text x="800" y="575" text-anchor="middle" font-size="13" font-weight="600" fill="#1f2937">Bootloader + public key (locked)</text>
+</svg>

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="1000" height="600"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="600" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">Virtual memory: every process gets its own private address space</text>
+<text x="153" y="70" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Process A</text>
+<text x="153" y="88" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">virtual addresses</text>
+<text x="305" y="70" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Page table A</text>
+<text x="500" y="70" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Physical RAM</text>
+<text x="500" y="88" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">4 KB pages (frames)</text>
+<text x="695" y="70" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Page table B</text>
+<text x="847" y="70" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Process B</text>
+<text x="847" y="88" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">virtual addresses</text>
+<rect x="265" y="100" width="80" height="420" rx="10" fill="#f6f7f9" stroke="#6b7280" stroke-width="1.2"/>
+<rect x="655" y="100" width="80" height="420" rx="10" fill="#f6f7f9" stroke="#6b7280" stroke-width="1.2"/>
+<rect x="390" y="100" width="220" height="38" rx="6" fill="#eef0f3" stroke="#6b7280" stroke-width="1.8"/>
+<text x="500" y="124" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">kernel code + data</text>
+<rect x="390" y="142" width="220" height="38" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="500" y="166" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">A: code</text>
+<rect x="390" y="184" width="220" height="38" rx="6" fill="#e0f2f1" stroke="#0f766e" stroke-width="1.8"/>
+<text x="500" y="208" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">shared: libc code</text>
+<rect x="390" y="226" width="220" height="38" rx="6" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.8"/>
+<text x="500" y="250" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">B: code</text>
+<rect x="390" y="268" width="220" height="38" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="500" y="292" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">A: data + heap</text>
+<rect x="390" y="310" width="220" height="38" rx="6" fill="#ffffff" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="4 3"/>
+<text x="500" y="334" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#6b7280">free</text>
+<rect x="390" y="352" width="220" height="38" rx="6" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.8"/>
+<text x="500" y="376" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">B: data + heap</text>
+<rect x="390" y="394" width="220" height="38" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="500" y="418" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">A: stack</text>
+<rect x="390" y="436" width="220" height="38" rx="6" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.8"/>
+<text x="500" y="460" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">B: stack</text>
+<rect x="390" y="478" width="220" height="38" rx="6" fill="#ffffff" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="4 3"/>
+<text x="500" y="502" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#6b7280">free</text>
+<text x="72" y="108" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="10.5" font-weight="400" fill="#6b7280">0xFFFF…</text>
+<text x="72" y="450" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="10.5" font-weight="400" fill="#6b7280">0x0000…</text>
+<rect x="78" y="100" width="150" height="70" rx="6" fill="#eef0f3" stroke="#6b7280" stroke-width="1.8"/>
+<text x="153.0" y="140.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Kernel space</text>
+<line x1="228" y1="135.0" x2="390" y2="119" stroke="#6b7280" stroke-width="1.8" stroke-dasharray="5 3"/>
+<rect x="78" y="200" width="150" height="40" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="153.0" y="225.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Stack</text>
+<line x1="228" y1="220.0" x2="390" y2="413" stroke="#2f6fbe" stroke-width="1.8"/>
+<rect x="78" y="262" width="150" height="36" rx="6" fill="#e0f2f1" stroke="#0f766e" stroke-width="1.8"/>
+<text x="153.0" y="285.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">libc (shared)</text>
+<line x1="228" y1="280.0" x2="390" y2="203" stroke="#0f766e" stroke-width="1.8"/>
+<rect x="78" y="320" width="150" height="40" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="153.0" y="345.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Heap</text>
+<line x1="228" y1="340.0" x2="390" y2="287" stroke="#2f6fbe" stroke-width="1.8"/>
+<rect x="78" y="372" width="150" height="26" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="153.0" y="390.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Data</text>
+<line x1="228" y1="385.0" x2="390" y2="287" stroke="#2f6fbe" stroke-width="1.8"/>
+<rect x="78" y="404" width="150" height="40" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="153.0" y="429.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Code</text>
+<line x1="228" y1="424.0" x2="390" y2="161" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="153.0" y="162" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#6b7280">·  ·  ·</text>
+<text x="928" y="108" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="10.5" font-weight="400" fill="#6b7280">0xFFFF…</text>
+<text x="928" y="450" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="10.5" font-weight="400" fill="#6b7280">0x0000…</text>
+<rect x="772" y="100" width="150" height="70" rx="6" fill="#eef0f3" stroke="#6b7280" stroke-width="1.8"/>
+<text x="847.0" y="140.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Kernel space</text>
+<line x1="772" y1="135.0" x2="610" y2="119" stroke="#6b7280" stroke-width="1.8" stroke-dasharray="5 3"/>
+<rect x="772" y="200" width="150" height="40" rx="6" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.8"/>
+<text x="847.0" y="225.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Stack</text>
+<line x1="772" y1="220.0" x2="610" y2="455" stroke="#2e8b57" stroke-width="1.8"/>
+<rect x="772" y="262" width="150" height="36" rx="6" fill="#e0f2f1" stroke="#0f766e" stroke-width="1.8"/>
+<text x="847.0" y="285.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">libc (shared)</text>
+<line x1="772" y1="280.0" x2="610" y2="203" stroke="#0f766e" stroke-width="1.8"/>
+<rect x="772" y="320" width="150" height="40" rx="6" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.8"/>
+<text x="847.0" y="345.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Heap</text>
+<line x1="772" y1="340.0" x2="610" y2="371" stroke="#2e8b57" stroke-width="1.8"/>
+<rect x="772" y="372" width="150" height="26" rx="6" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.8"/>
+<text x="847.0" y="390.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Data</text>
+<line x1="772" y1="385.0" x2="610" y2="371" stroke="#2e8b57" stroke-width="1.8"/>
+<rect x="772" y="404" width="150" height="40" rx="6" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.8"/>
+<text x="847.0" y="429.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Code</text>
+<line x1="772" y1="424.0" x2="610" y2="245" stroke="#2e8b57" stroke-width="1.8"/>
+<text x="847.0" y="162" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#6b7280">·  ·  ·</text>
+<rect x="25" y="530" width="950" height="58" rx="12" fill="#fbfbfc" stroke="#6b7280" stroke-width="1.2"/>
+<text x="500" y="553" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">A and B use the SAME virtual addresses but land on DIFFERENT physical pages, so neither can see the other's memory.</text>
+<text x="500" y="574" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">Shared code (libc) is stored once. The kernel is mapped into every process but only usable in kernel mode.</text>
+</svg>

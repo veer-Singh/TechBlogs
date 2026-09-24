@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 449" width="1000" height="449"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="448.54999999999995" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">Building a custom bootloader: 9 steps</text>
+<rect x="20.0" y="78.0" width="289.3" height="89.8" rx="12" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="164.7" y="115.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Requirements</text>
+<text x="164.7" y="141.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">update method? security? rollback?</text>
+<circle cx="22.0" cy="80" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="22.0" y="85.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">1</text>
+<rect x="355.3" y="78.0" width="289.3" height="89.8" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="500.0" y="106.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Memory / storage layout</text>
+<text x="500.0" y="132.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">where the bootloader, images and config</text>
+<text x="500.0" y="150.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">live</text>
+<circle cx="357.3333333333333" cy="80" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="357.3" y="85.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">2</text>
+<line x1="313.3" y1="122.9" x2="350.3" y2="122.9" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="690.7" y="78.0" width="289.3" height="89.8" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="835.3" y="115.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Minimal hardware init</text>
+<text x="835.3" y="141.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">clocks, RAM, one console</text>
+<circle cx="692.6666666666666" cy="80" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="692.7" y="85.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">3</text>
+<line x1="648.7" y1="122.9" x2="685.7" y2="122.9" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<polyline points="835.3,169.8 835.3,195.8 164.7,195.8 164.7,219.8" fill="none" stroke="#374151" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="20.0" y="223.8" width="289.3" height="72.3" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="164.7" y="252.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Image format</text>
+<text x="164.7" y="278.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">header: size, version, CRC, signature</text>
+<circle cx="22.0" cy="225.85" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="22.0" y="230.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">4</text>
+<rect x="355.3" y="223.8" width="289.3" height="72.3" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="500.0" y="252.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Validation</text>
+<text x="500.0" y="278.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">CRC + signature check</text>
+<circle cx="357.3333333333333" cy="225.85" r="14" fill="#d97d00" stroke="#ffffff" stroke-width="2.5"/>
+<text x="357.3" y="230.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">5</text>
+<line x1="313.3" y1="260.0" x2="350.3" y2="260.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="690.7" y="223.8" width="289.3" height="72.3" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="835.3" y="252.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Update mechanism</text>
+<text x="835.3" y="278.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">UART / USB / OTA, A/B slots</text>
+<circle cx="692.6666666666666" cy="225.85" r="14" fill="#d97d00" stroke="#ffffff" stroke-width="2.5"/>
+<text x="692.7" y="230.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">6</text>
+<line x1="648.7" y1="260.0" x2="685.7" y2="260.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<polyline points="835.3,298.2 835.3,324.2 164.7,324.2 164.7,348.2" fill="none" stroke="#374151" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="20.0" y="352.2" width="289.3" height="72.3" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="164.7" y="381.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Handoff</text>
+<text x="164.7" y="407.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">clean up, jump to the app / kernel</text>
+<circle cx="22.0" cy="354.2" r="14" fill="#d97d00" stroke="#ffffff" stroke-width="2.5"/>
+<text x="22.0" y="359.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">7</text>
+<rect x="355.3" y="352.2" width="289.3" height="72.3" rx="12" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+<text x="500.0" y="381.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Security</text>
+<text x="500.0" y="407.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">secure boot, anti-rollback, lock debug</text>
+<circle cx="357.3333333333333" cy="354.2" r="14" fill="#c0392b" stroke="#ffffff" stroke-width="2.5"/>
+<text x="357.3" y="359.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">8</text>
+<line x1="313.3" y1="388.4" x2="350.3" y2="388.4" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="690.7" y="352.2" width="289.3" height="72.3" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="835.3" y="381.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Testing</text>
+<text x="835.3" y="407.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">power cuts, corrupt images, rollback</text>
+<circle cx="692.6666666666666" cy="354.2" r="14" fill="#2e8b57" stroke="#ffffff" stroke-width="2.5"/>
+<text x="692.7" y="359.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">9</text>
+<line x1="648.7" y1="388.4" x2="685.7" y2="388.4" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+</svg>

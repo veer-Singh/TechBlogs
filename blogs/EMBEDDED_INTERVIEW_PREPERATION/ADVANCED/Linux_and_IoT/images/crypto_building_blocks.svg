@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 330" width="1000" height="330"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="330.3" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">The cryptography building blocks, grouped by the kind of key they need</text>
+<rect x="200.0" y="66.0" width="600.0" height="52.1" rx="12" fill="#0f1b2d"/>
+<text x="500.0" y="97.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#ffffff">Cryptography building blocks</text>
+<line x1="500.0" y1="118.1" x2="500.0" y2="148.1" stroke="#374151" stroke-width="2.2"/>
+<rect x="20.0" y="178.1" width="226.5" height="126.2" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="34.0" y="225.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">No key needed</text>
+<text x="34.0" y="251.1" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">• Hash: SHA-256</text>
+<text x="34.0" y="268.6" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">• a fingerprint of the data</text>
+<polyline points="500.0,148.1 133.2,148.1 133.2,174.1" fill="none" stroke="#2e8b57" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="264.5" y="178.1" width="226.5" height="126.2" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="278.5" y="225.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">One shared secret key</text>
+<text x="278.5" y="251.1" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">• AES: encrypt / decrypt</text>
+<text x="278.5" y="268.6" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">• HMAC / CMAC: keyed checksum</text>
+<polyline points="500.0,148.1 377.8,148.1 377.8,174.1" fill="none" stroke="#7b3fbf" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="509.0" y="178.1" width="226.5" height="126.2" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="523.0" y="206.9" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Key pair (private +</text>
+<text x="523.0" y="225.7" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">public)</text>
+<text x="523.0" y="251.8" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">• Signature: ECDSA, Ed25519,</text>
+<text x="523.0" y="269.3" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">RSA</text>
+<text x="523.0" y="286.8" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">• Key exchange: ECDH, ECIES</text>
+<polyline points="500.0,148.1 622.2,148.1 622.2,174.1" fill="none" stroke="#2f6fbe" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="753.5" y="178.1" width="226.5" height="126.2" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="767.5" y="225.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Random numbers (TRNG)</text>
+<text x="767.5" y="251.1" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">• create keys and nonces</text>
+<text x="767.5" y="268.6" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">• for both key types</text>
+<polyline points="500.0,148.1 866.8,148.1 866.8,174.1" fill="none" stroke="#d97d00" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+</svg>

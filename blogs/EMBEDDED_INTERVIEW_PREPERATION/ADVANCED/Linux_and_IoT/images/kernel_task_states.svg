@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="560" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">The life of a task (process or thread): its states</text>
+<rect x="15.0" y="212.0" width="170.0" height="76.0" rx="12" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="100.0" y="243.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">Created</text>
+<text x="100.0" y="269.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">a new task</text>
+<rect x="255.0" y="212.0" width="170.0" height="76.0" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="340.0" y="234.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">Runnable (R)</text>
+<text x="340.0" y="261.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">ready, waiting for a</text>
+<text x="340.0" y="278.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">CPU</text>
+<rect x="565.0" y="212.0" width="170.0" height="76.0" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="650.0" y="243.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">Running (R)</text>
+<text x="650.0" y="269.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">on a CPU right now</text>
+<rect x="565.0" y="402.0" width="170.0" height="76.0" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="650.0" y="424.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">Sleeping (S / D)</text>
+<text x="650.0" y="451.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">waits for I/O, a lock,</text>
+<text x="650.0" y="468.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">a timer</text>
+<rect x="565.0" y="52.0" width="170.0" height="76.0" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="650.0" y="83.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">Stopped (T)</text>
+<text x="650.0" y="109.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">paused</text>
+<rect x="805.0" y="212.0" width="170.0" height="76.0" rx="12" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+<text x="890.0" y="234.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">Zombie (Z)</text>
+<text x="890.0" y="261.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">finished, not</text>
+<text x="890.0" y="278.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">collected yet</text>
+<rect x="805.0" y="402.0" width="170.0" height="76.0" rx="12" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="890.0" y="433.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">Gone</text>
+<text x="890.0" y="459.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">removed completely</text>
+<line x1="187.0" y1="250.0" x2="250.0" y2="250.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="191.0" y="218.0" width="58.0" height="22" rx="11" fill="#ffffff" stroke="#6b7280" stroke-width="1.5"/>
+<text x="220.0" y="233.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#6b7280">fork()</text>
+<line x1="427.0" y1="238.0" x2="560.0" y2="238.0" stroke="#2e8b57" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="456.0" y="211.0" width="78.0" height="22" rx="11" fill="#ffffff" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="495.0" y="226.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2e8b57">scheduled</text>
+<line x1="563.0" y1="264.0" x2="430.0" y2="264.0" stroke="#2f6fbe" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="456.0" y="270.0" width="78.0" height="22" rx="11" fill="#ffffff" stroke="#2f6fbe" stroke-width="1.5"/>
+<text x="495.0" y="285.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2f6fbe">preempted</text>
+<line x1="690.0" y1="290.0" x2="690.0" y2="397.0" stroke="#d97d00" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="704.3" y="333.0" width="111.4" height="22" rx="11" fill="#ffffff" stroke="#d97d00" stroke-width="1.5"/>
+<text x="760.0" y="348.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#d97d00">waits for data</text>
+<polyline points="563.0,440.0 340.0,440.0 340.0,293.0" fill="none" stroke="#2f6fbe" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="383.0" y="429.0" width="138.1" height="22" rx="11" fill="#ffffff" stroke="#2f6fbe" stroke-width="1.5"/>
+<text x="452.0" y="444.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2f6fbe">data / IRQ arrives</text>
+<line x1="690.0" y1="210.0" x2="690.0" y2="133.0" stroke="#7b3fbf" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="719.7" y="159.0" width="64.7" height="22" rx="11" fill="#ffffff" stroke="#7b3fbf" stroke-width="1.5"/>
+<text x="752.0" y="174.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#7b3fbf">SIGSTOP</text>
+<polyline points="563.0,90.0 340.0,90.0 340.0,207.0" fill="none" stroke="#2f6fbe" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="419.7" y="79.0" width="64.7" height="22" rx="11" fill="#ffffff" stroke="#2f6fbe" stroke-width="1.5"/>
+<text x="452.0" y="94.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2f6fbe">SIGCONT</text>
+<line x1="737.0" y1="250.0" x2="800.0" y2="250.0" stroke="#c0392b" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="739.0" y="218.0" width="58.0" height="22" rx="11" fill="#ffffff" stroke="#c0392b" stroke-width="1.5"/>
+<text x="768.0" y="233.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#c0392b">exit()</text>
+<line x1="890.0" y1="290.0" x2="890.0" y2="397.0" stroke="#6b7280" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="834.3" y="333.0" width="111.4" height="22" rx="11" fill="#ffffff" stroke="#6b7280" stroke-width="1.5"/>
+<text x="890.0" y="348.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#6b7280">parent: wait()</text>
+<rect x="20.0" y="490.0" width="960.0" height="56.0" rx="10" fill="#fbfbfc" stroke="#6b7280" stroke-width="1.2"/>
+<text x="500.0" y="514.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">The letters are what ps shows:  R = running or runnable · S = sleeping · D = uninterruptible sleep (disk I/O)</text>
+<text x="500.0" y="534.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">T = stopped · Z = zombie (finished, but its parent hasn't collected its exit status yet)</text>
+</svg>

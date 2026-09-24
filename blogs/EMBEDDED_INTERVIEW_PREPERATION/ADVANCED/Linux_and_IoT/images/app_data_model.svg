@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="620" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">The application data model: Node → Endpoint → Cluster → Attribute</text>
+<rect x="20" y="60" width="200" height="60" rx="12" fill="#0f1b2d"/>
+<text x="120" y="86" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#f0a23b">NODE</text>
+<text x="120" y="106" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#e6edf3">one physical device</text>
+<line x1="120" y1="120" x2="120" y2="170" stroke="#374151" stroke-width="2"/>
+<line x1="120" y1="170" x2="238" y2="170" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="240" y="140" width="150" height="76" rx="10" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="315" y="168" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Endpoint 0</text>
+<text x="315" y="188" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">root / utility</text>
+<line x1="390" y1="170" x2="418" y2="160" stroke="#374151" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="420" y="140" width="300" height="60" rx="10" fill="#ffffff" stroke="#6b7280" stroke-width="1.6"/>
+<text x="436" y="162" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Basic / Basic Information</text>
+<text x="706" y="162" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="700" fill="#6b7280">0x0000 / 0x0028</text>
+<text x="446" y="184" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1f2937">vendor, model, firmware version</text>
+<line x1="120" y1="120" x2="120" y2="260" stroke="#374151" stroke-width="2"/>
+<line x1="120" y1="260" x2="238" y2="260" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="240" y="230" width="150" height="186" rx="10" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="315" y="258" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Endpoint 1</text>
+<text x="315" y="278" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">temperature sensor</text>
+<line x1="390" y1="260" x2="418" y2="250" stroke="#374151" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="420" y="230" width="300" height="100" rx="10" fill="#ffffff" stroke="#2f6fbe" stroke-width="1.6"/>
+<text x="436" y="252" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Temperature Measurement</text>
+<text x="706" y="252" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="700" fill="#2f6fbe">0x0402</text>
+<text x="446" y="274" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11" font-weight="400" fill="#1f2937">0x0000 MeasuredValue = 2355 (23.55 °C)</text>
+<text x="446" y="294" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11" font-weight="400" fill="#1f2937">0x0001 MinMeasuredValue</text>
+<text x="446" y="314" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11" font-weight="400" fill="#1f2937">0x0002 MaxMeasuredValue</text>
+<line x1="390" y1="260" x2="418" y2="360" stroke="#374151" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="420" y="340" width="300" height="60" rx="10" fill="#ffffff" stroke="#2f6fbe" stroke-width="1.6"/>
+<text x="436" y="362" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Power Configuration (ZCL)</text>
+<text x="706" y="362" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="700" fill="#2f6fbe">0x0001</text>
+<text x="446" y="384" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1f2937">BatteryVoltage (units of 100 mV)</text>
+<line x1="120" y1="120" x2="120" y2="460" stroke="#374151" stroke-width="2"/>
+<line x1="120" y1="460" x2="238" y2="460" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="240" y="430" width="150" height="96" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="315" y="458" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Endpoint 2</text>
+<text x="315" y="478" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">relay output</text>
+<line x1="390" y1="460" x2="418" y2="450" stroke="#374151" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="420" y="430" width="300" height="80" rx="10" fill="#ffffff" stroke="#2e8b57" stroke-width="1.6"/>
+<text x="436" y="452" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">On/Off</text>
+<text x="706" y="452" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="700" fill="#2e8b57">0x0006</text>
+<text x="446" y="474" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11" font-weight="400" fill="#1f2937">0x0000 OnOff = true</text>
+<text x="446" y="494" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11" font-weight="400" fill="#1f2937">commands: Off 0x00, On 0x01, Toggle 0x02</text>
+<rect x="740" y="60" width="240" height="316" rx="12" fill="#fff3e0" stroke="#e08a00" stroke-width="1.8"/>
+<text x="860" y="86" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">In one line each</text>
+<text x="760" y="118" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Node</text>
+<text x="760" y="136" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">the device</text>
+<text x="760" y="160" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Endpoint</text>
+<text x="760" y="178" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">one function of it</text>
+<text x="760" y="202" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Cluster</text>
+<text x="760" y="220" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">a standard feature set</text>
+<text x="760" y="244" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Attribute</text>
+<text x="760" y="262" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">one value (state)</text>
+<text x="760" y="286" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Command</text>
+<text x="760" y="304" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">an action</text>
+<text x="760" y="328" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Event (Matter)</text>
+<text x="760" y="346" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">something that happened</text>
+<rect x="740" y="392" width="240" height="214" rx="12" fill="#fdecea" stroke="#c0392b" stroke-width="1.8"/>
+<text x="860" y="418" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#c0392b">Same word, different things!</text>
+<text x="756" y="444" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">ENDPOINT</text>
+<text x="756" y="462" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">  Wirepas: a port number</text>
+<text x="756" y="480" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">  for a data stream (0-255)</text>
+<text x="756" y="498" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">  ZCL / Matter: a function</text>
+<text x="756" y="516" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">  inside the device</text>
+<text x="756" y="534" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">CLUSTER</text>
+<text x="756" y="552" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">  mesh: router + its nodes</text>
+<text x="756" y="570" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">  ZCL / Matter: a feature set</text>
+<text x="756" y="588" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">  with attributes + commands</text>
+<text x="380" y="606" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">Cluster and attribute IDs come from the Zigbee Cluster Library; Matter reuses most of them (e.g. Temperature Measurement 0x0402, On/Off 0x0006).</text>
+</svg>

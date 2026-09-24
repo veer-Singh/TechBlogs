@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 441" width="1000" height="441"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="441.04999999999995" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">Interrupts: a quick top half, then the rest later</text>
+<rect x="20.0" y="66.0" width="457.0" height="89.8" rx="12" fill="#0f1b2d"/>
+<text x="248.5" y="103.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#ffffff">Device raises an interrupt</text>
+<text x="248.5" y="129.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">e.g. data ready</text>
+<circle cx="22.0" cy="68" r="14" fill="#f0a23b" stroke="#ffffff" stroke-width="2.5"/>
+<text x="22.0" y="73.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">1</text>
+<rect x="523.0" y="66.0" width="457.0" height="89.8" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="751.5" y="94.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Top half (hard IRQ handler)</text>
+<text x="751.5" y="120.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">runs immediately; acknowledge the device, grab the data; must</text>
+<text x="751.5" y="138.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">NOT sleep</text>
+<circle cx="525.0" cy="68" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="525.0" y="73.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">2</text>
+<line x1="479.0" y1="110.9" x2="518.0" y2="110.9" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<polyline points="751.5,157.8 751.5,177.8 500.0,177.8 500.0,195.8" fill="none" stroke="#374151" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="220.0" y="199.8" width="560.0" height="48.9" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="500.0" y="228.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15.5" font-weight="700" fill="#1f2937">Where does the rest of the work run (the bottom half)?</text>
+<polyline points="500.0,250.7 500.0,278.7 174.7,278.7 174.7,340.7" fill="none" stroke="#c0392b" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="125.6" y="291.7" width="98.0" height="22" rx="11" fill="#ffffff" stroke="#c0392b" stroke-width="1.5"/>
+<text x="174.7" y="306.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#c0392b">still atomic</text>
+<rect x="20.0" y="344.7" width="309.3" height="70.3" rx="12" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+<text x="174.7" y="372.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">softirq / tasklet</text>
+<text x="174.7" y="397.3" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">can't sleep; networking, block I/O</text>
+<polyline points="500.0,250.7 500.0,278.7 500.0,278.7 500.0,340.7" fill="none" stroke="#2e8b57" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="431.0" y="291.7" width="138.1" height="22" rx="11" fill="#ffffff" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="500.0" y="306.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2e8b57">in a kernel thread</text>
+<rect x="345.3" y="344.7" width="309.3" height="70.3" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="500.0" y="372.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">workqueue</text>
+<text x="500.0" y="397.3" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">CAN sleep; slow jobs</text>
+<polyline points="500.0,250.7 500.0,278.7 825.3,278.7 825.3,340.7" fill="none" stroke="#2f6fbe" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="759.6" y="291.7" width="131.4" height="22" rx="11" fill="#ffffff" stroke="#2f6fbe" stroke-width="1.5"/>
+<text x="825.3" y="306.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2f6fbe">in its own thread</text>
+<rect x="670.7" y="344.7" width="309.3" height="70.3" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="825.3" y="372.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">threaded IRQ</text>
+<text x="825.3" y="397.3" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">CAN sleep; common for I2C / SPI devices</text>
+</svg>

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="640" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">MQTT: devices publish to topics, the broker delivers to subscribers</text>
+<text x="155" y="72" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#2f6fbe">PUBLISHERS</text>
+<text x="845" y="72" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#2e8b57">SUBSCRIBERS</text>
+<rect x="30" y="90" width="250" height="86" rx="10" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="155" y="116" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Temperature sensor</text>
+<text x="155" y="140" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#1f2937">home/livingroom/temp</text>
+<text x="155" y="160" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#374151">payload: 23.5</text>
+<line x1="280" y1="133" x2="396" y2="250" stroke="#2f6fbe" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="303.5" y="178.5" width="63" height="20" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.2"/>
+<text x="335" y="193.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2e8b57">PUBLISH</text>
+<rect x="30" y="205" width="250" height="86" rx="10" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="155" y="231" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Door sensor</text>
+<text x="155" y="255" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#1f2937">home/door/state</text>
+<text x="155" y="275" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#374151">payload: open</text>
+<line x1="280" y1="248" x2="396" y2="290" stroke="#2f6fbe" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="303.5" y="256.0" width="63" height="20" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.2"/>
+<text x="335" y="271.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2e8b57">PUBLISH</text>
+<rect x="30" y="320" width="250" height="86" rx="10" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="155" y="346" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Smart meter</text>
+<text x="155" y="370" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#1f2937">factory/line1/power</text>
+<text x="155" y="390" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#374151">payload: 4.2</text>
+<line x1="280" y1="363" x2="396" y2="330" stroke="#2f6fbe" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="303.5" y="333.5" width="63" height="20" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.2"/>
+<text x="335" y="348.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2e8b57">PUBLISH</text>
+<rect x="720" y="90" width="250" height="70" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="845" y="116" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Dashboard</text>
+<text x="845" y="140" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#1f2937">subscribes: home/#</text>
+<line x1="604" y1="240" x2="718" y2="125" stroke="#2e8b57" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="720" y="176" width="250" height="70" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="845" y="202" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Database</text>
+<text x="845" y="226" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#1f2937">subscribes: home/+/temp</text>
+<line x1="604" y1="270" x2="718" y2="211" stroke="#2e8b57" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="720" y="262" width="250" height="70" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="845" y="288" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Phone app</text>
+<text x="845" y="312" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#1f2937">subscribes: home/door/state</text>
+<line x1="604" y1="300" x2="718" y2="297" stroke="#2e8b57" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="720" y="348" width="250" height="70" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="845" y="374" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Energy service</text>
+<text x="845" y="398" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#1f2937">subscribes: factory/#</text>
+<line x1="604" y1="330" x2="718" y2="383" stroke="#2e8b57" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="400" y="170" width="200" height="230" rx="18" fill="#0f1b2d"/>
+<text x="500" y="210" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#f6f7f4">MQTT broker</text>
+<text x="500" y="232" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#c9d3e0">Mosquitto, EMQX, AWS IoT ...</text>
+<text x="500" y="268" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#e6edf3">receives every message</text>
+<text x="500" y="292" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#e6edf3">matches it to subscriptions</text>
+<text x="500" y="316" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#e6edf3">forwards a copy to each</text>
+<text x="500" y="340" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#e6edf3">keeps sessions + retained</text>
+<text x="500" y="364" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#e6edf3">checks who may do what</text>
+<rect x="370.5" y="413" width="259" height="20" rx="10" fill="#fff3e0" stroke="#e08a00" stroke-width="1.2"/>
+<text x="500" y="428" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#e08a00">TLS on every connection (port 8883)</text>
+<rect x="30" y="450" width="940" height="175" rx="14" fill="#fbfbfc" stroke="#6b7280" stroke-width="1.2"/>
+<text x="50" y="478" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Topics form a tree (levels separated by /)</text>
+<text x="60" y="506" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">home</text>
+<text x="60" y="525" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">  ├─ livingroom</text>
+<text x="60" y="544" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">  │   ├─ temp</text>
+<text x="60" y="563" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">  │   └─ humidity</text>
+<text x="60" y="582" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">  └─ door</text>
+<text x="60" y="601" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">       └─ state</text>
+<text x="300" y="506" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">factory</text>
+<text x="300" y="525" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">  └─ line1</text>
+<text x="300" y="544" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">       ├─ power</text>
+<text x="300" y="563" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">       └─ status</text>
+<text x="560" y="506" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1f2937">Wildcards (only when subscribing)</text>
+<text x="560" y="534" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="18" font-weight="700" fill="#e08a00">+</text>
+<text x="590" y="534" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">exactly one level:  home/+/temp</text>
+<text x="560" y="564" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="18" font-weight="700" fill="#e08a00">#</text>
+<text x="590" y="564" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">everything below:  home/#</text>
+<text x="560" y="598" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">Publishers and subscribers never know about each other.</text>
+</svg>

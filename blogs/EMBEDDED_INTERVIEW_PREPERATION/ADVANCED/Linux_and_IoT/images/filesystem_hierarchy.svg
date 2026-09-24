@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="640" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">The Linux filesystem: one tree, starting at /</text>
+<rect x="440" y="58" width="120" height="44" rx="10" fill="#0f1b2d"/>
+<text x="500" y="87" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="22" font-weight="700" fill="#f6f7f4">/</text>
+<line x1="500" y1="102" x2="500" y2="118" stroke="#374151" stroke-width="2"/>
+<line x1="132" y1="118" x2="868" y2="118" stroke="#374151" stroke-width="2"/>
+<line x1="132.0" y1="118" x2="132.0" y2="130" stroke="#374151" stroke-width="2"/>
+<line x1="377.3" y1="118" x2="377.3" y2="130" stroke="#374151" stroke-width="2"/>
+<line x1="622.6" y1="118" x2="622.6" y2="130" stroke="#374151" stroke-width="2"/>
+<line x1="867.9000000000001" y1="118" x2="867.9000000000001" y2="130" stroke="#374151" stroke-width="2"/>
+<rect x="20" y="130" width="225" height="96" rx="10" fill="#fff3e0" stroke="#e08a00" stroke-width="1.8"/>
+<text x="36" y="160" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/etc</text>
+<text x="36" y="186" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">configuration files</text>
+<text x="36" y="206" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#6b7280">network, services, fstab</text>
+<rect x="265" y="130" width="225" height="96" rx="10" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="281" y="160" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/usr</text>
+<text x="281" y="186" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">programs and libraries</text>
+<text x="281" y="206" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#6b7280">/usr/bin, /usr/lib</text>
+<rect x="510" y="130" width="225" height="96" rx="10" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="526" y="160" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/lib</text>
+<text x="526" y="186" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">libraries, kernel modules,</text>
+<text x="526" y="206" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#6b7280">firmware (/lib/firmware)</text>
+<rect x="755" y="130" width="225" height="96" rx="10" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="771" y="160" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/boot</text>
+<text x="771" y="186" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">kernel image, device trees</text>
+<text x="771" y="206" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#6b7280">(on some boards)</text>
+<rect x="20" y="238" width="225" height="96" rx="10" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="1.8"/>
+<text x="36" y="268" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/dev</text>
+<text x="36" y="294" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">device nodes</text>
+<text x="36" y="314" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#6b7280">ttyS0, i2c-1, mmcblk0</text>
+<rect x="265" y="238" width="225" height="96" rx="10" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="1.8"/>
+<text x="281" y="268" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/proc</text>
+<text x="281" y="294" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">processes + kernel status</text>
+<text x="281" y="314" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#6b7280">cpuinfo, meminfo, &lt;pid&gt;/</text>
+<rect x="510" y="238" width="225" height="96" rx="10" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="1.8"/>
+<text x="526" y="268" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/sys</text>
+<text x="526" y="294" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">devices, drivers, tunables</text>
+<text x="526" y="314" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#6b7280">class/, bus/, kernel/</text>
+<rect x="755" y="238" width="225" height="96" rx="10" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="1.8"/>
+<text x="771" y="268" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/run</text>
+<text x="771" y="294" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">runtime state (in RAM)</text>
+<text x="771" y="314" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#6b7280">PID files, sockets</text>
+<rect x="20" y="346" width="225" height="96" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.8"/>
+<text x="36" y="376" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/var</text>
+<text x="36" y="402" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">data that changes</text>
+<text x="36" y="422" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#6b7280">/var/log = the logs</text>
+<rect x="265" y="346" width="225" height="96" rx="10" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="1.8"/>
+<text x="281" y="376" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/tmp</text>
+<text x="281" y="402" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">temporary files</text>
+<text x="281" y="422" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#6b7280">often RAM (tmpfs)</text>
+<rect x="510" y="346" width="225" height="96" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.8"/>
+<text x="526" y="376" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/home</text>
+<text x="526" y="402" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">users' files</text>
+<text x="526" y="422" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#6b7280">/home/user</text>
+<rect x="755" y="346" width="225" height="96" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.8"/>
+<text x="771" y="376" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/root</text>
+<text x="771" y="402" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">the admin's home</text>
+<rect x="20" y="454" width="225" height="96" rx="10" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="36" y="484" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/bin  /sbin</text>
+<text x="36" y="510" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">essential commands</text>
+<text x="36" y="530" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#6b7280">(links into /usr today)</text>
+<rect x="265" y="454" width="225" height="96" rx="10" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="281" y="484" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/opt</text>
+<text x="281" y="510" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">add-on software</text>
+<text x="281" y="530" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#6b7280">vendor packages</text>
+<rect x="510" y="454" width="225" height="96" rx="10" fill="#eef0f3" stroke="#6b7280" stroke-width="1.8"/>
+<text x="526" y="484" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/mnt  /media</text>
+<text x="526" y="510" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">mount points</text>
+<text x="526" y="530" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#6b7280">USB sticks, SD cards</text>
+<rect x="755" y="454" width="225" height="96" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.8"/>
+<text x="771" y="484" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="700" fill="#1f2937">/data</text>
+<text x="771" y="510" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">persistent app data</text>
+<text x="771" y="530" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#6b7280">(embedded convention)</text>
+<rect x="30" y="574" width="18" height="18" rx="4" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.5"/>
+<text x="56" y="588" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">programs, libraries (can be read-only)</text>
+<rect x="302.0" y="574" width="18" height="18" rx="4" fill="#fff3e0" stroke="#e08a00" stroke-width="1.5"/>
+<text x="328.0" y="588" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">configuration</text>
+<rect x="424.0" y="574" width="18" height="18" rx="4" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="450.0" y="588" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">writable data</text>
+<rect x="546.0" y="574" width="18" height="18" rx="4" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="1.5"/>
+<text x="572.0" y="588" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">virtual: made by the kernel / in RAM</text>
+<rect x="806.0" y="574" width="18" height="18" rx="4" fill="#eef0f3" stroke="#6b7280" stroke-width="1.5"/>
+<text x="832.0" y="588" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">mount points</text>
+<text x="500" y="624" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">Embedded tip: keep /usr, /lib, /etc read-only and put everything that changes in /var or /data</text>
+</svg>

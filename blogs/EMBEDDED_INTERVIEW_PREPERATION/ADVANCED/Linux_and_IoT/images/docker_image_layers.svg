@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 580" width="1000" height="580"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="580" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">From Dockerfile to image layers to a running container</text>
+<rect x="30" y="60" width="440" height="280" rx="12" fill="#0f1b2d"/>
+<text x="50" y="86" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#f0a23b">Dockerfile</text>
+<text x="50" y="120" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13.5" font-weight="400" fill="#e6edf3">FROM python:3.12-slim</text>
+<text x="50" y="150" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13.5" font-weight="400" fill="#e6edf3">WORKDIR /app</text>
+<text x="50" y="180" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13.5" font-weight="400" fill="#e6edf3">COPY requirements.txt .</text>
+<text x="50" y="210" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13.5" font-weight="400" fill="#e6edf3">RUN pip install -r requirements.txt</text>
+<text x="50" y="240" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13.5" font-weight="400" fill="#e6edf3">COPY collector.py .</text>
+<text x="50" y="270" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13.5" font-weight="400" fill="#e6edf3">USER 1000</text>
+<text x="50" y="300" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13.5" font-weight="400" fill="#e6edf3">CMD ["python", "collector.py"]</text>
+<text x="50" y="330" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#9fb0c4">USER and CMD are settings (metadata), not layers</text>
+<rect x="560" y="340" width="300" height="116" rx="6" fill="#eef0f3" stroke="#6b7280" stroke-width="1.8"/>
+<text x="710" y="394.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1f2937">Base image: python:3.12-slim</text>
+<text x="710" y="412.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">OS files + Python (shared by many images)</text>
+<rect x="560" y="300" width="300" height="36" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="710" y="323.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1f2937">WORKDIR /app</text>
+<rect x="560" y="240" width="300" height="56" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="710" y="264.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1f2937">Dependencies</text>
+<text x="710" y="282.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">requirements.txt + pip install</text>
+<rect x="560" y="190" width="300" height="46" rx="6" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.8"/>
+<text x="710" y="209.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1f2937">Your code: collector.py</text>
+<text x="710" y="227.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">changes most often, so it goes last</text>
+<rect x="560" y="140" width="300" height="42" rx="6" fill="#fff3e0" stroke="#e08a00" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="710" y="158" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Container's writable layer</text>
+<text x="710" y="174" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">lost when the container is removed</text>
+<text x="710" y="130" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#e08a00">RUNNING CONTAINER = image + writable layer</text>
+<rect x="875" y="140" width="105" height="42" rx="6" fill="#e0f2f1" stroke="#0f766e" stroke-width="2"/>
+<text x="927" y="158" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Volume</text>
+<text x="927" y="174" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#374151">data survives</text>
+<text x="710" y="480" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2f6fbe">IMAGE = read-only layers</text>
+<line x1="472" y1="115" x2="556" y2="398.0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+<line x1="472" y1="145" x2="556" y2="318.0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+<line x1="472" y1="175" x2="556" y2="268.0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+<line x1="472" y1="205" x2="556" y2="268.0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+<line x1="472" y1="235" x2="556" y2="213.0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+<rect x="30" y="496" width="940" height="72" rx="12" fill="#fbfbfc" stroke="#6b7280" stroke-width="1.2"/>
+<text x="500" y="520" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Why layers matter: each layer is cached and shared</text>
+<text x="500" y="544" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">Change only collector.py → only the top layer is rebuilt, pushed and downloaded again (seconds, not minutes).</text>
+<text x="500" y="561" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Rule: put what changes least first (base, dependencies), and what changes most last (your code).</text>
+</svg>

@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 580" width="1000" height="580"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="580" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">Seven ways a device talks: at a glance</text>
+<rect x="25" y="70" width="215" height="225" rx="14" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<rect x="25" y="70" width="215" height="46" rx="14" fill="#2f6fbe"/>
+<rect x="25" y="100" width="215" height="16" fill="#2f6fbe"/>
+<text x="132" y="100" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff">UART</text>
+<text x="41" y="150" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2f6fbe">WIRES</text>
+<text x="41" y="167" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">TX, RX, GND</text>
+<text x="41" y="188" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2f6fbe">SPEED</text>
+<text x="41" y="205" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">9.6k-3 Mbit/s</text>
+<text x="41" y="226" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2f6fbe">REACH</text>
+<text x="41" y="243" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">~15 m (RS-232)</text>
+<text x="41" y="264" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2f6fbe">USE</text>
+<text x="41" y="281" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">consoles, GPS, modems</text>
+<rect x="270" y="70" width="215" height="225" rx="14" fill="#fff3e0" stroke="#e08a00" stroke-width="2"/>
+<rect x="270" y="70" width="215" height="46" rx="14" fill="#e08a00"/>
+<rect x="270" y="100" width="215" height="16" fill="#e08a00"/>
+<text x="377" y="100" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff">SPI</text>
+<text x="286" y="150" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#e08a00">WIRES</text>
+<text x="286" y="167" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">SCLK, MOSI, MISO, CS</text>
+<text x="286" y="188" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#e08a00">SPEED</text>
+<text x="286" y="205" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">1-100+ MHz</text>
+<text x="286" y="226" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#e08a00">REACH</text>
+<text x="286" y="243" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">on the board</text>
+<text x="286" y="264" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#e08a00">USE</text>
+<text x="286" y="281" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">flash, displays, ADCs</text>
+<rect x="515" y="70" width="215" height="225" rx="14" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<rect x="515" y="70" width="215" height="46" rx="14" fill="#2e8b57"/>
+<rect x="515" y="100" width="215" height="16" fill="#2e8b57"/>
+<text x="622" y="100" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff">I2C</text>
+<text x="531" y="150" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2e8b57">WIRES</text>
+<text x="531" y="167" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">SDA, SCL + pull-ups</text>
+<text x="531" y="188" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2e8b57">SPEED</text>
+<text x="531" y="205" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">100k / 400k / 1M</text>
+<text x="531" y="226" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2e8b57">REACH</text>
+<text x="531" y="243" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">on the board</text>
+<text x="531" y="264" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2e8b57">USE</text>
+<text x="531" y="281" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">sensors, EEPROM, PMIC</text>
+<rect x="760" y="70" width="215" height="225" rx="14" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<rect x="760" y="70" width="215" height="46" rx="14" fill="#6b7280"/>
+<rect x="760" y="100" width="215" height="16" fill="#6b7280"/>
+<text x="867" y="100" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff">GPIO</text>
+<text x="776" y="150" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#6b7280">WIRES</text>
+<text x="776" y="167" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">1 pin per signal</text>
+<text x="776" y="188" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#6b7280">SPEED</text>
+<text x="776" y="205" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">software-timed</text>
+<text x="776" y="226" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#6b7280">REACH</text>
+<text x="776" y="243" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">on the board</text>
+<text x="776" y="264" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#6b7280">USE</text>
+<text x="776" y="281" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">LEDs, buttons, IRQs</text>
+<rect x="147" y="320" width="215" height="225" rx="14" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<rect x="147" y="320" width="215" height="46" rx="14" fill="#7b3fbf"/>
+<rect x="147" y="350" width="215" height="16" fill="#7b3fbf"/>
+<text x="254" y="350" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff">Ethernet</text>
+<text x="163" y="400" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#7b3fbf">WIRES</text>
+<text x="163" y="417" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">2 or 4 twisted pairs</text>
+<text x="163" y="438" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#7b3fbf">SPEED</text>
+<text x="163" y="455" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">10M-1G+ bit/s</text>
+<text x="163" y="476" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#7b3fbf">REACH</text>
+<text x="163" y="493" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">100 m per link</text>
+<text x="163" y="514" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#7b3fbf">USE</text>
+<text x="163" y="531" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">networks, gateways</text>
+<rect x="392" y="320" width="215" height="225" rx="14" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+<rect x="392" y="320" width="215" height="46" rx="14" fill="#c0392b"/>
+<rect x="392" y="350" width="215" height="16" fill="#c0392b"/>
+<text x="499" y="350" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff">Modbus RS-485</text>
+<text x="408" y="400" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#c0392b">WIRES</text>
+<text x="408" y="417" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">A, B (+ GND)</text>
+<text x="408" y="438" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#c0392b">SPEED</text>
+<text x="408" y="455" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">9.6k-115.2k typical</text>
+<text x="408" y="476" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#c0392b">REACH</text>
+<text x="408" y="493" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">up to 1200 m</text>
+<text x="408" y="514" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#c0392b">USE</text>
+<text x="408" y="531" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">meters, PLCs, drives</text>
+<rect x="637" y="320" width="215" height="225" rx="14" fill="#e0f2f1" stroke="#0f766e" stroke-width="2"/>
+<rect x="637" y="320" width="215" height="46" rx="14" fill="#0f766e"/>
+<rect x="637" y="350" width="215" height="16" fill="#0f766e"/>
+<text x="744" y="350" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff">USB</text>
+<text x="653" y="400" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#0f766e">WIRES</text>
+<text x="653" y="417" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">VBUS, D+, D-, GND</text>
+<text x="653" y="438" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#0f766e">SPEED</text>
+<text x="653" y="455" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">1.5M-480M (USB 2.0)</text>
+<text x="653" y="476" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#0f766e">REACH</text>
+<text x="653" y="493" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">5 m (USB 2.0)</text>
+<text x="653" y="514" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#0f766e">USE</text>
+<text x="653" y="531" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#1f2937">storage, serial, HID</text>
+</svg>

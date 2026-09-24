@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 825" width="1000" height="825"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="825" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">How data flows end to end, up and back down</text>
+<line x1="116.0" y1="124.0" x2="116.0" y2="789.0" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="28.0" y="66.0" width="176.0" height="58.0" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="116.0" y="99.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Sensor node</text>
+<line x1="308.0" y1="124.0" x2="308.0" y2="789.0" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="220.0" y="66.0" width="176.0" height="58.0" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="308.0" y="88.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Routers</text>
+<text x="308.0" y="112.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">the mesh</text>
+<line x1="500.0" y1="124.0" x2="500.0" y2="789.0" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="412.0" y="66.0" width="176.0" height="58.0" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="500.0" y="99.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Sink</text>
+<line x1="692.0" y1="124.0" x2="692.0" y2="789.0" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="604.0" y="66.0" width="176.0" height="58.0" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="692.0" y="88.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Gateway</text>
+<text x="692.0" y="112.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">sink + transport service</text>
+<line x1="884.0" y1="124.0" x2="884.0" y2="789.0" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="796.0" y="66.0" width="176.0" height="58.0" rx="12" fill="#0f1b2d"/>
+<text x="884.0" y="88.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#ffffff">Backend</text>
+<text x="884.0" y="112.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#c9d3e0">broker + your app</text>
+<line x1="116.0" y1="200.0" x2="304.0" y2="200.0" stroke="#2e8b57" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="212.0" y="162.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">1. Report on its endpoint,</text>
+<text x="212.0" y="179.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">with a QoS</text>
+<rect x="216.8" y="226.0" width="182.4" height="50.0" rx="8" fill="#fff3e0" stroke="#d97d00" stroke-width="1.5"/>
+<text x="308.0" y="244.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">2. hop by hop along the</text>
+<text x="308.0" y="260.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">cheapest route</text>
+<line x1="308.0" y1="319.0" x2="496.0" y2="319.0" stroke="#2f6fbe" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="404.0" y="298.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">3. arrives at the best sink</text>
+<line x1="500.0" y1="376.0" x2="688.0" y2="376.0" stroke="#d97d00" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="596.0" y="355.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">4. over UART</text>
+<line x1="692.0" y1="467.0" x2="880.0" y2="467.0" stroke="#7b3fbf" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="788.0" y="412.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">5. MQTT over TLS: protobuf</text>
+<text x="788.0" y="429.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">with address, endpoints,</text>
+<text x="788.0" y="446.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">hop count, payload</text>
+<rect x="792.8" y="493.0" width="182.4" height="50.0" rx="8" fill="#fff3e0" stroke="#d97d00" stroke-width="1.5"/>
+<text x="884.0" y="511.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">6. decode the payload →</text>
+<text x="884.0" y="527.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">store, alert, dashboard</text>
+<line x1="884.0" y1="586.0" x2="696.0" y2="586.0" stroke="#1f2937" stroke-width="2.4" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<text x="788.0" y="565.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">7. command / configuration</text>
+<line x1="692.0" y1="643.0" x2="504.0" y2="643.0" stroke="#7b3fbf" stroke-width="2.4" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<text x="596.0" y="622.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">8. over UART</text>
+<line x1="500.0" y1="700.0" x2="312.0" y2="700.0" stroke="#d97d00" stroke-width="2.4" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<text x="404.0" y="679.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">9. downlink</text>
+<line x1="308.0" y1="757.0" x2="120.0" y2="757.0" stroke="#2f6fbe" stroke-width="2.4" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<text x="212.0" y="736.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">10. delivered to the node</text>
+</svg>

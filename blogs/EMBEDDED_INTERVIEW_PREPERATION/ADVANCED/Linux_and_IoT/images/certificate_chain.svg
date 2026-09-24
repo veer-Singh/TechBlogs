@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="1000" height="600"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="600" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">Certificates: a chain of trust back to a root the device already has</text>
+<rect x="40" y="70" width="400" height="104" rx="12" fill="#fff3e0" stroke="#e08a00" stroke-width="2"/>
+<text x="240" y="102" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#1f2937">Root CA</text>
+<text x="240" y="128" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">self-signed · kept offline</text>
+<text x="240" y="150" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">its certificate is built into the device's trust store</text>
+<line x1="240" y1="174" x2="240" y2="216" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="252" y="200" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#c0392b">signs</text>
+<rect x="40" y="220" width="400" height="104" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="240" y="252" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#1f2937">Intermediate CA</text>
+<text x="240" y="278" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">signed by the Root CA</text>
+<text x="240" y="300" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">does the day-to-day signing</text>
+<line x1="240" y1="324" x2="240" y2="366" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="252" y="350" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#c0392b">signs</text>
+<rect x="40" y="370" width="400" height="104" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="240" y="402" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#1f2937">Server certificate</text>
+<text x="240" y="428" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#374151">signed by the Intermediate</text>
+<text x="240" y="450" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">SAN: broker.example.com · valid 1 year</text>
+<rect x="480" y="70" width="490" height="250" rx="14" fill="#f7fcf9" stroke="#2e8b57" stroke-width="2"/>
+<text x="725" y="98" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#2e8b57">What the device checks when it connects</text>
+<circle cx="505" cy="128" r="11" fill="#2e8b57"/>
+<text x="505" y="132" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#ffffff">1</text>
+<text x="526" y="132" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Signatures</text>
+<text x="610" y="132" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">each certificate is signed by the one above, up to a root it trusts</text>
+<circle cx="505" cy="166" r="11" fill="#2e8b57"/>
+<text x="505" y="170" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#ffffff">2</text>
+<text x="526" y="170" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Name</text>
+<text x="610" y="170" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">SAN matches the host it dialled (broker.example.com)</text>
+<circle cx="505" cy="204" r="11" fill="#2e8b57"/>
+<text x="505" y="208" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#ffffff">3</text>
+<text x="526" y="208" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Dates</text>
+<text x="610" y="208" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">now is between 'not before' and 'not after' (needs a correct clock)</text>
+<circle cx="505" cy="242" r="11" fill="#2e8b57"/>
+<text x="505" y="246" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#ffffff">4</text>
+<text x="526" y="246" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Purpose</text>
+<text x="610" y="246" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">the certificate is allowed for server authentication</text>
+<circle cx="505" cy="280" r="11" fill="#2e8b57"/>
+<text x="505" y="284" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#ffffff">5</text>
+<text x="526" y="284" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Revocation</text>
+<text x="610" y="284" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">not revoked (CRL / OCSP; often skipped on small devices)</text>
+<rect x="480" y="340" width="490" height="240" rx="14" fill="#fbfbfc" stroke="#6b7280" stroke-width="1.5"/>
+<text x="725" y="366" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Inside an X.509 certificate (simplified)</text>
+<text x="500" y="398" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.5" font-weight="700" fill="#1f2937">Subject:</text>
+<text x="620" y="398" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.5" font-weight="400" fill="#1f2937">CN = broker.example.com</text>
+<text x="500" y="426" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.5" font-weight="700" fill="#1f2937">Issuer:</text>
+<text x="620" y="426" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.5" font-weight="400" fill="#1f2937">CN = Example Intermediate CA</text>
+<text x="500" y="454" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.5" font-weight="700" fill="#1f2937">Validity:</text>
+<text x="620" y="454" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.5" font-weight="400" fill="#1f2937">2026-01-01 → 2027-01-01</text>
+<text x="500" y="482" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.5" font-weight="700" fill="#1f2937">Public key:</text>
+<text x="620" y="482" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.5" font-weight="400" fill="#1f2937">EC P-256 (the broker's)</text>
+<text x="500" y="510" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.5" font-weight="700" fill="#1f2937">SAN:</text>
+<text x="620" y="510" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.5" font-weight="400" fill="#1f2937">DNS: broker.example.com</text>
+<text x="500" y="538" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.5" font-weight="700" fill="#1f2937">Signature:</text>
+<text x="620" y="538" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.5" font-weight="400" fill="#1f2937">ecdsa-with-SHA256 by the Issuer</text>
+<rect x="40" y="520" width="400" height="60" rx="12" fill="#fdecea" stroke="#c0392b" stroke-width="1.5"/>
+<text x="240" y="545" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">A certificate = public key + identity + dates,</text>
+<text x="240" y="565" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">signed by someone you already trust</text>
+</svg>

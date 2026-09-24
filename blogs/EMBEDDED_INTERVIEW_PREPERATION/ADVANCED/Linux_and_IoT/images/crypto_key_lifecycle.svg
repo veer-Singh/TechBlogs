@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 209" width="1000" height="209"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="209.35" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">The life of a signing key</text>
+<rect x="20.0" y="78.0" width="205.5" height="107.3" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="122.8" y="115.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Generate the key pair</text>
+<text x="122.8" y="141.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">inside an HSM; the private</text>
+<text x="122.8" y="159.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">key never leaves it</text>
+<circle cx="22.0" cy="80" r="14" fill="#7b3fbf" stroke="#ffffff" stroke-width="2.5"/>
+<text x="22.0" y="85.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">1</text>
+<rect x="271.5" y="78.0" width="205.5" height="107.3" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="374.2" y="115.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Provision devices</text>
+<text x="374.2" y="141.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">burn the public-key hash</text>
+<text x="374.2" y="159.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">into eFuse at the factory</text>
+<circle cx="273.5" cy="80" r="14" fill="#d97d00" stroke="#ffffff" stroke-width="2.5"/>
+<text x="273.5" y="85.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">2</text>
+<line x1="229.5" y1="131.7" x2="266.5" y2="131.7" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="523.0" y="78.0" width="205.5" height="107.3" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="625.8" y="115.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Sign every release</text>
+<text x="625.8" y="141.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">in CI; the HSM does the</text>
+<text x="625.8" y="159.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">signing</text>
+<circle cx="525.0" cy="80" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="525.0" y="85.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">3</text>
+<line x1="481.0" y1="131.7" x2="518.0" y2="131.7" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="774.5" y="78.0" width="205.5" height="107.3" rx="12" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+<text x="877.2" y="106.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Rotate / revoke</text>
+<text x="877.2" y="132.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">if compromised; needs</text>
+<text x="877.2" y="150.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">spare key slots planned in</text>
+<text x="877.2" y="167.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">advance</text>
+<circle cx="776.5" cy="80" r="14" fill="#c0392b" stroke="#ffffff" stroke-width="2.5"/>
+<text x="776.5" y="85.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">4</text>
+<line x1="732.5" y1="131.7" x2="769.5" y2="131.7" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+</svg>

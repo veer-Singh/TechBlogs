@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="560" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">Reading file permissions: ls -l explained</text>
+<rect x="40" y="58" width="920" height="46" rx="10" fill="#0f1b2d"/>
+<text x="500" y="89" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="17" font-weight="400" fill="#e6edf3">$ ls -l run.sh      -rwxr-x---  1  root  dev  4096  Sep 23 12:00  run.sh</text>
+<rect x="60" y="160" width="48" height="60" rx="6" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="84" y="200" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="26" font-weight="700" fill="#1f2937">-</text>
+<rect x="128" y="160" width="48" height="60" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="152" y="200" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="26" font-weight="700" fill="#1f2937">r</text>
+<rect x="180" y="160" width="48" height="60" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="204" y="200" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="26" font-weight="700" fill="#1f2937">w</text>
+<rect x="232" y="160" width="48" height="60" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="256" y="200" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="26" font-weight="700" fill="#1f2937">x</text>
+<rect x="300" y="160" width="48" height="60" rx="6" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="324" y="200" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="26" font-weight="700" fill="#1f2937">r</text>
+<rect x="352" y="160" width="48" height="60" rx="6" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="376" y="200" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="26" font-weight="700" fill="#1f2937">-</text>
+<rect x="404" y="160" width="48" height="60" rx="6" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="428" y="200" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="26" font-weight="700" fill="#1f2937">x</text>
+<rect x="472" y="160" width="48" height="60" rx="6" fill="#fff3e0" stroke="#e08a00" stroke-width="2"/>
+<text x="496" y="200" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="26" font-weight="700" fill="#1f2937">-</text>
+<rect x="524" y="160" width="48" height="60" rx="6" fill="#fff3e0" stroke="#e08a00" stroke-width="2"/>
+<text x="548" y="200" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="26" font-weight="700" fill="#1f2937">-</text>
+<rect x="576" y="160" width="48" height="60" rx="6" fill="#fff3e0" stroke="#e08a00" stroke-width="2"/>
+<text x="600" y="200" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="26" font-weight="700" fill="#1f2937">-</text>
+<text x="84.0" y="148" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1f2937">type</text>
+<polyline points="60,230 60,238 108,238 108,230" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="84.0" y="258" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#374151">- file, d dir,</text>
+<text x="84.0" y="278" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">l link, c char dev</text>
+<text x="204.0" y="148" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1f2937">owner (user)</text>
+<polyline points="128,230 128,238 280,238 280,230" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="204.0" y="258" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#374151">4 + 2 + 1</text>
+<text x="204.0" y="278" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">= 7</text>
+<text x="376.0" y="148" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1f2937">group</text>
+<polyline points="300,230 300,238 452,238 452,230" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="376.0" y="258" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#374151">4 + 0 + 1</text>
+<text x="376.0" y="278" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">= 5</text>
+<text x="548.0" y="148" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1f2937">others</text>
+<polyline points="472,230 472,238 624,238 624,230" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="548.0" y="258" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#374151">0 + 0 + 0</text>
+<text x="548.0" y="278" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">= 0</text>
+<rect x="640" y="150" width="320" height="136" rx="12" fill="#fbfbfc" stroke="#6b7280" stroke-width="1.5"/>
+<text x="660" y="178" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#2f6fbe">owner = root</text>
+<text x="660" y="202" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#2e8b57">group = dev</text>
+<text x="660" y="226" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#e08a00">others = everyone else</text>
+<rect x="660" y="240" width="280" height="34" rx="8" fill="#0f1b2d"/>
+<text x="800" y="263" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#f0a23b">chmod 750 run.sh</text>
+<rect x="40" y="310" width="440" height="230" rx="12" fill="#fbfbfc" stroke="#6b7280" stroke-width="1.5"/>
+<text x="260" y="336" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">What each letter means</text>
+<text x="60" y="364" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#6b7280"></text>
+<text x="150" y="364" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#6b7280">value</text>
+<text x="250" y="364" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#6b7280">on a file</text>
+<text x="390" y="364" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#6b7280">on a directory</text>
+<text x="66" y="400" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="20" font-weight="700" fill="#1f2937">r</text>
+<text x="150" y="400" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#1f2937">4</text>
+<text x="250" y="400" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">read the contents</text>
+<text x="390" y="400" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">list the names</text>
+<text x="66" y="444" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="20" font-weight="700" fill="#1f2937">w</text>
+<text x="150" y="444" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#1f2937">2</text>
+<text x="250" y="444" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">change the contents</text>
+<text x="390" y="444" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">create / delete files</text>
+<text x="66" y="488" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="20" font-weight="700" fill="#1f2937">x</text>
+<text x="150" y="488" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#1f2937">1</text>
+<text x="250" y="488" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">run it as a program</text>
+<text x="390" y="488" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">enter it (cd)</text>
+<text x="260" y="528" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Add the values for each group: rwx = 7, r-x = 5, r-- = 4</text>
+<rect x="500" y="310" width="460" height="230" rx="12" fill="#fbfbfc" stroke="#6b7280" stroke-width="1.5"/>
+<text x="730" y="336" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Common modes</text>
+<text x="525" y="370" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="16" font-weight="700" fill="#e08a00">644</text>
+<text x="580" y="370" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="14" font-weight="400" fill="#1f2937">rw-r--r--</text>
+<text x="700" y="370" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">normal file</text>
+<text x="525" y="404" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="16" font-weight="700" fill="#e08a00">755</text>
+<text x="580" y="404" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="14" font-weight="400" fill="#1f2937">rwxr-xr-x</text>
+<text x="700" y="404" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">program, directory</text>
+<text x="525" y="438" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="16" font-weight="700" fill="#e08a00">600</text>
+<text x="580" y="438" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="14" font-weight="400" fill="#1f2937">rw-------</text>
+<text x="700" y="438" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">private key, secrets</text>
+<text x="525" y="472" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="16" font-weight="700" fill="#e08a00">700</text>
+<text x="580" y="472" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="14" font-weight="400" fill="#1f2937">rwx------</text>
+<text x="700" y="472" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">private directory (~/.ssh)</text>
+<text x="525" y="506" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="16" font-weight="700" fill="#e08a00">660</text>
+<text x="580" y="506" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="14" font-weight="400" fill="#1f2937">rw-rw----</text>
+<text x="700" y="506" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">device for a group (/dev/ttyUSB0)</text>
+</svg>

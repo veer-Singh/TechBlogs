@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 630" width="1000" height="630"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="630" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">Linux fundamentals: six areas, one system</text>
+<rect x="30" y="70" width="310" height="150" rx="14" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="48" y="100" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">1  Files and directories</text>
+<text x="48" y="122" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#2f6fbe">Where is it?</text>
+<text x="48" y="152" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">ls -l   cd   find</text>
+<text x="48" y="174" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">cat   less   grep</text>
+<text x="48" y="196" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">cp   mv   rm   tar</text>
+<line x1="340" y1="145" x2="400" y2="315" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<rect x="30" y="245" width="310" height="150" rx="14" fill="#fff3e0" stroke="#e08a00" stroke-width="2"/>
+<text x="48" y="275" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">2  Users and permissions</text>
+<text x="48" y="297" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#e08a00">Who is allowed to do it?</text>
+<text x="48" y="327" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">id   whoami   sudo</text>
+<text x="48" y="349" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">chmod   chown</text>
+<text x="48" y="371" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">groups: dialout, i2c</text>
+<line x1="340" y1="320" x2="400" y2="315" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<rect x="30" y="420" width="310" height="150" rx="14" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+<text x="48" y="450" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">3  Processes</text>
+<text x="48" y="472" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#c0392b">What is running?</text>
+<text x="48" y="502" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">ps   top   htop</text>
+<text x="48" y="524" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">kill   nice</text>
+<text x="48" y="546" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">/proc/&lt;pid&gt;/</text>
+<line x1="340" y1="495" x2="400" y2="315" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<rect x="660" y="70" width="310" height="150" rx="14" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="678" y="100" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">4  Services (systemd)</text>
+<text x="678" y="122" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#7b3fbf">What starts at boot?</text>
+<text x="678" y="152" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">systemctl status app</text>
+<text x="678" y="174" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">systemctl restart app</text>
+<text x="678" y="196" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">journalctl -u app</text>
+<line x1="660" y1="145" x2="600" y2="315" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<rect x="660" y="245" width="310" height="150" rx="14" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="678" y="275" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">5  Networking</text>
+<text x="678" y="297" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#2e8b57">Can it talk to others?</text>
+<text x="678" y="327" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">ip addr   ip route</text>
+<text x="678" y="349" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">ping   ss -tulpn</text>
+<text x="678" y="371" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">curl   ssh</text>
+<line x1="660" y1="320" x2="600" y2="315" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<rect x="660" y="420" width="310" height="150" rx="14" fill="#e0f2f1" stroke="#0f766e" stroke-width="2"/>
+<text x="678" y="450" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">6  Storage and logs</text>
+<text x="678" y="472" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#0f766e">Is there room? What happened?</text>
+<text x="678" y="502" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">df -h   du -sh</text>
+<text x="678" y="524" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">lsblk   mount</text>
+<text x="678" y="546" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">dmesg   journalctl</text>
+<line x1="660" y1="495" x2="600" y2="315" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<rect x="400" y="225" width="200" height="180" rx="18" fill="#0f1b2d"/>
+<text x="500" y="280" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#f6f7f4">Your Linux</text>
+<text x="500" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#f6f7f4">system</text>
+<text x="500" y="336" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">kernel + user space</text>
+<text x="500" y="360" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">you work through</text>
+<text x="500" y="378" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">the shell / SSH</text>
+<rect x="30" y="585" width="940" height="36" rx="10" fill="#fff3e0" stroke="#e08a00" stroke-width="1.5"/>
+<text x="500" y="608" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Troubleshooting = asking each of these six areas: "Is this where it's broken?"</text>
+</svg>

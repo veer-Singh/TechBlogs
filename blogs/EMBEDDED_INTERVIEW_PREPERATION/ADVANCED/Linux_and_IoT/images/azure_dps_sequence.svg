@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 564" width="1000" height="564"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="564" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">Zero-touch provisioning: a new device finds its IoT Hub by itself</text>
+<line x1="180.0" y1="124.0" x2="180.0" y2="528.0" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="28.0" y="66.0" width="304.0" height="58.0" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="180.0" y="88.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Device</text>
+<text x="180.0" y="112.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">first boot</text>
+<line x1="500.0" y1="124.0" x2="500.0" y2="528.0" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="348.0" y="66.0" width="304.0" height="58.0" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="500.0" y="88.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">DPS</text>
+<text x="500.0" y="112.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">global endpoint + ID scope</text>
+<line x1="820.0" y1="124.0" x2="820.0" y2="528.0" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="668.0" y="66.0" width="304.0" height="58.0" rx="12" fill="#0f1b2d"/>
+<text x="820.0" y="88.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#ffffff">IoT Hub</text>
+<text x="820.0" y="112.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#c9d3e0">the chosen hub</text>
+<line x1="180.0" y1="200.0" x2="496.0" y2="200.0" stroke="#2f6fbe" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="340.0" y="162.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">1. Register: here is my X.509 certificate (or</text>
+<text x="340.0" y="179.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">TPM / symmetric key)</text>
+<rect x="348.0" y="226.0" width="304.0" height="50.0" rx="8" fill="#fff3e0" stroke="#d97d00" stroke-width="1.5"/>
+<text x="500.0" y="244.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">2. Check the certificate against an enrollment</text>
+<text x="500.0" y="260.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">(e.g. signed by our factory CA)</text>
+<rect x="348.0" y="288.0" width="304.0" height="34.0" rx="8" fill="#fff3e0" stroke="#d97d00" stroke-width="1.5"/>
+<text x="500.0" y="306.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">3. Choose a hub (allocation policy)</text>
+<line x1="500.0" y1="365.0" x2="816.0" y2="365.0" stroke="#7b3fbf" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="660.0" y="344.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">4. Create the device identity in that hub</text>
+<line x1="500.0" y1="439.0" x2="184.0" y2="439.0" stroke="#7b3fbf" stroke-width="2.4" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<text x="340.0" y="401.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">5. You belong to</text>
+<text x="340.0" y="418.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">hub-iot-prod-weu.azure-devices.net</text>
+<line x1="180.0" y1="496.0" x2="816.0" y2="496.0" stroke="#2f6fbe" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="500.0" y="475.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">6. Connect with MQTT over TLS, start sending telemetry</text>
+</svg>

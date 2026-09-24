@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="1000" height="500"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="500" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">A driver's life: load, match, probe, run, remove</text>
+<rect x="15" y="92" width="125" height="76" rx="10" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="77" y="118" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">1 Load</text>
+<text x="77" y="138" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">insmod, or</text>
+<text x="77" y="154" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">built in</text>
+<line x1="140" y1="130" x2="154" y2="130" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="156" y="92" width="125" height="76" rx="10" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="218" y="118" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">2 Register</text>
+<text x="218" y="138" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">tell the bus</text>
+<text x="218" y="154" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">"I handle X"</text>
+<line x1="281" y1="130" x2="295" y2="130" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="297" y="92" width="125" height="76" rx="10" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="359" y="118" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">3 Match</text>
+<text x="359" y="138" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">bus finds a device</text>
+<text x="359" y="154" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">with the same ID</text>
+<line x1="422" y1="130" x2="436" y2="130" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="438" y="92" width="125" height="76" rx="10" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+<text x="500" y="118" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">4 probe()</text>
+<text x="500" y="138" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">set up</text>
+<text x="500" y="154" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">the hardware</text>
+<line x1="563" y1="130" x2="577" y2="130" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="579" y="92" width="125" height="76" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="641" y="118" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">5 Running</text>
+<text x="641" y="138" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">serve requests</text>
+<text x="641" y="154" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">and interrupts</text>
+<line x1="704" y1="130" x2="718" y2="130" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="720" y="92" width="125" height="76" rx="10" fill="#fff3e0" stroke="#e08a00" stroke-width="2"/>
+<text x="782" y="118" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">6 remove()</text>
+<text x="782" y="138" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">tear down</text>
+<line x1="845" y1="130" x2="859" y2="130" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="861" y="92" width="125" height="76" rx="10" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="923" y="118" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">7 Unload</text>
+<text x="923" y="138" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">rmmod</text>
+<path d="M 500 92 C 480 58, 380 58, 360 92" fill="none" stroke="#c0392b" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+<text x="430" y="60" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#c0392b">-EPROBE_DEFER: a dependency isn't ready, retry later</text>
+<rect x="15" y="195" width="305" height="285" rx="12" fill="#fbf8fe" stroke="#7b3fbf" stroke-width="1.5"/>
+<text x="167" y="220" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#7b3fbf">How a device and driver match</text>
+<text x="35" y="250" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Device tree</text>
+<text x="35" y="268" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#374151">compatible = "acme,sensor"</text>
+<text x="35" y="294" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">I2C / SPI id table</text>
+<text x="35" y="312" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">name, e.g. "tmp102"</text>
+<text x="35" y="338" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">USB</text>
+<text x="35" y="356" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">vendor : product ID</text>
+<text x="35" y="382" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">PCI</text>
+<text x="35" y="400" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">vendor : device ID</text>
+<text x="35" y="426" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">ACPI (x86)</text>
+<text x="35" y="444" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">ACPI ID</text>
+<rect x="335" y="195" width="330" height="285" rx="12" fill="#fef8f7" stroke="#c0392b" stroke-width="1.5"/>
+<text x="500" y="220" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#c0392b">What probe() does, in order</text>
+<circle cx="360" cy="246" r="10" fill="#c0392b"/>
+<text x="360" y="250" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">1</text>
+<text x="380" y="250" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2937">Allocate driver state (devm_kzalloc)</text>
+<circle cx="360" cy="278" r="10" fill="#c0392b"/>
+<text x="360" y="282" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">2</text>
+<text x="380" y="282" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2937">Map registers (ioremap)</text>
+<circle cx="360" cy="310" r="10" fill="#c0392b"/>
+<text x="360" y="314" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">3</text>
+<text x="380" y="314" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2937">Enable clocks and power</text>
+<circle cx="360" cy="342" r="10" fill="#c0392b"/>
+<text x="360" y="346" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">4</text>
+<text x="380" y="346" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2937">Take GPIOs, release reset</text>
+<circle cx="360" cy="374" r="10" fill="#c0392b"/>
+<text x="360" y="378" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">5</text>
+<text x="380" y="378" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2937">Read the chip ID: is it really there?</text>
+<circle cx="360" cy="406" r="10" fill="#c0392b"/>
+<text x="360" y="410" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">6</text>
+<text x="380" y="410" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2937">Request the interrupt</text>
+<circle cx="360" cy="438" r="10" fill="#c0392b"/>
+<text x="360" y="442" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">7</text>
+<text x="380" y="442" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2937">Register with a framework → /dev appears</text>
+<rect x="680" y="195" width="305" height="285" rx="12" fill="#f7fcf9" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="832" y="220" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#2e8b57">Running, then removal</text>
+<text x="700" y="250" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">While running</text>
+<text x="700" y="274" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">user space: open, read, write, ioctl</text>
+<text x="700" y="300" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">hardware: interrupts arrive</text>
+<text x="700" y="326" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">power: runtime suspend / resume</text>
+<text x="700" y="360" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">On remove()</text>
+<text x="700" y="384" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">unregister from the framework</text>
+<text x="700" y="410" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">stop the hardware, disable IRQ</text>
+<text x="700" y="436" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">devm_* resources freed</text>
+<text x="700" y="462" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">automatically, in reverse order</text>
+</svg>

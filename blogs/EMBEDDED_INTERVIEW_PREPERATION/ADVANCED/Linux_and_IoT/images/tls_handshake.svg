@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 690" width="1000" height="690"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="690" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">TLS 1.3 handshake: agree on keys, prove identity, then encrypt</text>
+<rect x="70" y="58" width="240" height="48" rx="10" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="190" y="88" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Client: IoT device</text>
+<rect x="690" y="58" width="240" height="48" rx="10" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="810" y="88" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Server: MQTT broker</text>
+<line x1="190" y1="106" x2="190" y2="660" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<line x1="810" y1="106" x2="810" y2="660" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<line x1="190" y1="142" x2="807" y2="142" stroke="#2f6fbe" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="500" y="133" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">1  ClientHello</text>
+<text x="500" y="159" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">TLS versions, cipher suites, key share (ECDHE public key), SNI: broker.example.com</text>
+<line x1="810" y1="202" x2="193" y2="202" stroke="#7b3fbf" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="500" y="193" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">2  ServerHello</text>
+<text x="500" y="219" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">chosen cipher suite + the server's key share</text>
+<rect x="230" y="228" width="540" height="30" rx="8" fill="#fff3e0" stroke="#e08a00" stroke-width="1.5"/>
+<text x="500" y="248" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1f2937">Both sides now compute the same secret (ECDHE). Everything below is encrypted.</text>
+<line x1="810" y1="288" x2="193" y2="288" stroke="#7b3fbf" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="500" y="279" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">{ 3  Certificate }</text>
+<text x="500" y="305" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">the broker's certificate chain</text>
+<line x1="810" y1="338" x2="193" y2="338" stroke="#7b3fbf" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="500" y="329" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">{ 4  CertificateVerify }</text>
+<text x="500" y="355" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">a signature proving the broker owns the certificate's private key</text>
+<line x1="810" y1="388" x2="193" y2="388" stroke="#7b3fbf" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="500" y="379" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">{ 5  Finished }</text>
+<text x="500" y="405" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">a MAC over the whole handshake: nothing was tampered with</text>
+<rect x="20" y="412" width="330" height="88" rx="10" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="185" y="434" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">The device checks the certificate:</text>
+<text x="185" y="454" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">chain leads to a trusted root CA</text>
+<text x="185" y="472" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">name matches broker.example.com</text>
+<text x="185" y="490" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">dates are valid (needs the right time!)</text>
+<line x1="190" y1="536" x2="807" y2="536" stroke="#2f6fbe" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="500" y="527" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">{ 6  Certificate + CertificateVerify }</text>
+<text x="500" y="553" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">only with mutual TLS: the device proves ITS identity</text>
+<line x1="190" y1="592" x2="807" y2="592" stroke="#2f6fbe" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="500" y="583" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">{ 7  Finished }</text>
+<rect x="200" y="620" width="600" height="46" rx="10" fill="#0f1b2d"/>
+<text x="500" y="640" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#f0a23b">Application data, encrypted (AES-GCM / ChaCha20-Poly1305)</text>
+<text x="500" y="657" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="12" font-weight="400" fill="#e6edf3">MQTT CONNECT · CONNACK · PUBLISH ...</text>
+<text x="870" y="460" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#2e8b57">1 round trip</text>
+<text x="870" y="478" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">before data can flow</text>
+<text x="870" y="496" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">(TLS 1.2 needed 2)</text>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 565" width="1000" height="565"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="565" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">How the kernel pairs a device with its driver</text>
+<line x1="180.0" y1="124.0" x2="180.0" y2="529.0" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="28.0" y="66.0" width="304.0" height="58.0" rx="12" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="180.0" y="88.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Device tree</text>
+<text x="180.0" y="112.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">describes the board</text>
+<line x1="500.0" y1="124.0" x2="500.0" y2="529.0" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="348.0" y="66.0" width="304.0" height="58.0" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="500.0" y="88.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Bus core</text>
+<text x="500.0" y="112.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">e.g. the I2C bus</text>
+<line x1="820.0" y1="124.0" x2="820.0" y2="529.0" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="668.0" y="66.0" width="304.0" height="58.0" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="820.0" y="88.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Your driver</text>
+<text x="820.0" y="112.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">e.g. tmp102</text>
+<line x1="180.0" y1="217.0" x2="496.0" y2="217.0" stroke="#6b7280" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="340.0" y="162.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">1. Node "temp-sensor@48", compatible =</text>
+<text x="340.0" y="179.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">"ti,tmp102" → a device is created on the</text>
+<text x="340.0" y="196.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">I2C bus</text>
+<line x1="820.0" y1="274.0" x2="504.0" y2="274.0" stroke="#2f6fbe" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="660.0" y="253.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">2. i2c_add_driver(): "I handle ti,tmp102"</text>
+<rect x="348.0" y="300.0" width="304.0" height="50.0" rx="8" fill="#fff3e0" stroke="#d97d00" stroke-width="1.5"/>
+<text x="500.0" y="318.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">3. Compare the device's compatible with every</text>
+<text x="500.0" y="334.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">driver's match table</text>
+<line x1="500.0" y1="393.0" x2="816.0" y2="393.0" stroke="#d97d00" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="660.0" y="372.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">4. Match! Call probe(device)</text>
+<line x1="820.0" y1="450.0" x2="504.0" y2="450.0" stroke="#2f6fbe" stroke-width="2.4" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<text x="660.0" y="429.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">5. 0 = success (or an error code)</text>
+<rect x="40.0" y="476.0" width="920.0" height="35.0" rx="8" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="500.0" y="495.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">The device is now bound to the driver and appears in /sys and /dev</text>
+</svg>

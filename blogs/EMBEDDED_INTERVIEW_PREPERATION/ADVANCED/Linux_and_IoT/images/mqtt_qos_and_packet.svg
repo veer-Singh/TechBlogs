@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="640" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">MQTT quality of service: how hard delivery tries</text>
+<rect x="20" y="58" width="310" height="330" rx="14" fill="#ffffff" stroke="#c0392b" stroke-width="2"/>
+<text x="175" y="86" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#c0392b">QoS 0</text>
+<text x="175" y="108" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1f2937">at most once</text>
+<text x="80" y="136" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#374151">Sender</text>
+<text x="270" y="136" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#374151">Receiver</text>
+<line x1="80" y1="144" x2="80" y2="340" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<line x1="270" y1="144" x2="270" y2="340" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<line x1="80" y1="170" x2="267" y2="170" stroke="#c0392b" stroke-width="2.2" marker-end="url(#arrow)"/>
+<text x="175.0" y="163" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="12" font-weight="700" fill="#1f2937">PUBLISH</text>
+<text x="175" y="368" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#374151">fire and forget: may be lost</text>
+<rect x="345" y="58" width="310" height="330" rx="14" fill="#ffffff" stroke="#e08a00" stroke-width="2"/>
+<text x="500" y="86" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#e08a00">QoS 1</text>
+<text x="500" y="108" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1f2937">at least once</text>
+<text x="405" y="136" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#374151">Sender</text>
+<text x="595" y="136" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#374151">Receiver</text>
+<line x1="405" y1="144" x2="405" y2="340" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<line x1="595" y1="144" x2="595" y2="340" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<line x1="405" y1="170" x2="592" y2="170" stroke="#e08a00" stroke-width="2.2" marker-end="url(#arrow)"/>
+<text x="500.0" y="163" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="12" font-weight="700" fill="#1f2937">PUBLISH</text>
+<line x1="595" y1="214" x2="408" y2="214" stroke="#e08a00" stroke-width="2.2" marker-end="url(#arrow)"/>
+<text x="500.0" y="207" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="12" font-weight="700" fill="#1f2937">PUBACK</text>
+<text x="500" y="368" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#374151">resent until acknowledged: may duplicate</text>
+<rect x="670" y="58" width="310" height="330" rx="14" fill="#ffffff" stroke="#2e8b57" stroke-width="2"/>
+<text x="825" y="86" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#2e8b57">QoS 2</text>
+<text x="825" y="108" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1f2937">exactly once</text>
+<text x="730" y="136" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#374151">Sender</text>
+<text x="920" y="136" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#374151">Receiver</text>
+<line x1="730" y1="144" x2="730" y2="340" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<line x1="920" y1="144" x2="920" y2="340" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<line x1="730" y1="170" x2="917" y2="170" stroke="#2e8b57" stroke-width="2.2" marker-end="url(#arrow)"/>
+<text x="825.0" y="163" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="12" font-weight="700" fill="#1f2937">PUBLISH</text>
+<line x1="920" y1="214" x2="733" y2="214" stroke="#2e8b57" stroke-width="2.2" marker-end="url(#arrow)"/>
+<text x="825.0" y="207" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="12" font-weight="700" fill="#1f2937">PUBREC</text>
+<line x1="730" y1="258" x2="917" y2="258" stroke="#2e8b57" stroke-width="2.2" marker-end="url(#arrow)"/>
+<text x="825.0" y="251" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="12" font-weight="700" fill="#1f2937">PUBREL</text>
+<line x1="920" y1="302" x2="733" y2="302" stroke="#2e8b57" stroke-width="2.2" marker-end="url(#arrow)"/>
+<text x="825.0" y="295" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="12" font-weight="700" fill="#1f2937">PUBCOMP</text>
+<text x="825" y="368" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#374151">4-step handshake: slowest, no duplicates</text>
+<rect x="20" y="405" width="960" height="220" rx="14" fill="#fbfbfc" stroke="#6b7280" stroke-width="1.2"/>
+<text x="500" y="432" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Inside a packet: PUBLISH "23.5" to topic home/temp (MQTT 3.1.1, QoS 0)</text>
+<rect x="60" y="450" width="90" height="40" rx="6" fill="#fdecea" stroke="#c0392b" stroke-width="1.8"/>
+<text x="105.0" y="476" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="14" font-weight="700" fill="#1f2937">30</text>
+<text x="105.0" y="512" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1f2937">fixed header</text>
+<text x="105.0" y="530" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">type 3 = PUBLISH</text>
+<text x="105.0" y="547" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">flags 0000</text>
+<rect x="158" y="450" width="90" height="40" rx="6" fill="#fff3e0" stroke="#e08a00" stroke-width="1.8"/>
+<text x="203.0" y="476" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="14" font-weight="700" fill="#1f2937">0F</text>
+<text x="203.0" y="512" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1f2937">remaining</text>
+<text x="203.0" y="530" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">length</text>
+<text x="203.0" y="547" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">= 15 bytes</text>
+<rect x="256" y="450" width="110" height="40" rx="6" fill="#eef0f3" stroke="#6b7280" stroke-width="1.8"/>
+<text x="311.0" y="476" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="14" font-weight="700" fill="#1f2937">00 09</text>
+<text x="311.0" y="512" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1f2937">topic length</text>
+<text x="311.0" y="530" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">= 9</text>
+<rect x="374" y="450" width="330" height="40" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.8"/>
+<text x="539.0" y="476" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="14" font-weight="700" fill="#1f2937">68 6F 6D 65 2F 74 65 6D 70</text>
+<text x="539.0" y="512" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1f2937">topic</text>
+<text x="539.0" y="530" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">"home/temp"</text>
+<rect x="712" y="450" width="170" height="40" rx="6" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.8"/>
+<text x="797.0" y="476" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="14" font-weight="700" fill="#1f2937">32 33 2E 35</text>
+<text x="797.0" y="512" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1f2937">payload</text>
+<text x="797.0" y="530" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">"23.5"</text>
+<text x="500" y="580" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#1f2937">First byte 0x30 = 0011 0000: upper 4 bits = packet type (3), then DUP (0), QoS (00), RETAIN (0)</text>
+<text x="500" y="604" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">The whole message is 17 bytes. That's why MQTT suits small devices and slow networks.</text>
+</svg>

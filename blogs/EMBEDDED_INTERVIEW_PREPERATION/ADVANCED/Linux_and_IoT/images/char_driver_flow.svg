@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 580" width="1000" height="580"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="580" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">A character driver in action: read() sleeps until the interrupt brings data</text>
+<text x="30" y="70" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#2e8b57">USER SPACE</text>
+<line x1="20" y1="140" x2="980" y2="140" stroke="#e08a00" stroke-width="2" stroke-dasharray="8 5"/>
+<text x="30" y="160" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#e08a00">KERNEL</text>
+<rect x="30" y="78" width="400" height="58" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="230" y="102" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">1  App</text>
+<text x="230" y="122" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="12" font-weight="400" fill="#374151">read(fd, buf, 8)  on /dev/mysensor</text>
+<rect x="30" y="168" width="400" height="58" rx="10" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="230" y="192" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">2  VFS</text>
+<text x="230" y="212" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">char device 240:0 → the driver's cdev</text>
+<rect x="30" y="243" width="400" height="58" rx="10" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="230" y="267" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">3  file_operations</text>
+<text x="230" y="287" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="12" font-weight="400" fill="#374151">.read = my_read</text>
+<rect x="30" y="318" width="400" height="58" rx="10" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+<text x="230" y="342" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">4  my_read()</text>
+<text x="230" y="362" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">no data yet → sleep on the wait queue</text>
+<rect x="30" y="393" width="400" height="58" rx="10" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+<text x="230" y="417" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">6  my_read() wakes up</text>
+<text x="230" y="437" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="12" font-weight="400" fill="#374151">copy_to_user(buf, kbuf, 8)</text>
+<rect x="30" y="468" width="400" height="58" rx="10" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="230" y="492" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">7  read() returns 8</text>
+<text x="230" y="512" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">the app has its sample</text>
+<line x1="230" y1="136" x2="230" y2="166" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<line x1="230" y1="226" x2="230" y2="241" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<line x1="230" y1="301" x2="230" y2="316" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<line x1="230" y1="451" x2="230" y2="466" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="590" y="468" width="380" height="58" rx="10" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="780" y="492" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Hardware</text>
+<text x="780" y="512" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">sensor raises its interrupt line</text>
+<rect x="590" y="393" width="380" height="58" rx="10" fill="#fff3e0" stroke="#e08a00" stroke-width="2"/>
+<text x="780" y="417" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">5a  IRQ handler (threaded)</text>
+<text x="780" y="437" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">read the sample into kbuf</text>
+<rect x="590" y="318" width="380" height="58" rx="10" fill="#fff3e0" stroke="#e08a00" stroke-width="2"/>
+<text x="780" y="342" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">5b  Signal the reader</text>
+<text x="780" y="362" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="12" font-weight="400" fill="#374151">data_ready = true; wake_up(&amp;wq)</text>
+<line x1="780" y1="468" x2="780" y2="453" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<line x1="780" y1="393" x2="780" y2="378" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="470" y="318" width="80" height="58" rx="10" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="510" y="343" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#7b3fbf">wait</text>
+<text x="510" y="360" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#7b3fbf">queue</text>
+<line x1="432" y1="340" x2="466" y2="340" stroke="#7b3fbf" stroke-width="2.5" marker-end="url(#arrow)"/>
+<line x1="588" y1="347" x2="554" y2="347" stroke="#7b3fbf" stroke-width="2.5" marker-end="url(#arrow)"/>
+<polyline points="510,376 510,420 460,420" fill="none" stroke="#7b3fbf" stroke-width="2.5" stroke-linejoin="round"/>
+<line x1="462" y1="420" x2="434" y2="420" stroke="#7b3fbf" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="780" y="190" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1f2937">Why sleep instead of busy-waiting?</text>
+<text x="780" y="212" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">The CPU runs other tasks (or idles, saving power)</text>
+<text x="780" y="230" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">until the interrupt says data is ready.</text>
+<text x="780" y="258" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">Non-blocking alternative: the app uses poll()</text>
+<text x="780" y="276" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">and the driver implements .poll.</text>
+<rect x="30" y="538" width="940" height="32" rx="8" fill="#0f1b2d"/>
+<text x="500" y="559" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#f6f7f4">Never touch a user pointer directly: always copy_to_user() / copy_from_user()</text>
+</svg>

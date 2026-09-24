@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 460" width="1000" height="460" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="460" rx="16" fill="#ffffff"/>
+  <text x="500" y="35" text-anchor="middle" font-size="20" font-weight="700" fill="#1f2937">Digital signature: sign once at the factory, verify on every boot</text>
+
+  <!-- ===== Left: signing side ===== -->
+  <rect x="20" y="55" width="440" height="390" rx="12" fill="#f5f9ff" stroke="#2f6fbe" stroke-width="2"/>
+  <text x="40" y="80" font-size="14" font-weight="700" fill="#2f6fbe">Build server / factory: SECRET side</text>
+
+  <rect x="40" y="95" width="250" height="44" rx="8" fill="#ffffff" stroke="#374151"/>
+  <text x="165" y="122" text-anchor="middle" font-size="14" fill="#1f2937">firmware.bin</text>
+  <rect x="40" y="165" width="250" height="44" rx="8" fill="#e8f6ec" stroke="#2e8b57"/>
+  <text x="165" y="192" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2937">SHA-256</text>
+  <rect x="40" y="235" width="250" height="44" rx="8" fill="#ffffff" stroke="#374151"/>
+  <text x="165" y="262" text-anchor="middle" font-size="14" fill="#1f2937">digest (32 bytes)</text>
+  <rect x="40" y="305" width="250" height="44" rx="8" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+  <text x="165" y="332" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2937">Sign (ECDSA / RSA)</text>
+  <rect x="40" y="380" width="250" height="44" rx="8" fill="#ffffff" stroke="#2f6fbe" stroke-width="2"/>
+  <text x="165" y="407" text-anchor="middle" font-size="14" font-weight="600" fill="#1f2937">signature (64 bytes for ECDSA)</text>
+
+  <line x1="165" y1="139" x2="165" y2="161" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="165" y1="209" x2="165" y2="231" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="165" y1="279" x2="165" y2="301" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="165" y1="349" x2="165" y2="376" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="310" y="305" width="135" height="44" rx="8" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+  <text x="377" y="323" text-anchor="middle" font-size="13" font-weight="700" fill="#c0392b">PRIVATE key</text>
+  <text x="377" y="341" text-anchor="middle" font-size="12" fill="#374151">(in HSM, never shared)</text>
+  <line x1="310" y1="327" x2="294" y2="327" stroke="#c0392b" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ===== Middle: shipping ===== -->
+  <line x1="462" y1="250" x2="536" y2="250" stroke="#374151" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="500" y="222" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">firmware +</text>
+  <text x="500" y="238" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">signature</text>
+  <text x="500" y="272" text-anchor="middle" font-size="11" fill="#374151">via OTA / USB</text>
+
+  <!-- ===== Right: verifying side ===== -->
+  <rect x="540" y="55" width="440" height="390" rx="12" fill="#f3fbf5" stroke="#2e8b57" stroke-width="2"/>
+  <text x="560" y="80" font-size="14" font-weight="700" fill="#2e8b57">Device bootloader: PUBLIC side</text>
+
+  <rect x="560" y="95" width="250" height="44" rx="8" fill="#ffffff" stroke="#374151"/>
+  <text x="685" y="122" text-anchor="middle" font-size="14" fill="#1f2937">firmware in flash</text>
+  <rect x="560" y="165" width="250" height="44" rx="8" fill="#e8f6ec" stroke="#2e8b57"/>
+  <text x="685" y="192" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2937">SHA-256</text>
+  <rect x="560" y="235" width="250" height="44" rx="8" fill="#ffffff" stroke="#374151"/>
+  <text x="685" y="262" text-anchor="middle" font-size="14" fill="#1f2937">digest (32 bytes)</text>
+  <rect x="560" y="305" width="250" height="44" rx="8" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+  <text x="685" y="332" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2937">Verify</text>
+
+  <line x1="685" y1="139" x2="685" y2="161" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="685" y1="209" x2="685" y2="231" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="685" y1="279" x2="685" y2="301" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="830" y="235" width="135" height="44" rx="8" fill="#ffffff" stroke="#2f6fbe" stroke-width="2"/>
+  <text x="897" y="253" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2937">signature</text>
+  <text x="897" y="271" text-anchor="middle" font-size="12" fill="#374151">(from the image)</text>
+  <line x1="850" y1="279" x2="812" y2="310" stroke="#2f6fbe" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="830" y="305" width="135" height="44" rx="8" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+  <text x="897" y="323" text-anchor="middle" font-size="13" font-weight="700" fill="#2e8b57">PUBLIC key</text>
+  <text x="897" y="341" text-anchor="middle" font-size="12" fill="#374151">(eFuse / OTP, locked)</text>
+  <line x1="830" y1="327" x2="814" y2="327" stroke="#2e8b57" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="560" y="385" width="190" height="45" rx="8" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+  <text x="655" y="413" text-anchor="middle" font-size="14" font-weight="700" fill="#2e8b57">✓ match → run it</text>
+  <rect x="770" y="385" width="195" height="45" rx="8" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+  <text x="867" y="413" text-anchor="middle" font-size="14" font-weight="700" fill="#c0392b">✗ no match → reject</text>
+  <line x1="660" y1="349" x2="655" y2="381" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="720" y1="349" x2="840" y2="381" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+</svg>

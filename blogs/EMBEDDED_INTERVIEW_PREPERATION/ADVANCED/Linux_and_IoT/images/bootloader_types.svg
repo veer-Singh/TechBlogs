@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 764" width="1000" height="764"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="764" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">Type 1: by stages. Does it start in one step, or in a relay?</text>
+<rect x="20.0" y="64.0" width="310.0" height="680.0" rx="16" fill="#ffffff" stroke="#2e8b57" stroke-width="2"/>
+<text x="175.0" y="94.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16.5" font-weight="700" fill="#2e8b57">Single-stage</text>
+<text x="175.0" y="114.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">simple microcontrollers: Arduino, basic STM32</text>
+<rect x="42.0" y="136.0" width="266.0" height="72.0" rx="12" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="175.0" y="155.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Boot ROM</text>
+<text x="175.0" y="181.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">built into the chip; finds the</text>
+<text x="175.0" y="198.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">bootloader</text>
+<circle cx="44.0" cy="138" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="44.0" y="143.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">1</text>
+<line x1="175.0" y1="210.0" x2="175.0" y2="298.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="42.0" y="303.0" width="266.0" height="72.0" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="175.0" y="322.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Bootloader</text>
+<text x="175.0" y="348.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">in flash; checks the app, can</text>
+<text x="175.0" y="365.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">update it</text>
+<circle cx="44.0" cy="305.0" r="14" fill="#2e8b57" stroke="#ffffff" stroke-width="2.5"/>
+<text x="44.0" y="310.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">2</text>
+<line x1="175.0" y1="377.0" x2="175.0" y2="465.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="42.0" y="470.0" width="266.0" height="72.0" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="175.0" y="498.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Your application</text>
+<text x="175.0" y="523.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">runs straight from flash</text>
+<circle cx="44.0" cy="472.0" r="14" fill="#2e8b57" stroke="#ffffff" stroke-width="2.5"/>
+<text x="44.0" y="477.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">3</text>
+<rect x="34.0" y="600.0" width="282.0" height="128.0" rx="12" fill="#0f1b2d"/>
+<text x="175.0" y="638.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#ffffff">Why one step is enough</text>
+<text x="175.0" y="664.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">flash and SRAM work at power-on.</text>
+<text x="175.0" y="681.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">Limit: the bootloader itself</text>
+<text x="175.0" y="699.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">can't be updated safely</text>
+<rect x="345.0" y="64.0" width="310.0" height="680.0" rx="16" fill="#ffffff" stroke="#7b3fbf" stroke-width="2"/>
+<text x="500.0" y="94.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16.5" font-weight="700" fill="#7b3fbf">Multi-stage microcontroller</text>
+<text x="500.0" y="114.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">secure MCUs: nRF (NSIB + MCUboot), STM32H5</text>
+<rect x="367.0" y="136.0" width="266.0" height="62.0" rx="12" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="500.0" y="159.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Boot ROM</text>
+<text x="500.0" y="184.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">built into the chip</text>
+<circle cx="369.0" cy="138" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="369.0" y="143.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">1</text>
+<line x1="500.0" y1="200.0" x2="500.0" y2="239.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="367.0" y="244.0" width="266.0" height="72.0" rx="12" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+<text x="500.0" y="263.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Stage 1: immutable</text>
+<text x="500.0" y="289.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">never changes; checks stage 2's</text>
+<text x="500.0" y="306.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">signature</text>
+<circle cx="369.0" cy="246.0" r="14" fill="#c0392b" stroke="#ffffff" stroke-width="2.5"/>
+<text x="369.0" y="251.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">2</text>
+<line x1="500.0" y1="318.0" x2="500.0" y2="357.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="367.0" y="362.0" width="266.0" height="72.0" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="500.0" y="381.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Stage 2: updatable</text>
+<text x="500.0" y="407.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">e.g. MCUboot; checks and updates</text>
+<text x="500.0" y="424.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">the app</text>
+<circle cx="369.0" cy="364.0" r="14" fill="#7b3fbf" stroke="#ffffff" stroke-width="2.5"/>
+<text x="369.0" y="369.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">3</text>
+<line x1="500.0" y1="436.0" x2="500.0" y2="475.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="367.0" y="480.0" width="266.0" height="62.0" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="500.0" y="503.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Your application</text>
+<text x="500.0" y="528.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">runs from flash</text>
+<circle cx="369.0" cy="482.0" r="14" fill="#2e8b57" stroke="#ffffff" stroke-width="2.5"/>
+<text x="369.0" y="487.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">4</text>
+<rect x="359.0" y="600.0" width="282.0" height="128.0" rx="12" fill="#0f1b2d"/>
+<text x="500.0" y="638.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#ffffff">Why two stages</text>
+<text x="500.0" y="664.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">so the bootloader itself can be</text>
+<text x="500.0" y="681.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">updated securely: stage 1 never</text>
+<text x="500.0" y="699.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">changes and always checks stage 2</text>
+<rect x="670.0" y="64.0" width="310.0" height="680.0" rx="16" fill="#ffffff" stroke="#2f6fbe" stroke-width="2"/>
+<text x="825.0" y="94.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16.5" font-weight="700" fill="#2f6fbe">Multi-stage Linux board</text>
+<text x="825.0" y="114.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">Raspberry Pi, BeagleBone, i.MX</text>
+<rect x="692.0" y="136.0" width="266.0" height="62.0" rx="12" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="825.0" y="159.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Boot ROM</text>
+<text x="825.0" y="184.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">built into the chip; finds stage 1</text>
+<circle cx="694.0" cy="138" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="694.0" y="143.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">1</text>
+<line x1="825.0" y1="200.0" x2="825.0" y2="239.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="692.0" y="244.0" width="266.0" height="72.0" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="825.0" y="263.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Stage 1: SPL / MLO</text>
+<text x="825.0" y="289.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">tiny; runs in SRAM; switches on</text>
+<text x="825.0" y="306.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">DRAM</text>
+<circle cx="694.0" cy="246.0" r="14" fill="#d97d00" stroke="#ffffff" stroke-width="2.5"/>
+<text x="694.0" y="251.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">2</text>
+<line x1="825.0" y1="318.0" x2="825.0" y2="357.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="692.0" y="362.0" width="266.0" height="72.0" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="825.0" y="381.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Stage 2: U-Boot</text>
+<text x="825.0" y="407.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">full bootloader; runs in DRAM;</text>
+<text x="825.0" y="424.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">loads Linux</text>
+<circle cx="694.0" cy="364.0" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="694.0" y="369.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">3</text>
+<line x1="825.0" y1="436.0" x2="825.0" y2="475.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="692.0" y="480.0" width="266.0" height="62.0" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="825.0" y="503.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Linux kernel</text>
+<text x="825.0" y="528.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">the operating system starts</text>
+<circle cx="694.0" cy="482.0" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="694.0" y="487.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">4</text>
+<rect x="684.0" y="600.0" width="282.0" height="128.0" rx="12" fill="#0f1b2d"/>
+<text x="825.0" y="638.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#ffffff">Why a relay is needed</text>
+<text x="825.0" y="664.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">the big DRAM is OFF at power-on;</text>
+<text x="825.0" y="681.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">a tiny stage 1 must switch it on</text>
+<text x="825.0" y="699.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">before stage 2 fits anywhere</text>
+</svg>

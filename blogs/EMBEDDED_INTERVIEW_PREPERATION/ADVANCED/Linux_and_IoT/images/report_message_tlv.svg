@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 660" width="1000" height="660"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="660" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">A report message: layers from radio to value, and two ways to encode it</text>
+<rect x="20" y="58" width="960" height="36" rx="8" fill="#eef0f3" stroke="#6b7280" stroke-width="1.6"/>
+<text x="36" y="81" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Radio frame (PHY / MAC)</text>
+<text x="966" y="81" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">preamble, addressing, security (AES-128), CRC</text>
+<rect x="60" y="100" width="880" height="36" rx="8" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.6"/>
+<text x="76" y="123" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Wirepas packet</text>
+<text x="926" y="123" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">source + destination node address · source + destination ENDPOINT (port) · QoS</text>
+<rect x="100" y="142" width="800" height="36" rx="8" fill="#fff3e0" stroke="#e08a00" stroke-width="1.6"/>
+<text x="116" y="165" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Application payload: the "report data" message</text>
+<text x="886" y="165" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">defined by YOUR application (e.g. ZCL frame or TLV)</text>
+<rect x="140" y="184" width="720" height="36" rx="8" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.6"/>
+<text x="156" y="207" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Value</text>
+<text x="846" y="207" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">MeasuredValue = 2355 → 23.55 °C</text>
+<rect x="20" y="238" width="960" height="170" rx="14" fill="#f6f9fe" stroke="#2f6fbe" stroke-width="1.5"/>
+<text x="500" y="262" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#2f6fbe">Option A: ZCL "Report Attributes" frame (Temperature Measurement cluster 0x0402)</text>
+<rect x="60" y="276" width="110" height="40" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.6"/>
+<text x="115.0" y="302" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">18</text>
+<text x="115.0" y="334" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">frame control</text>
+<text x="115.0" y="352" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">server → client,</text>
+<text x="115.0" y="368" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">no default response</text>
+<rect x="190" y="276" width="110" height="40" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.6"/>
+<text x="245.0" y="302" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">01</text>
+<text x="245.0" y="334" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">sequence</text>
+<text x="245.0" y="352" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">number</text>
+<rect x="320" y="276" width="110" height="40" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.6"/>
+<text x="375.0" y="302" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">0A</text>
+<text x="375.0" y="334" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">command</text>
+<text x="375.0" y="352" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">Report Attributes</text>
+<rect x="450" y="276" width="130" height="40" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.6"/>
+<text x="515.0" y="302" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">00 00</text>
+<text x="515.0" y="334" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">attribute ID</text>
+<text x="515.0" y="352" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">0x0000 =</text>
+<text x="515.0" y="368" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">MeasuredValue</text>
+<rect x="600" y="276" width="110" height="40" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.6"/>
+<text x="655.0" y="302" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">29</text>
+<text x="655.0" y="334" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">data type</text>
+<text x="655.0" y="352" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">0x29 = int16</text>
+<rect x="730" y="276" width="130" height="40" rx="6" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="1.6"/>
+<text x="795.0" y="302" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">33 09</text>
+<text x="795.0" y="334" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">value</text>
+<text x="795.0" y="352" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">0x0933 = 2355</text>
+<text x="795.0" y="368" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">= 23.55 °C</text>
+<text x="500" y="396" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">Multi-byte numbers are little-endian (lowest byte first). The cluster ID travels outside the ZCL frame (e.g. in the header or APS layer).</text>
+<rect x="20" y="420" width="960" height="226" rx="14" fill="#fbf8fe" stroke="#7b3fbf" stroke-width="1.5"/>
+<text x="500" y="444" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#7b3fbf">Option B: CHIP / Matter TLV: every element = control byte + (tag) + (length) + value</text>
+<rect x="60" y="458" width="120" height="40" rx="6" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="1.6"/>
+<text x="120.0" y="484" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">21</text>
+<text x="120.0" y="516" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">control byte</text>
+<text x="120.0" y="534" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">see bits below</text>
+<text x="120.0" y="550" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151"></text>
+<rect x="200" y="458" width="120" height="40" rx="6" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="1.6"/>
+<text x="260.0" y="484" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">02</text>
+<text x="260.0" y="516" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">tag</text>
+<text x="260.0" y="534" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">context tag 2</text>
+<text x="260.0" y="550" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">("Data")</text>
+<rect x="340" y="458" width="120" height="40" rx="6" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="1.6"/>
+<text x="400.0" y="484" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">33 09</text>
+<text x="400.0" y="516" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">value</text>
+<text x="400.0" y="534" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">int16 = 2355</text>
+<text x="400.0" y="550" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">little-endian</text>
+<rect x="520" y="458" width="30" height="40" rx="5" fill="#fff3e0" stroke="#e08a00" stroke-width="1.5"/>
+<text x="535" y="484" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">0</text>
+<rect x="554" y="458" width="30" height="40" rx="5" fill="#fff3e0" stroke="#e08a00" stroke-width="1.5"/>
+<text x="569" y="484" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">0</text>
+<rect x="588" y="458" width="30" height="40" rx="5" fill="#fff3e0" stroke="#e08a00" stroke-width="1.5"/>
+<text x="603" y="484" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">1</text>
+<rect x="622" y="458" width="30" height="40" rx="5" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="637" y="484" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">0</text>
+<rect x="656" y="458" width="30" height="40" rx="5" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="671" y="484" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">0</text>
+<rect x="690" y="458" width="30" height="40" rx="5" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="705" y="484" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">0</text>
+<rect x="724" y="458" width="30" height="40" rx="5" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="739" y="484" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">0</text>
+<rect x="758" y="458" width="30" height="40" rx="5" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="773" y="484" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#1f2937">1</text>
+<polyline points="520,506 520,512 620,512 620,506" fill="none" stroke="#6b7280" stroke-width="1.4" stroke-linejoin="round"/>
+<text x="570" y="530" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">tag control</text>
+<text x="570" y="546" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">001 = context tag</text>
+<polyline points="622,506 622,512 792,512 792,506" fill="none" stroke="#6b7280" stroke-width="1.4" stroke-linejoin="round"/>
+<text x="707" y="530" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">element type</text>
+<text x="707" y="546" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">00001 = signed int, 2 bytes</text>
+<text x="870" y="478" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="15" font-weight="700" fill="#7b3fbf">0x21</text>
+<text x="500" y="580" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="12" font-weight="700" fill="#1f2937">Containers: 15 = structure · 16 = array · 17 = list · 18 = end of container</text>
+<text x="500" y="604" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">A Matter ReportData message nests these: path (endpoint 1, cluster 0x0402, attribute 0x0000) + data version + value.</text>
+<text x="500" y="624" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#1f2937">TLV is self-describing: a receiver can skip unknown tags, so new fields don't break old devices.</text>
+</svg>

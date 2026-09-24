@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="620" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">Kubernetes objects: how an app is described and reached</text>
+<rect x="20" y="250" width="120" height="80" rx="10" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="80" y="284" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Clients</text>
+<text x="80" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#374151">browser, devices</text>
+<rect x="170" y="240" width="150" height="100" rx="10" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="245" y="272" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">Ingress</text>
+<text x="245" y="294" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">HTTP(S) routing</text>
+<text x="245" y="311" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">+ TLS, by host / path</text>
+<rect x="350" y="240" width="160" height="100" rx="10" fill="#fff3e0" stroke="#e08a00" stroke-width="2"/>
+<text x="430" y="272" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">Service</text>
+<text x="430" y="294" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">stable name + IP</text>
+<text x="430" y="311" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">load-balances pods</text>
+<line x1="140" y1="290" x2="168" y2="290" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<line x1="320" y1="290" x2="348" y2="290" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="565" y="120" width="160" height="80" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="645" y="148" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Pod</text>
+<text x="645" y="168" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">container: collector</text>
+<text x="645" y="186" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="10.5" font-weight="700" fill="#2e8b57">label app=collector</text>
+<line x1="510" y1="290" x2="563" y2="160" stroke="#e08a00" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="565" y="250" width="160" height="80" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="645" y="278" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Pod</text>
+<text x="645" y="298" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">container: collector</text>
+<text x="645" y="316" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="10.5" font-weight="700" fill="#2e8b57">label app=collector</text>
+<line x1="510" y1="290" x2="563" y2="290" stroke="#e08a00" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="565" y="380" width="160" height="80" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="645" y="408" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Pod</text>
+<text x="645" y="428" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">container: collector</text>
+<text x="645" y="446" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="10.5" font-weight="700" fill="#2e8b57">label app=collector</text>
+<line x1="510" y1="290" x2="563" y2="420" stroke="#e08a00" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="430" y="358" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#e08a00">selects pods by label</text>
+<text x="430" y="373" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="11" font-weight="400" fill="#1f2937">selector: app=collector</text>
+<rect x="790" y="70" width="185" height="80" rx="10" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="882" y="98" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Deployment</text>
+<text x="882" y="118" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="10.5" font-weight="400" fill="#374151">replicas: 3, image v1.4</text>
+<text x="882" y="136" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#374151">rolling updates, rollback</text>
+<rect x="790" y="180" width="185" height="64" rx="10" fill="#f6f9fe" stroke="#2f6fbe" stroke-width="1.5"/>
+<text x="882" y="206" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">ReplicaSet</text>
+<text x="882" y="226" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#374151">keeps 3 pods alive</text>
+<line x1="882" y1="150" x2="882" y2="178" stroke="#2f6fbe" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="790" y1="212" x2="727" y2="160" stroke="#2f6fbe" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="790" y1="218" x2="727" y2="290" stroke="#2f6fbe" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="790" y1="224" x2="727" y2="420" stroke="#2f6fbe" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="790" y="300" width="185" height="56" rx="10" fill="#e0f2f1" stroke="#0f766e" stroke-width="2"/>
+<text x="882" y="324" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">ConfigMap</text>
+<text x="882" y="342" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#374151">settings as files / env</text>
+<rect x="790" y="370" width="185" height="56" rx="10" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+<text x="882" y="394" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Secret</text>
+<text x="882" y="412" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#374151">passwords, keys, certs</text>
+<line x1="790" y1="328" x2="727" y2="300" stroke="#0f766e" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="4 3"/>
+<line x1="790" y1="398" x2="727" y2="410" stroke="#c0392b" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="4 3"/>
+<rect x="565" y="490" width="160" height="56" rx="10" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="645" y="514" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">PersistentVolume</text>
+<text x="645" y="532" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" fill="#374151">Claim → real storage</text>
+<line x1="645" y1="488" x2="645" y2="462" stroke="#374151" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="4 3"/>
+<rect x="20" y="388" width="490" height="164" rx="12" fill="#fbfbfc" stroke="#6b7280" stroke-width="1.2"/>
+<text x="40" y="412" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Reading it</text>
+<text x="40" y="436" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2937">1. Deployment says WHAT to run and how many (3 x v1.4)</text>
+<text x="40" y="455" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2937">2. ReplicaSet makes sure 3 pods always exist</text>
+<text x="40" y="474" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2937">3. Pods come and go, and their IPs change</text>
+<text x="40" y="493" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2937">4. Service gives them ONE stable name and spreads traffic</text>
+<text x="40" y="512" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2937">5. Ingress exposes HTTP(S) routes to the outside</text>
+<text x="40" y="531" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1f2937">6. ConfigMap / Secret inject settings; volumes keep data</text>
+<rect x="20" y="562" width="955" height="44" rx="10" fill="#ffffff" stroke="#6b7280" stroke-width="1.2"/>
+<text x="497" y="589" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#374151">Other workload types:  StatefulSet (databases)  ·  DaemonSet (one pod per node, e.g. on every edge gateway)  ·  Job / CronJob (run to completion)</text>
+</svg>

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 458" width="1000" height="458"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="458.34999999999997" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">Boot pins: the board tells the Boot ROM where to look</text>
+<text x="500.0" y="62.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#374151">A typical example (each chip has its own table). If boot settings are burned into OTP / eFuse, they win over the pins</text>
+<rect x="20.0" y="84.0" width="457.0" height="72.3" rx="12" fill="#0f1b2d"/>
+<text x="248.5" y="112.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#ffffff">Reset</text>
+<text x="248.5" y="138.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">the Boot ROM starts</text>
+<circle cx="22.0" cy="86" r="14" fill="#f0a23b" stroke="#ffffff" stroke-width="2.5"/>
+<text x="22.0" y="91.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">1</text>
+<rect x="523.0" y="84.0" width="457.0" height="72.3" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="751.5" y="112.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Read BOOT0 and BOOT1</text>
+<text x="751.5" y="138.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">resistors or switches set each pin HIGH (1) or LOW (0)</text>
+<circle cx="525.0" cy="86" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="525.0" y="91.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">2</text>
+<line x1="479.0" y1="120.2" x2="518.0" y2="120.2" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<polyline points="751.5,158.3 751.5,178.3 500.0,178.3 500.0,196.3" fill="none" stroke="#374151" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="220.0" y="200.3" width="560.0" height="48.9" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="500.0" y="229.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15.5" font-weight="700" fill="#1f2937">Which combination?</text>
+<polyline points="500.0,251.2 500.0,279.2 134.0,279.2 134.0,341.2" fill="none" stroke="#2e8b57" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="71.6" y="292.2" width="124.7" height="22" rx="11" fill="#ffffff" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="134.0" y="307.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2e8b57">BOOT0=0, BOOT1=0</text>
+<rect x="20.0" y="345.2" width="228.0" height="87.1" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="134.0" y="373.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Internal flash</text>
+<text x="134.0" y="397.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">normal boot: run the bootloader</text>
+<text x="134.0" y="414.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">in the chip's flash</text>
+<polyline points="500.0,251.2 500.0,279.2 378.0,279.2 378.0,341.2" fill="none" stroke="#2f6fbe" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="315.6" y="292.2" width="124.7" height="22" rx="11" fill="#ffffff" stroke="#2f6fbe" stroke-width="1.5"/>
+<text x="378.0" y="307.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#2f6fbe">BOOT0=1, BOOT1=0</text>
+<rect x="264.0" y="345.2" width="228.0" height="87.1" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="378.0" y="373.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">External flash</text>
+<text x="378.0" y="397.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">SPI / NOR / NAND flash chip on</text>
+<text x="378.0" y="414.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">the board</text>
+<polyline points="500.0,251.2 500.0,279.2 622.0,279.2 622.0,341.2" fill="none" stroke="#7b3fbf" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="559.6" y="292.2" width="124.7" height="22" rx="11" fill="#ffffff" stroke="#7b3fbf" stroke-width="1.5"/>
+<text x="622.0" y="307.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#7b3fbf">BOOT0=0, BOOT1=1</text>
+<rect x="508.0" y="345.2" width="228.0" height="87.1" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="622.0" y="373.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">USB</text>
+<text x="622.0" y="397.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">serial download mode: a PC</text>
+<text x="622.0" y="414.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">sends the firmware</text>
+<polyline points="500.0,251.2 500.0,279.2 866.0,279.2 866.0,341.2" fill="none" stroke="#d97d00" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="803.6" y="292.2" width="124.7" height="22" rx="11" fill="#ffffff" stroke="#d97d00" stroke-width="1.5"/>
+<text x="866.0" y="307.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#d97d00">BOOT0=1, BOOT1=1</text>
+<rect x="752.0" y="345.2" width="228.0" height="87.1" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="866.0" y="373.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">SD card</text>
+<text x="866.0" y="397.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">load the bootloader from a</text>
+<text x="866.0" y="414.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">memory card</text>
+</svg>

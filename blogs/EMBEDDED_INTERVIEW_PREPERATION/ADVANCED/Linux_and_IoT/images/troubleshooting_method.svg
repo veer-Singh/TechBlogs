@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="640" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">A troubleshooting method that works on any Linux problem</text>
+<rect x="18" y="64" width="150" height="96" rx="12" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+<text x="93" y="94" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">1 Describe</text>
+<text x="93" y="118" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">What exactly fails?</text>
+<text x="93" y="136" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">Since when?</text>
+<line x1="168" y1="112" x2="179" y2="112" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="181" y="64" width="150" height="96" rx="12" fill="#fff3e0" stroke="#e08a00" stroke-width="2"/>
+<text x="256" y="94" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">2 Collect</text>
+<text x="256" y="118" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">Logs, status,</text>
+<text x="256" y="136" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">error messages</text>
+<line x1="331" y1="112" x2="342" y2="112" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="344" y="64" width="150" height="96" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="419" y="94" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">3 Locate</text>
+<text x="419" y="118" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">Which layer is</text>
+<text x="419" y="136" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">broken?</text>
+<line x1="494" y1="112" x2="505" y2="112" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="507" y="64" width="150" height="96" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="582" y="94" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">4 Test</text>
+<text x="582" y="118" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">One hypothesis,</text>
+<text x="582" y="136" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">one change</text>
+<line x1="657" y1="112" x2="668" y2="112" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="670" y="64" width="150" height="96" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="745" y="94" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">5 Fix + verify</text>
+<text x="745" y="118" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">Does the symptom</text>
+<text x="745" y="136" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">really go away?</text>
+<line x1="820" y1="112" x2="831" y2="112" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="833" y="64" width="150" height="96" rx="12" fill="#e0f2f1" stroke="#0f766e" stroke-width="2"/>
+<text x="908" y="94" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">6 Prevent</text>
+<text x="908" y="118" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">Monitor, document,</text>
+<text x="908" y="136" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">automate</text>
+<text x="500" y="190" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Step 3 in detail: check the layers from the bottom up (or jump to where the evidence points)</text>
+<rect x="40" y="210" width="210" height="48" rx="8" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="145" y="240" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Application</text>
+<rect x="260" y="210" width="360" height="48" rx="8" fill="#ffffff" stroke="#6b7280" stroke-width="1.2"/>
+<text x="280" y="240" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">exit code ($?), app logs, strace</text>
+<rect x="40" y="268" width="210" height="48" rx="8" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="145" y="298" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Service</text>
+<rect x="260" y="268" width="360" height="48" rx="8" fill="#ffffff" stroke="#6b7280" stroke-width="1.2"/>
+<text x="280" y="298" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">systemctl status, journalctl -u</text>
+<rect x="40" y="326" width="210" height="48" rx="8" fill="#e0f2f1" stroke="#0f766e" stroke-width="2"/>
+<text x="145" y="356" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Network</text>
+<rect x="260" y="326" width="360" height="48" rx="8" fill="#ffffff" stroke="#6b7280" stroke-width="1.2"/>
+<text x="280" y="356" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">ip addr, ip route, ping, ss, curl</text>
+<rect x="40" y="384" width="210" height="48" rx="8" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="145" y="414" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Storage / filesystem</text>
+<rect x="260" y="384" width="360" height="48" rx="8" fill="#ffffff" stroke="#6b7280" stroke-width="1.2"/>
+<text x="280" y="414" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">df -h, df -i, mount, dmesg</text>
+<rect x="40" y="442" width="210" height="48" rx="8" fill="#fff3e0" stroke="#e08a00" stroke-width="2"/>
+<text x="145" y="472" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Kernel / drivers</text>
+<rect x="260" y="442" width="360" height="48" rx="8" fill="#ffffff" stroke="#6b7280" stroke-width="1.2"/>
+<text x="280" y="472" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">dmesg, lsmod, /sys, /dev</text>
+<rect x="40" y="500" width="210" height="48" rx="8" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="145" y="530" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Hardware / power</text>
+<rect x="260" y="500" width="360" height="48" rx="8" fill="#ffffff" stroke="#6b7280" stroke-width="1.2"/>
+<text x="280" y="530" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="13" font-weight="400" fill="#1f2937">LEDs, voltages, cables, console</text>
+<line x1="20" y1="550" x2="20" y2="214" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="500" y="580" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="1" font-weight="400" fill="#1f2937"></text>
+<rect x="650" y="210" width="330" height="338" rx="14" fill="#fbfbfc" stroke="#6b7280" stroke-width="1.5"/>
+<text x="815" y="238" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">Golden rules</text>
+<circle cx="673" cy="266" r="4" fill="#e08a00"/>
+<text x="690" y="270" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">Read the FIRST error, not the last</text>
+<circle cx="673" cy="300" r="4" fill="#e08a00"/>
+<text x="690" y="304" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">Check what changed recently</text>
+<circle cx="673" cy="334" r="4" fill="#e08a00"/>
+<text x="690" y="338" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">Reproduce it before fixing it</text>
+<circle cx="673" cy="368" r="4" fill="#e08a00"/>
+<text x="690" y="372" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">Change one thing at a time</text>
+<circle cx="673" cy="402" r="4" fill="#e08a00"/>
+<text x="690" y="406" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">Look at the evidence, not guesses</text>
+<circle cx="673" cy="436" r="4" fill="#e08a00"/>
+<text x="690" y="440" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">Write down what you tried</text>
+<circle cx="673" cy="470" r="4" fill="#e08a00"/>
+<text x="690" y="474" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">After the fix, add a check so</text>
+<text x="690" y="492" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">it can't come back silently</text>
+<rect x="20" y="568" width="960" height="58" rx="12" fill="#0f1b2d"/>
+<text x="500" y="592" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#f0a23b">Three commands that answer most questions first:</text>
+<text x="500" y="614" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="14" font-weight="400" fill="#e6edf3">dmesg | tail -50     ·     journalctl -b -p err     ·     systemctl --failed</text>
+</svg>

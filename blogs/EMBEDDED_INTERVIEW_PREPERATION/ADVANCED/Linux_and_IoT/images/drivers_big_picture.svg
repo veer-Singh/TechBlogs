@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 670" width="1000" height="670"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="670" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">Where a device driver lives, and what it connects</text>
+<text x="62" y="92" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#2e8b57">USER SPACE</text>
+<text x="62" y="109" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">apps</text>
+<text x="62" y="360" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#e08a00">KERNEL</text>
+<text x="62" y="377" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">privileged</text>
+<text x="62" y="570" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#6b7280">HARDWARE</text>
+<rect x="130" y="64" width="198" height="44" rx="8" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.6"/>
+<text x="229" y="91" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="12.5" font-weight="700" fill="#1f2937">cat /dev/hello</text>
+<rect x="342" y="64" width="198" height="44" rx="8" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.6"/>
+<text x="441" y="91" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="12.5" font-weight="700" fill="#1f2937">read /sys/bus/iio/...</text>
+<rect x="554" y="64" width="198" height="44" rx="8" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.6"/>
+<text x="653" y="91" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">sockets: ip, ping</text>
+<rect x="766" y="64" width="198" height="44" rx="8" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.6"/>
+<text x="865" y="91" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">gpioset / LEDs</text>
+<rect x="130" y="120" width="848" height="36" rx="9" fill="#0f1b2d"/>
+<text x="554" y="143" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#f6f7f4">Interfaces the driver exposes:  /dev nodes  ·  sysfs files  ·  network interfaces  ·  ioctl</text>
+<rect x="120" y="168" width="868" height="358" rx="14" fill="#fffaf2" stroke="#e08a00" stroke-width="2.5" stroke-dasharray="8 5"/>
+<text x="140" y="192" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#b86e00">Subsystem frameworks (the kernel already knows how to present these)</text>
+<rect x="140" y="202" width="97" height="38" rx="7" fill="#ffffff" stroke="#6b7280" stroke-width="1.4"/>
+<text x="188" y="226" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">tty / serial</text>
+<rect x="245" y="202" width="97" height="38" rx="7" fill="#ffffff" stroke="#6b7280" stroke-width="1.4"/>
+<text x="293" y="226" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">IIO sensors</text>
+<rect x="350" y="202" width="97" height="38" rx="7" fill="#ffffff" stroke="#6b7280" stroke-width="1.4"/>
+<text x="398" y="226" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">input</text>
+<rect x="455" y="202" width="97" height="38" rx="7" fill="#ffffff" stroke="#6b7280" stroke-width="1.4"/>
+<text x="503" y="226" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">net</text>
+<rect x="560" y="202" width="97" height="38" rx="7" fill="#ffffff" stroke="#6b7280" stroke-width="1.4"/>
+<text x="608" y="226" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">block</text>
+<rect x="665" y="202" width="97" height="38" rx="7" fill="#ffffff" stroke="#6b7280" stroke-width="1.4"/>
+<text x="713" y="226" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1f2937">GPIO / LED</text>
+<rect x="140" y="256" width="620" height="118" rx="12" fill="#fdecea" stroke="#c0392b" stroke-width="2.5"/>
+<text x="450" y="282" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#c0392b">YOUR DRIVER</text>
+<rect x="155" y="294" width="188" height="68" rx="8" fill="#ffffff" stroke="#c0392b" stroke-width="1.4"/>
+<text x="249" y="314" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">probe() / remove()</text>
+<text x="249" y="332" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">find and set up</text>
+<text x="249" y="348" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">the hardware</text>
+<rect x="357" y="294" width="188" height="68" rx="8" fill="#ffffff" stroke="#c0392b" stroke-width="1.4"/>
+<text x="451" y="314" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">callbacks</text>
+<text x="451" y="332" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">file ops or framework</text>
+<text x="451" y="348" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">ops: read, write, ...</text>
+<rect x="559" y="294" width="188" height="68" rx="8" fill="#ffffff" stroke="#c0392b" stroke-width="1.4"/>
+<text x="653" y="314" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">interrupt handler</text>
+<text x="653" y="332" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">+ deferred work</text>
+<text x="653" y="348" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">(threaded IRQ, workqueue)</text>
+<rect x="140" y="390" width="620" height="44" rx="10" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="450" y="417" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Bus core: platform · I2C · SPI · USB · PCI  (matches devices with drivers)</text>
+<rect x="140" y="448" width="620" height="64" rx="10" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="450" y="473" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#2f6fbe">Kernel services the driver uses</text>
+<text x="450" y="495" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">memory + DMA · MMIO (ioremap) · clocks · regulators · pinctrl · GPIO · IRQ · timers</text>
+<rect x="780" y="256" width="190" height="178" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="875" y="282" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#7b3fbf">Device tree</text>
+<text x="795" y="308" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#1f2937">compatible =</text>
+<text x="795" y="330" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#1f2937">  "acme,sensor"</text>
+<text x="795" y="352" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#1f2937">reg = &lt;addr size&gt;</text>
+<text x="795" y="374" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#1f2937">interrupts = &lt;...&gt;</text>
+<text x="795" y="396" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#1f2937">clocks = &lt;...&gt;</text>
+<line x1="780" y1="412" x2="764" y2="412" stroke="#7b3fbf" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="875" y="460" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#374151">describes WHAT is on</text>
+<text x="875" y="476" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#374151">the board; the driver</text>
+<text x="875" y="492" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#374151">knows HOW to use it</text>
+<rect x="120" y="540" width="868" height="58" rx="12" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="554" y="575" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Device: registers (memory-mapped or over a bus) · interrupt line · DMA · clock · power</text>
+<rect x="20" y="612" width="960" height="44" rx="12" fill="#0f1b2d"/>
+<text x="500" y="640" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#f6f7f4"><tspan font-weight="700" fill="#f0a23b">A driver</tspan> turns a device's registers and interrupts into a standard Linux interface.</text>
+</svg>

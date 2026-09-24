@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 227" width="1000" height="227"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="226.85" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">The device tree's journey: from a text file to working devices</text>
+<rect x="20.0" y="78.0" width="205.5" height="124.8" rx="12" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="122.8" y="124.3" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">myboard.dts</text>
+<text x="122.8" y="150.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">human-readable text you</text>
+<text x="122.8" y="167.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">write</text>
+<circle cx="22.0" cy="80" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="22.0" y="85.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">1</text>
+<rect x="271.5" y="78.0" width="205.5" height="124.8" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="374.2" y="124.3" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">myboard.dtb</text>
+<text x="374.2" y="150.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">binary made by the dtc</text>
+<text x="374.2" y="167.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">compiler</text>
+<circle cx="273.5" cy="80" r="14" fill="#d97d00" stroke="#ffffff" stroke-width="2.5"/>
+<text x="273.5" y="85.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">2</text>
+<line x1="229.5" y1="140.4" x2="266.5" y2="140.4" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="523.0" y="78.0" width="205.5" height="124.8" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="625.8" y="124.3" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Linux kernel</text>
+<text x="625.8" y="150.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">U-Boot passes it the .dtb</text>
+<text x="625.8" y="167.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">address</text>
+<circle cx="525.0" cy="80" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="525.0" y="85.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">3</text>
+<line x1="481.0" y1="140.4" x2="518.0" y2="140.4" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="774.5" y="78.0" width="205.5" height="124.8" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="877.2" y="106.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Drivers probe</text>
+<text x="877.2" y="132.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">kernel matches</text>
+<text x="877.2" y="150.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">'compatible' strings →</text>
+<text x="877.2" y="167.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">devices appear in /dev and</text>
+<text x="877.2" y="185.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">/sys</text>
+<circle cx="776.5" cy="80" r="14" fill="#2e8b57" stroke="#ffffff" stroke-width="2.5"/>
+<text x="776.5" y="85.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">4</text>
+<line x1="732.5" y1="140.4" x2="769.5" y2="140.4" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+</svg>
