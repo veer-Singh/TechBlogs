@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" width="1000" height="520"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="520" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">The update state machine</text>
+<rect x="20.0" y="110.0" width="164.0" height="64.0" rx="12" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="102.0" y="127.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">IDLE</text>
+<text x="102.0" y="152.3" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">running the current</text>
+<text x="102.0" y="167.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">image</text>
+<rect x="219.0" y="110.0" width="164.0" height="64.0" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="301.0" y="127.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">DOWNLOADING</text>
+<text x="301.0" y="152.3" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">new image into the</text>
+<text x="301.0" y="167.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">other slot</text>
+<line x1="186.0" y1="142.0" x2="214.0" y2="142.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<circle cx="202" cy="128.0" r="10" fill="#2f6fbe" stroke="#ffffff" stroke-width="2"/>
+<text x="202.0" y="132.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">1</text>
+<rect x="418.0" y="110.0" width="164.0" height="64.0" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="500.0" y="127.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">PENDING</text>
+<text x="500.0" y="152.3" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">'try the new slot'</text>
+<text x="500.0" y="167.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">written</text>
+<line x1="385.0" y1="142.0" x2="413.0" y2="142.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<circle cx="401" cy="128.0" r="10" fill="#d97d00" stroke="#ffffff" stroke-width="2"/>
+<text x="401.0" y="132.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">2</text>
+<rect x="617.0" y="110.0" width="164.0" height="64.0" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="699.0" y="135.3" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">TESTING</text>
+<text x="699.0" y="160.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">new image boots once</text>
+<line x1="584.0" y1="142.0" x2="612.0" y2="142.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<circle cx="600" cy="128.0" r="10" fill="#7b3fbf" stroke="#ffffff" stroke-width="2"/>
+<text x="600.0" y="132.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">3</text>
+<rect x="816.0" y="110.0" width="164.0" height="64.0" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="898.0" y="135.3" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">CONFIRMED</text>
+<text x="898.0" y="160.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">new slot is now active</text>
+<line x1="783.0" y1="142.0" x2="811.0" y2="142.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<circle cx="799" cy="128.0" r="10" fill="#2e8b57" stroke="#ffffff" stroke-width="2"/>
+<text x="799.0" y="132.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">4</text>
+<rect x="617.0" y="260.0" width="164.0" height="64.0" rx="12" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+<text x="699.0" y="285.3" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">ROLLBACK</text>
+<text x="699.0" y="310.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#374151">boot the old slot</text>
+<line x1="699.0" y1="176.0" x2="699.0" y2="256.0" stroke="#c0392b" stroke-width="2.2" marker-end="url(#arrow)"/>
+<circle cx="715.0" cy="210" r="10" fill="#c0392b" stroke="#ffffff" stroke-width="2"/>
+<text x="715.0" y="214.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">5</text>
+<polyline points="617.0,292.0 102.0,292.0 102.0,178.0" fill="none" stroke="#c0392b" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="6 4"/>
+<circle cx="359.5" cy="292" r="10" fill="#c0392b" stroke="#ffffff" stroke-width="2"/>
+<text x="359.5" y="296.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">6</text>
+<polyline points="301.0,108.0 301.0,80.0 102.0,80.0 102.0,106.0" fill="none" stroke="#c0392b" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="6 4"/>
+<circle cx="201.5" cy="80" r="10" fill="#c0392b" stroke="#ffffff" stroke-width="2"/>
+<text x="201.5" y="84.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">7</text>
+<polyline points="898.0,176.0 898.0,350.0 60.0,350.0 60.0,178.0" fill="none" stroke="#2e8b57" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="6 4"/>
+<circle cx="898.0" cy="330" r="10" fill="#2e8b57" stroke="#ffffff" stroke-width="2"/>
+<text x="898.0" y="334.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">8</text>
+<circle cx="40.0" cy="396" r="10" fill="#2f6fbe"/>
+<text x="40.0" y="400.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">1</text>
+<text x="58.0" y="400.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">the app starts an OTA download</text>
+<circle cx="40.0" cy="422" r="10" fill="#d97d00"/>
+<text x="40.0" y="426.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">2</text>
+<text x="58.0" y="426.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">image verified; 'try the new slot' written</text>
+<circle cx="40.0" cy="448" r="10" fill="#7b3fbf"/>
+<text x="40.0" y="452.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">3</text>
+<text x="58.0" y="452.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">the bootloader boots the new slot once (attempts++)</text>
+<circle cx="40.0" cy="474" r="10" fill="#2e8b57"/>
+<text x="40.0" y="478.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">4</text>
+<text x="58.0" y="478.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">self-test passes: the app writes CONFIRMED</text>
+<circle cx="510.0" cy="396" r="10" fill="#c0392b"/>
+<text x="510.0" y="400.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">5</text>
+<text x="528.0" y="400.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">reset before confirming (crash, watchdog, too many attempts)</text>
+<circle cx="510.0" cy="422" r="10" fill="#c0392b"/>
+<text x="510.0" y="426.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">6</text>
+<text x="528.0" y="426.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">old slot booted again; the new one is marked INVALID</text>
+<circle cx="510.0" cy="448" r="10" fill="#c0392b"/>
+<text x="510.0" y="452.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">7</text>
+<text x="528.0" y="452.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">the download or its verification fails</text>
+<circle cx="510.0" cy="474" r="10" fill="#2e8b57"/>
+<text x="510.0" y="478.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">8</text>
+<text x="528.0" y="478.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#1f2937">done: wait for the next update</text>
+</svg>

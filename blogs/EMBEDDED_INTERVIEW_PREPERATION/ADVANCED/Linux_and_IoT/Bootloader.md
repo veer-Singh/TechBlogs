@@ -73,6 +73,7 @@
 | initramfs | Initial RAM filesystem | A small root filesystem loaded into RAM at boot |
 | IoT | Internet of Things | Connected devices such as sensors and meters |
 | IP | Intellectual Property | The company's valuable know-how in the firmware |
+| IRQ | Interrupt Request | A hardware interrupt from a peripheral |
 | IV | Initialisation Vector | A starting value that makes each encryption different |
 | IWDG | Independent Watchdog | An STM32 watchdog that runs on its own clock and resets a stuck chip |
 | JTAG | Joint Test Action Group | The standard hardware debug port |
@@ -90,6 +91,7 @@
 | NAND | "Not AND" (flash type) | High-density flash memory, named after its logic structure |
 | NFS | Network File System | Mounting files over the network |
 | NIST | National Institute of Standards and Technology | US standards body for cryptography |
+| NMI | Non-Maskable Interrupt | An interrupt that can't be disabled |
 | NOR | NOR flash (named after the NOR logic gate) | Small flash that can run code in place |
 | NSIB | nRF Secure Immutable Bootloader | Nordic's never-updated first-stage bootloader, which checks MCUboot |
 | NXP / ST / TI | NXP Semiconductors / STMicroelectronics / Texas Instruments | Chip vendors |
@@ -583,6 +585,19 @@ Step by step:
 5. **Verify the image** with a CRC and a signature.
 6. **Jump to the application.** On an MCU the application usually **runs directly from flash** ("execute in place"). Nothing is copied to RAM, and there's no DRAM to set up.
 7. **The application confirms it is healthy.** For example, it connects to the cloud and then marks itself "good". If it never confirms, the bootloader **rolls back** to the previous version at the next reset. This is the most important step for safe updates.
+
+#### What the Cortex-M does at reset: the vector table
+
+At reset the CPU **reads word 0** of the vector table into the **MSP** (Main Stack Pointer) and **word 1**, the address of `Reset_Handler`, into the **PC** (Program Counter). The startup code then copies `.data`, zeroes `.bss` and calls `main()`. The bootloader's jump to the application ([section 6.2, step 7](#step-7-hand-over-cleanly)) does the same thing by hand, using the application's table.
+
+![The Cortex-M vector table, what is at each address: offset 0x0000 holds the initial SP value, read into MSP at reset; 0x0004 the Reset handler, read into the PC; then the faults and NMI, fixed by Arm: NMI at 0x0008 (exception 2), HardFault at 0x000C (3), MemManage at 0x0010 (4), BusFault at 0x0014 (5), UsageFault at 0x0018 (6); reserved entries 7 to 10; then the system exceptions: SVCall at 0x002C (11), Debug monitor at 0x0030 (12), reserved 13, PendSV at 0x0038 (14), SysTick at 0x003C (15); then the peripheral interrupts defined by the chip maker from IRQ0 at 0x0040 (exception 16) up to IRQn at 0x0040 + 4n. Offset = exception number × 4; IRQ number = exception number − 16. The table starts at the address in VTOR](images/cortexm_vector_table.svg)
+
+1. It's an **array of 32-bit addresses** that starts at the address in **VTOR**. At reset VTOR is `0x0000_0000`, which on STM32 is the start of flash.
+2. **Word 0 is the initial stack pointer**, not a handler. **Word 1 is the Reset handler.** These are the two words the hardware reads at reset.
+3. **Words 1-15 are the system exceptions**, the same on every Cortex-M: Reset, NMI, the faults, SVCall, PendSV and SysTick.
+4. **From word 16 on are the peripheral interrupts (IRQs)**, defined by the chip maker. An STM32F4 has 82, so its table has 16 + 82 = 98 entries (392 bytes, aligned to 0x200).
+5. **Offset = exception number × 4**, and **IRQ number = exception number − 16**. CMSIS uses the IRQ number, so system exceptions are negative (for example `SysTick_IRQn = -1`).
+6. **When an interrupt fires**, the CPU reads the handler address at **VTOR + 4 × exception number** and jumps there. Example: USART1 on an STM32F4 is IRQ 37, so exception 53, at offset 53 × 4 = `0xD4`.
 
 ### 5.3 Side by side
 
@@ -1567,6 +1582,10 @@ Set the boot pins to serial download mode, connect USB or UART, and use the chip
 **Q: Can a microcontroller have a first-stage and a second-stage bootloader?**
 
 > "Yes. It doesn't need two stages for memory, because its flash and SRAM work at reset, but secure designs use them anyway. Stage 1 is small and immutable, in write-protected flash, and only verifies stage 2's signature. Stage 2, usually MCUboot, does the updates and rollback, and can itself be updated in the field. Examples are Nordic's NSIB plus MCUboot, STM32H5's STiROT plus OEMiROT, and TF-M's BL1 plus BL2."
+
+**Q: What is in the Cortex-M vector table, and how does the CPU use it?**
+
+> "An array of 32-bit addresses at the address in VTOR. Word 0 is the initial stack pointer and word 1 the reset handler: at reset the hardware loads them into MSP and PC. Words 2 to 15 are the system exceptions like NMI, HardFault and SysTick, and from word 16 on are the chip's peripheral interrupts. When an interrupt fires, the CPU reads the handler at VTOR plus 4 times the exception number. The IRQ number CMSIS uses is the exception number minus 16."
 
 **Q: Explain the Linux boot flow.**
 

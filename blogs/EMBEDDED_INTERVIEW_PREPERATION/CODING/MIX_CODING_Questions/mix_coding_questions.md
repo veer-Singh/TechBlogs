@@ -7,7 +7,8 @@ How to use this file: read the question, try it yourself, then compare with the 
 | Part | Topic | Questions |
 | --- | --- | --- |
 | A | Embedded C core challenges (bits, memory, strings, math) | Q01-Q30 |
-| B | Practice programs (numbers, strings, bits, arrays, linked lists) | B1-B11 |
+| B | Practice programs (numbers, strings, bits, arrays, linked lists) | B1-B13 |
+| C | MISRA-C style common code (memory copy, bit reversal) | C1-C2 |
 
 Common rules used throughout: use unsigned types for bit work, never shift by the type width or more, and check pointers and lengths before use.
 
@@ -238,7 +239,22 @@ int main(void) {
 }
 ```
 
-**Key concept:** a binary search over the bit positions takes 5 steps instead of 32. On Cortex-M, `__builtin_clz` maps to the `CLZ` instruction.
+**Simple way (loop):** check bits from 31 down to 0 and return the first set bit.
+
+```c
+int find_msb_loop(uint32_t val) {
+    if (val == 0) return -1;                      /* 0 has no set bits */
+
+    for (int i = 31; i >= 0; i--) {               /* start from the highest bit */
+        if (val & (1U << i)) {
+            return i;                             /* first '1' found = MSB */
+        }
+    }
+    return -1;
+}
+```
+
+**Key concept:** the loop takes up to 32 steps; the binary search over the bit positions takes 5. On Cortex-M, `__builtin_clz` maps to the `CLZ` instruction.
 
 ### Q08: Is a number a power of two?
 
@@ -598,11 +614,22 @@ uint32_t extract_field(uint32_t reg, uint32_t mask, uint8_t shift) {
     return (reg & mask) >> shift;      /* isolate the field, then move it down to bit 0 */
 }
 
+/* Same thing using position and width: the mask is built from the width */
+uint32_t extract_bit_field(uint32_t value, uint8_t position, uint8_t width) {
+    if (width == 0 || width >= 32) return 0;      /* 1U << 32 is undefined, so limit the width */
+
+    uint32_t mask = (1U << width) - 1U;           /* width = 4 -> 0b1111 */
+    return (value >> position) & mask;            /* move the field down to bit 0, keep 'width' bits */
+}
+
 int main(void) {
     printf("Field: 0x%X\n", extract_field(0x0000F000, 0x0000F000, 12));   /* 0xF */
+    printf("Field: 0x%X\n", extract_bit_field(0x0000F000, 12, 4));        /* 0xF */
     return 0;
 }
 ```
+
+**Formula to remember:** `field = (x >> position) & ((1U << width) - 1U);`
 
 ### Q23: Write a field without disturbing other bits
 
@@ -615,8 +642,15 @@ uint32_t set_field(uint32_t reg, uint32_t val, uint32_t mask, uint8_t shift) {
          | ((val << shift) & mask);      /* 2. insert the new value, masked so it cannot spill */
 }
 
+/* Same thing using position and width */
+uint32_t modify_bit_field(uint32_t reg, uint8_t pos, uint8_t width, uint32_t new_val) {
+    uint32_t mask = ((1U << width) - 1U) << pos;  /* build the mask and move it to the field (width < 32) */
+    return (reg & ~mask) | ((new_val << pos) & mask);
+}
+
 int main(void) {
     printf("Reg: 0x%08X\n", set_field(0xFFFFFFFF, 0x5, 0x000000F0, 4));   /* 0xFFFFFF5F */
+    printf("Reg: 0x%08X\n", modify_bit_field(0xFFFFFFFF, 4, 4, 0x5));     /* 0xFFFFFF5F */
     return 0;
 }
 ```
@@ -1303,6 +1337,38 @@ void delete_at_start(struct node **head) {
     free(t);
 }
 
+/* Insert at position 'pos' (1-based); pos == 1 changes the caller's head */
+void insert_at_pos(struct node **head, int data, int pos) {
+    if (pos == 1) {                               /* new first node */
+        insert_at_start(head, data);
+        return;
+    }
+
+    struct node *t = *head;
+    for (int i = 1; i < pos - 1 && t != NULL; i++) t = t->next;   /* stop at node pos-1 */
+    if (t == NULL) { printf("Position out of bounds\n"); return; }
+
+    struct node *n = make_node(data, t->next);    /* new node points to the old node at pos */
+    if (n) t->next = n;                           /* node pos-1 now points to the new node */
+}
+
+/* Delete the node at position 'pos' (1-based) */
+void del_at_pos(struct node **head, int pos) {
+    if (head == NULL || *head == NULL) return;
+    if (pos == 1) {                               /* deleting the first node changes the head */
+        delete_at_start(head);
+        return;
+    }
+
+    struct node *t = *head;
+    for (int i = 1; i < pos - 1 && t != NULL; i++) t = t->next;   /* node JUST BEFORE the one to delete */
+    if (t == NULL || t->next == NULL) { printf("Position out of bounds\n"); return; }
+
+    struct node *victim = t->next;
+    t->next = victim->next;                       /* unlink first... */
+    free(victim);                                 /* ...then free */
+}
+
 /* ---- Printing ---- */
 
 void print_list(const struct node *head) {
@@ -1417,3 +1483,259 @@ int main(void) {
 ```
 
 **Follow-up:** O(n) time and O(1) extra space.
+
+## B12. Find a substring
+
+**Idea:** Try every start position in `str`. From there, compare character by character with `sub`. If we reach the end of `sub`, it matched.
+
+```c
+#include <stdio.h>
+
+int find_sub_string(const char *str, const char *sub) {
+    for (int i = 0; str[i] != '\0'; i++) {        /* each possible start position */
+        int j;
+        for (j = 0; sub[j] != '\0'; j++) {        /* walk through sub, not str */
+            if (str[i + j] != sub[j])
+                break;                            /* mismatch: try the next start */
+        }
+        if (sub[j] == '\0')
+            return i;                             /* reached the end of sub: found at index i */
+    }
+    return -1;                                    /* not found */
+}
+
+int main(void) {
+    char str[] = "I love India";
+    char sub[] = "love";
+
+    int res = find_sub_string(str, sub);
+    if (res != -1)
+        printf("Found at index %d\n", res);       /* 2 */
+    else
+        printf("Not Found\n");
+    return 0;
+}
+```
+
+**Watch out:** the inner loop must check `sub[j]`, not `str[j]`, and `i`, `j` should be local, not global. If `str` ends early, `str[i + j]` is `'\0'`, which never matches a character of `sub`, so the loop stops safely. O(n × m).
+
+## B13. Swap two bits
+
+**Idea:** Read the two bits. If they're equal, there's nothing to do. If they differ, swapping them is the same as flipping both.
+
+```c
+#include <stdio.h>
+#include <stdint.h>
+
+/* Version 1: pass by value (returns the new value) */
+uint16_t swap_bits_val(uint16_t num, uint8_t b1, uint8_t b2) {
+    uint16_t i = (num >> b1) & 1;                 /* bit at position b1 */
+    uint16_t j = (num >> b2) & 1;                 /* bit at position b2 */
+
+    if (i != j) {                                 /* swap only if they differ */
+        num ^= (1U << b1);                        /* flip bit b1 */
+        num ^= (1U << b2);                        /* flip bit b2 */
+    }
+    return num;
+}
+
+/* Version 2: pass by pointer (changes the original variable), without an if */
+void swap_bits_ptr(uint16_t *num, uint8_t b1, uint8_t b2) {
+    if (!num) return;
+
+    uint16_t diff = ((*num >> b1) ^ (*num >> b2)) & 1;   /* 1 if the bits differ, else 0 */
+
+    *num ^= (diff << b1);                         /* flip both only when they differ */
+    *num ^= (diff << b2);
+}
+
+int main(void) {
+    uint16_t val = 0x000A;                        /* 0b1010: bits 1 and 3 are set */
+
+    printf("Original:   0x%04X\n", val);
+    printf("By value:   0x%04X\n", swap_bits_val(val, 1, 2));   /* 0x000C: bit 1 moved to bit 2 */
+
+    swap_bits_ptr(&val, 1, 2);
+    printf("By pointer: 0x%04X\n", val);          /* 0x000C */
+    return 0;
+}
+```
+
+**Key concept:** XOR with 1 flips a bit, so flipping both bits swaps them when they differ.
+
+---
+
+## Part C: MISRA-C style common code
+
+Reusable functions written to **MISRA C:2012** guidelines, the coding standard used in automotive and safety-critical embedded code. The `main()` test functions use `printf`, which MISRA doesn't allow in production code (Rule 21.6), so treat them as test code only.
+
+**MISRA rules used in this part:**
+
+| Rule | What it says | How the code follows it |
+| --- | --- | --- |
+| 21.2 | Don't redefine standard library names | `mem_copy()`, not `memcpy()` |
+| 7.2 | Unsigned constants need a `U` suffix | `0U`, `1U`, `32U` |
+| 10.1 / 10.4 | No mixing of signed and unsigned in one operation | Every operand is unsigned |
+| 12.2 | A shift amount must be less than the type's width | `width` is range-checked before shifting |
+| 13.3 | No `++` inside a larger expression | `d[i] = s[i];` then `i++`, not `*d++ = *s++` |
+| 14.4 | An `if`/`while` condition must be a real boolean | `while (i < len)`, not `while (len)` |
+| 15.5 | One `return` at the end of a function (advisory) | The result goes in a local variable, returned once |
+| 15.6 | Always use braces for loop and `if` bodies | Braces even around one line |
+| 17.8 | Don't modify a function parameter | Parameters are copied to locals first |
+| 18.4 | Avoid `+`/`-` pointer arithmetic (advisory) | Array indexing `d[i]` instead of `*(d + i)` |
+| 8.13 | Point to `const` when the data isn't changed | `const void *src` |
+| Dir 4.9 | Prefer functions to function-like macros | Functions and wrappers, no macros |
+
+### C1. Custom memory copy (`mem_copy`)
+
+**Idea:** Copy `len` bytes from `src` to `dst`, one byte at a time. Check the pointers first and return a status instead of crashing.
+
+```c
+#include <stddef.h>
+#include <stdint.h>
+
+typedef enum
+{
+    MEM_OK = 0,          /* copy done */
+    MEM_ERR_NULL         /* a NULL pointer was passed: nothing copied */
+} mem_status_t;
+
+/*
+ * Copies 'len' bytes from 'src' to 'dst'.
+ * The two areas must not overlap (use a memmove, Q03, for overlapping areas).
+ */
+mem_status_t mem_copy(void *dst, const void *src, size_t len)
+{
+    mem_status_t status = MEM_OK;
+
+    if ((dst == NULL) || (src == NULL))                  /* Rule 14.4: a real boolean condition */
+    {
+        status = MEM_ERR_NULL;
+    }
+    else
+    {
+        /* Deviation, Rule 11.5 (advisory): void * to uint8_t *, needed for a generic byte copy */
+        uint8_t       *d = (uint8_t *)dst;
+        const uint8_t *s = (const uint8_t *)src;
+        size_t         i;
+
+        for (i = 0U; i < len; i++)                       /* Rule 13.3: no *d++ = *s++ */
+        {
+            d[i] = s[i];                                 /* Rule 18.4: indexing, not pointer arithmetic */
+        }
+    }
+
+    return status;                                       /* Rule 15.5: one exit point */
+}
+```
+
+**Test (not production code):**
+
+```c
+#include <stdio.h>
+
+int main(void)
+{
+    uint8_t src[5] = {1U, 2U, 3U, 4U, 5U};
+    uint8_t dst[5] = {0U};
+
+    if (mem_copy(dst, src, sizeof(src)) == MEM_OK)
+    {
+        printf("%u %u %u %u %u\n", dst[0], dst[1], dst[2], dst[3], dst[4]);   /* 1 2 3 4 5 */
+    }
+    printf("NULL check: %d\n", (int)mem_copy(NULL, src, 5U));                 /* 1 = MEM_ERR_NULL */
+    return 0;
+}
+```
+
+**Interview points:**
+
+1. **Why not call it `memcpy`?** MISRA Rule 21.2 forbids redefining standard library names, and it would clash with the real one.
+2. **Why return a status?** The caller can check for a NULL pointer instead of the program crashing.
+3. **Why no overlap check?** Comparing two unrelated pointers is undefined in C (Rule 18.3). Overlapping copies need a memmove (Q03).
+4. **Why byte by byte?** It's simple and works for any alignment. For speed, copy 32-bit words when both pointers are aligned (Q11).
+
+### C2. Reverse bits: one common function for 8, 16 and 32 bits
+
+**Idea:** One loop reverses the lowest `width` bits: take the lowest bit of the input and push it into the result from the other side, `width` times. The 8, 16 and 32-bit versions just call it.
+
+```c
+#include <stdint.h>
+
+/*
+ * Reverses the lowest 'width' bits of 'value' (width = 1..32).
+ * Returns 0 if 'width' is out of range.
+ */
+uint32_t reverse_bits(uint32_t value, uint8_t width)
+{
+    uint32_t result = 0U;
+    uint32_t input  = value;                             /* Rule 17.8: don't change the parameter */
+    uint8_t  i;
+
+    if ((width > 0U) && (width <= 32U))                  /* Rule 12.2: keep the shifts in range */
+    {
+        for (i = 0U; i < width; i++)
+        {
+            result = (result << 1U) | (input & 1U);      /* push the lowest input bit into the result */
+            input  = input >> 1U;                        /* move to the next input bit */
+        }
+    }
+
+    return result;
+}
+
+/* Wrappers for each size: one common routine, no duplicated logic */
+uint8_t reverse_bits_8(uint8_t value)
+{
+    return (uint8_t)reverse_bits((uint32_t)value, 8U);
+}
+
+uint16_t reverse_bits_16(uint16_t value)
+{
+    return (uint16_t)reverse_bits((uint32_t)value, 16U);
+}
+
+uint32_t reverse_bits_32(uint32_t value)
+{
+    return reverse_bits(value, 32U);
+}
+```
+
+**Faster version for 32 bits** (constant time, the same mask-and-swap idea as B6, written to MISRA):
+
+```c
+uint32_t reverse_bits_32_fast(uint32_t value)
+{
+    uint32_t x = value;                                              /* Rule 17.8 */
+
+    x = ((x & 0xFFFF0000U) >> 16U) | ((x & 0x0000FFFFU) << 16U);    /* swap halves  */
+    x = ((x & 0xFF00FF00U) >> 8U)  | ((x & 0x00FF00FFU) << 8U);     /* swap bytes   */
+    x = ((x & 0xF0F0F0F0U) >> 4U)  | ((x & 0x0F0F0F0FU) << 4U);     /* swap nibbles */
+    x = ((x & 0xCCCCCCCCU) >> 2U)  | ((x & 0x33333333U) << 2U);     /* swap pairs   */
+    x = ((x & 0xAAAAAAAAU) >> 1U)  | ((x & 0x55555555U) << 1U);     /* swap bits    */
+
+    return x;
+}
+```
+
+**Test (not production code):**
+
+```c
+#include <stdio.h>
+
+int main(void)
+{
+    printf("8-bit : 0x%02X -> 0x%02X\n", 0xF0U, reverse_bits_8(0xF0U));                  /* 0x0F */
+    printf("16-bit: 0x%04X -> 0x%04X\n", 0x00F0U, reverse_bits_16(0x00F0U));             /* 0x0F00 */
+    printf("32-bit: 0x%08lX -> 0x%08lX\n", 0x1UL, (unsigned long)reverse_bits_32(1U));    /* 0x80000000 */
+    printf("fast  : 0x%08lX\n", (unsigned long)reverse_bits_32_fast(1U));                 /* 0x80000000 */
+    printf("4 bits of 0b0001: 0x%lX\n", (unsigned long)reverse_bits(1U, 4U));             /* 0x8 = 0b1000 */
+    return 0;
+}
+```
+
+**Interview points:**
+
+1. **Why compute in `uint32_t` and cast back?** In C, `uint8_t` and `uint16_t` are promoted to `int` in expressions. Working in `uint32_t` keeps every operand unsigned (Rules 10.1 and 10.4), and the final cast is a narrowing cast to the same unsigned category, which MISRA allows.
+2. **Why check `width`?** Shifting by the type's width or more is undefined behaviour (Rule 12.2).
+3. **Loop or masks?** The loop is simple and works for any width, in O(width) time. The mask version is constant time but written for one fixed size.

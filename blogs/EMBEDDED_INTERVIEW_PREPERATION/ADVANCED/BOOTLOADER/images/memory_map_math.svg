@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 768" width="1000" height="768"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="768" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">The memory map, sector by sector: how every address and size is calculated</text>
+<text x="500.0" y="62.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#374151">STM32F411: 512 KB flash in 8 sectors of different sizes, 128 KB RAM (boxes not to scale)</text>
+<text x="178.0" y="108.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="700" fill="#1f2937">0x0808_0000 (end)</text>
+<rect x="190.0" y="104.0" width="300.0" height="58.0" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="340.0" y="137.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Sector 7: 128 KB = 0x2_0000</text>
+<text x="178.0" y="166.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x0806_0000</text>
+<rect x="190.0" y="166.0" width="300.0" height="58.0" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="340.0" y="199.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Sector 6: 128 KB = 0x2_0000</text>
+<text x="178.0" y="228.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x0804_0000</text>
+<rect x="190.0" y="228.0" width="300.0" height="58.0" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="340.0" y="261.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Sector 5: 128 KB = 0x2_0000</text>
+<text x="178.0" y="290.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x0802_0000</text>
+<rect x="190.0" y="290.0" width="300.0" height="48.0" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="340.0" y="318.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Sector 4: 64 KB = 0x1_0000</text>
+<text x="178.0" y="342.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x0801_0000</text>
+<rect x="190.0" y="342.0" width="300.0" height="40.0" rx="12" fill="#eef0f3" stroke="#6b7280" stroke-width="1.5"/>
+<text x="340.0" y="366.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Sector 3: 16 KB = 0x4000</text>
+<text x="178.0" y="386.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x0800_C000</text>
+<rect x="190.0" y="386.0" width="300.0" height="40.0" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="1.5"/>
+<text x="340.0" y="410.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Sector 2: 16 KB = 0x4000</text>
+<text x="178.0" y="430.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x0800_8000</text>
+<rect x="190.0" y="430.0" width="300.0" height="40.0" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="1.5"/>
+<text x="340.0" y="454.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Sector 1: 16 KB = 0x4000</text>
+<text x="178.0" y="474.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x0800_4000</text>
+<rect x="190.0" y="474.0" width="300.0" height="40.0" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="1.5"/>
+<text x="340.0" y="498.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">Sector 0: 16 KB = 0x4000</text>
+<text x="178.0" y="518.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x0800_0000</text>
+<polyline points="504.0,106.0 514.0,106.0 514.0,336.0 504.0,336.0" fill="none" stroke="#2e8b57" stroke-width="2" stroke-linejoin="round"/>
+<text x="526.0" y="197.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#2e8b57">APPLICATION: sectors 4-7</text>
+<text x="526.0" y="215.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">64 + 3 × 128 = 448 KB</text>
+<text x="526.0" y="231.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">= 0x1_0000 + 3 × 0x2_0000 = 0x7_0000</text>
+<text x="526.0" y="247.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">0x0801_0000 + 0x7_0000 = 0x0808_0000</text>
+<polyline points="504.0,344.0 514.0,344.0 514.0,380.0 504.0,380.0" fill="none" stroke="#6b7280" stroke-width="2" stroke-linejoin="round"/>
+<text x="526.0" y="354.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#6b7280">METADATA: sector 3</text>
+<text x="526.0" y="372.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">16 KB = 0x4000, from 0x0800_C000</text>
+<polyline points="504.0,388.0 514.0,388.0 514.0,512.0 504.0,512.0" fill="none" stroke="#d97d00" stroke-width="2" stroke-linejoin="round"/>
+<text x="526.0" y="426.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#d97d00">BOOTLOADER: sectors 0-2</text>
+<text x="526.0" y="444.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">3 × 16 = 48 KB = 3 × 0x4000 = 0xC000</text>
+<text x="526.0" y="460.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">0x0800_0000 + 0xC000 = 0x0800_C000</text>
+<text x="526.0" y="476.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">write-protected</text>
+<rect x="20.0" y="532.0" width="960.0" height="92.0" rx="12" fill="#0f1b2d"/>
+<text x="500.0" y="561.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#ffffff">The rule: next start address = this start address + this size (in hex)</text>
+<text x="500.0" y="587.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">1 KB = 1024 bytes = 0x400, so 16 KB = 16 × 1024 = 16,384 = 0x4000; 64 KB = 0x1_0000; 128 KB = 0x2_0000</text>
+<text x="500.0" y="604.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">Total: 4 × 16 + 64 + 3 × 128 = 512 KB = 0x8_0000, so flash ends at 0x0800_0000 + 0x8_0000 = 0x0808_0000</text>
+<text x="500.0" y="652.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">RAM: 128 KB = 128 × 1024 = 131,072 bytes = 0x2_0000</text>
+<rect x="20.0" y="664.0" width="150.0" height="64.0" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="95.0" y="688.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">NOINIT</text>
+<text x="95.0" y="713.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">32 B = 0x20</text>
+<rect x="170.0" y="664.0" width="810.0" height="64.0" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="575.0" y="688.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#1f2937">RAM: stack, heap, .data, .bss</text>
+<text x="575.0" y="713.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">128 KB − 32 B = 131,040 bytes, from 0x2000_0020 up to the top of RAM</text>
+<text x="20.0" y="748.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x2000_0000</text>
+<text x="170.0" y="748.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x2000_0020  (= 0x2000_0000 + 0x20)</text>
+<text x="980.0" y="748.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x2002_0000 = _estack  (= 0x2000_0000 + 0x2_0000)</text>
+</svg>

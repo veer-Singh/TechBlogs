@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 556" width="1000" height="556"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="556.25" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">The jump to the application, step by step</text>
+<rect x="20.0" y="78.0" width="205.5" height="124.8" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="122.8" y="106.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Is the app valid?</text>
+<text x="122.8" y="132.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">MSP in RAM? reset vector</text>
+<text x="122.8" y="150.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">inside the app? CRC /</text>
+<text x="122.8" y="167.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">signature OK? If not: stay</text>
+<text x="122.8" y="185.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">in the bootloader</text>
+<circle cx="22.0" cy="80" r="14" fill="#d97d00" stroke="#ffffff" stroke-width="2.5"/>
+<text x="22.0" y="85.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">1</text>
+<rect x="271.5" y="78.0" width="205.5" height="124.8" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="374.2" y="115.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">De-init peripherals</text>
+<text x="374.2" y="141.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">UART, USB, timers, DMA,</text>
+<text x="374.2" y="159.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">GPIO used by the</text>
+<text x="374.2" y="176.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">bootloader</text>
+<circle cx="273.5" cy="80" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="273.5" y="85.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">2</text>
+<line x1="229.5" y1="140.4" x2="266.5" y2="140.4" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="523.0" y="78.0" width="205.5" height="124.8" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="625.8" y="133.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Clocks to reset state</text>
+<text x="625.8" y="159.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">HSI on, PLL off</text>
+<circle cx="525.0" cy="80" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="525.0" y="85.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">3</text>
+<line x1="481.0" y1="140.4" x2="518.0" y2="140.4" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="774.5" y="78.0" width="205.5" height="124.8" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="877.2" y="133.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Disable interrupts</text>
+<text x="877.2" y="159.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">__disable_irq()</text>
+<circle cx="776.5" cy="80" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="776.5" y="85.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">4</text>
+<line x1="732.5" y1="140.4" x2="769.5" y2="140.4" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<polyline points="877.2,204.8 877.2,230.8 122.8,230.8 122.8,254.9" fill="none" stroke="#374151" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="20.0" y="258.9" width="205.5" height="108.7" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="122.8" y="297.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Stop SysTick</text>
+<text x="122.8" y="323.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">it is not controlled by</text>
+<text x="122.8" y="340.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">the NVIC</text>
+<circle cx="22.0" cy="260.85" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="22.0" y="265.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">5</text>
+<rect x="271.5" y="258.9" width="205.5" height="108.7" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="374.2" y="297.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Clear the NVIC</text>
+<text x="374.2" y="323.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">disable every IRQ, clear</text>
+<text x="374.2" y="340.7" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">every pending bit</text>
+<circle cx="273.5" cy="260.85" r="14" fill="#2f6fbe" stroke="#ffffff" stroke-width="2.5"/>
+<text x="273.5" y="265.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">6</text>
+<line x1="229.5" y1="313.2" x2="266.5" y2="313.2" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="523.0" y="258.9" width="205.5" height="108.7" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="625.8" y="287.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">SCB-&gt;VTOR =</text>
+<text x="625.8" y="306.5" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">APP_ADDRESS</text>
+<text x="625.8" y="332.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">interrupts now use the</text>
+<text x="625.8" y="350.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">app's table</text>
+<circle cx="525.0" cy="260.85" r="14" fill="#7b3fbf" stroke="#ffffff" stroke-width="2.5"/>
+<text x="525.0" y="265.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">7</text>
+<line x1="481.0" y1="313.2" x2="518.0" y2="313.2" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="774.5" y="258.9" width="205.5" height="108.7" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="877.2" y="305.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">__set_MSP(app_vector[0])</text>
+<text x="877.2" y="331.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">the app's own stack</text>
+<circle cx="776.5" cy="260.85" r="14" fill="#7b3fbf" stroke="#ffffff" stroke-width="2.5"/>
+<text x="776.5" y="265.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">8</text>
+<line x1="732.5" y1="313.2" x2="769.5" y2="313.2" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<polyline points="877.2,369.6 877.2,395.6 122.8,395.6 122.8,419.6" fill="none" stroke="#374151" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="20.0" y="423.6" width="205.5" height="108.7" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="122.8" y="461.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">__DSB(); __ISB()</text>
+<text x="122.8" y="487.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">make the changes take</text>
+<text x="122.8" y="505.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">effect</text>
+<circle cx="22.0" cy="425.55" r="14" fill="#7b3fbf" stroke="#ffffff" stroke-width="2.5"/>
+<text x="22.0" y="430.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">9</text>
+<rect x="271.5" y="423.6" width="205.5" height="108.7" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="374.2" y="452.3" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">Branch to</text>
+<text x="374.2" y="471.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#1f2937">app_vector[1]</text>
+<text x="374.2" y="497.3" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">the app's Reset_Handler</text>
+<text x="374.2" y="514.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#374151">runs</text>
+<circle cx="273.5" cy="425.55" r="14" fill="#2e8b57" stroke="#ffffff" stroke-width="2.5"/>
+<text x="273.5" y="430.6" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">10</text>
+<line x1="229.5" y1="477.9" x2="266.5" y2="477.9" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+</svg>

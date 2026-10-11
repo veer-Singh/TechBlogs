@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 592" width="1000" height="592"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="592" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">STM32F411 flash layout for a two-stage bootloader</text>
+<text x="500.0" y="62.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#374151">512 KB flash; sectors 0-3 are 16 KB each, sector 4 is 64 KB, sectors 5-7 are 128 KB</text>
+<rect x="250.0" y="90.0" width="470.0" height="150.0" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="485.0" y="157.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Application</text>
+<text x="485.0" y="183.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">your firmware (vector table at 0x0801_0000)</text>
+<text x="740.0" y="169.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#2e8b57">Sectors 4-7 (448 KB)</text>
+<text x="235.0" y="236.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x0801_0000</text>
+<rect x="250.0" y="246.0" width="470.0" height="58.0" rx="12" fill="#eef0f3" stroke="#6b7280" stroke-width="2"/>
+<text x="485.0" y="267.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">App metadata</text>
+<text x="485.0" y="293.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">the app's size, CRC and valid flag, written by stage 2</text>
+<text x="740.0" y="279.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#6b7280">Sector 3 (16 KB)</text>
+<text x="235.0" y="300.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x0800_C000</text>
+<rect x="250.0" y="310.0" width="470.0" height="58.0" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="485.0" y="331.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Stage 2, slot B</text>
+<text x="485.0" y="357.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">second copy: stage 2 can be updated safely</text>
+<text x="740.0" y="343.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#7b3fbf">Sector 2 (16 KB)</text>
+<text x="235.0" y="364.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x0800_8000</text>
+<rect x="250.0" y="374.0" width="470.0" height="58.0" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="485.0" y="395.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Stage 2, slot A</text>
+<text x="485.0" y="421.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">the updatable bootloader: UART update, validate app, jump</text>
+<text x="740.0" y="407.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#7b3fbf">Sector 1 (16 KB)</text>
+<text x="235.0" y="428.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x0800_4000</text>
+<rect x="250.0" y="438.0" width="470.0" height="58.0" rx="12" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+<text x="485.0" y="459.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#1f2937">Stage 1</text>
+<text x="485.0" y="485.2" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#374151">tiny, never updated: picks a valid stage 2 and jumps</text>
+<text x="740.0" y="471.0" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#c0392b">Sector 0 (16 KB), write-protected</text>
+<text x="235.0" y="492.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">0x0800_0000</text>
+<text x="235.0" y="104.0" text-anchor="end" font-family="Consolas, Menlo, monospace" font-size="11.5" font-weight="400" fill="#6b7280">end: 0x0808_0000</text>
+<rect x="20.0" y="516.0" width="960.0" height="56.0" rx="12" fill="#0f1b2d"/>
+<text x="500.0" y="536.4" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#ffffff">Reset always starts stage 1 (sector 0)</text>
+<text x="500.0" y="561.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c9d3e0">stage 1 → newest valid stage 2 → valid application</text>
+</svg>

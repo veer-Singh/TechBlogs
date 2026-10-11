@@ -202,6 +202,14 @@ The numbers below follow the picture.
 };
 ```
 
+A whole board looks like this. Every box is a node, and every device sits under the bus it is connected to:
+
+![The device tree structure of a small i.MX 8M board: the root node / holds the board's model and compatible; its children are cpus (with cpu@0 and cpu@1), memory@40000000 (RAM address and size), chosen (console and bootargs) and aliases (settings, not hardware), soc (the chip's internal bus) and leds (compatible gpio-leds, with a led-status child that uses gpio1 pin 13 through a phandle reference &gpio1). Under soc are the controllers serial@30890000 (UART2, the console), i2c@30a20000 (I2C bus 1), spi@30820000 (SPI bus 1) and gpio@30200000; under the I2C bus is the device temperature-sensor@48 (compatible ti,tmp102) and under the SPI bus the device flash@0 (jedec,spi-nor, chip select 0). A node's path is its place in the tree, for example /soc/i2c@30a20000/temperature-sensor@48, and the kernel shows the same path as a folder under /proc/device-tree](images/device_tree_structure.svg)
+
+- **Hardware basics** (`cpus`, `memory`) and **settings** (`chosen`, `aliases`) sit directly under the root.
+- **Buses and controllers** inside the chip sit under `soc`; the **devices** on each bus are their children.
+- A node can also **point to** another node with a reference (`&gpio1`), which isn't a parent-child link.
+
 ### 4.2 Node names and unit addresses (picture: 2)
 
 A node name has the form **`name@unit-address`**:

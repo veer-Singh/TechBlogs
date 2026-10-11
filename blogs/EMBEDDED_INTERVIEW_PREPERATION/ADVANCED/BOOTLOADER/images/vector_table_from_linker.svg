@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 472" width="1000" height="472"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect x="0" y="0" width="1000" height="472" rx="16" fill="#ffffff"/>
+<text x="500.0" y="38.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#1f2937">Where word 0 and word 1 come from</text>
+<rect x="20.0" y="70.0" width="220.0" height="320.0" rx="12" fill="#f3e8fd" stroke="#7b3fbf" stroke-width="2"/>
+<text x="130.0" y="98.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#7b3fbf">1. Linker script</text>
+<text x="130.0" y="118.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">STM32F411xE_FLASH.ld</text>
+<text x="34.0" y="152.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">_estack = ORIGIN(RAM)</text>
+<text x="34.0" y="176.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">        + LENGTH(RAM);</text>
+<text x="34.0" y="200.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">  = 0x20000000 + 128K</text>
+<text x="34.0" y="224.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">  = 0x20020000</text>
+<text x="34.0" y="248.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">.isr_vector : {</text>
+<text x="34.0" y="272.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">  KEEP(*(.isr_vector))</text>
+<text x="34.0" y="296.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">} &gt; FLASH   /* placed FIRST */</text>
+<rect x="266.0" y="70.0" width="220.0" height="320.0" rx="12" fill="#e8f1fd" stroke="#2f6fbe" stroke-width="2"/>
+<text x="376.0" y="98.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#2f6fbe">2. Startup file</text>
+<text x="376.0" y="118.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">startup_stm32f411xe.s</text>
+<text x="280.0" y="152.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">g_pfnVectors:</text>
+<text x="280.0" y="176.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">  .word _estack</text>
+<text x="280.0" y="200.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">  .word Reset_Handler</text>
+<text x="280.0" y="224.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">  .word NMI_Handler</text>
+<text x="280.0" y="248.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">  .word HardFault_Handler</text>
+<text x="280.0" y="272.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">  ...</text>
+<line x1="243.0" y1="230.0" x2="261.0" y2="230.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="512.0" y="70.0" width="220.0" height="320.0" rx="12" fill="#fff3e0" stroke="#d97d00" stroke-width="2"/>
+<text x="622.0" y="98.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#d97d00">3. Flash after linking</text>
+<text x="622.0" y="118.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">at 0x0800_0000</text>
+<text x="526.0" y="152.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">0x0800_0000: 0x2002_0000</text>
+<text x="526.0" y="176.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">0x0800_0004: 0x0800_01C1</text>
+<text x="526.0" y="200.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">0x0800_0008: 0x0800_01D1</text>
+<text x="526.0" y="224.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">0x0800_000C: 0x0800_01D3</text>
+<text x="526.0" y="248.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">  (Reset_Handler is at</text>
+<text x="526.0" y="272.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">   0x0800_01C0; +1 = Thumb)</text>
+<line x1="489.0" y1="230.0" x2="507.0" y2="230.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="758.0" y="70.0" width="220.0" height="320.0" rx="12" fill="#e8f6ec" stroke="#2e8b57" stroke-width="2"/>
+<text x="868.0" y="98.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#2e8b57">4. CPU at reset</text>
+<text x="868.0" y="118.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#374151">hardware</text>
+<text x="772.0" y="152.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">MSP = word 0</text>
+<text x="772.0" y="176.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">    = 0x2002_0000</text>
+<text x="772.0" y="200.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">PC  = word 1 &amp; ~1</text>
+<text x="772.0" y="224.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">    = 0x0800_01C0</text>
+<text x="772.0" y="248.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">Thumb bit = 1</text>
+<text x="772.0" y="272.0" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="12.2" font-weight="400" fill="#1f2937">→ Reset_Handler runs</text>
+<line x1="735.0" y1="230.0" x2="753.0" y2="230.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<rect x="20.0" y="408.0" width="960.0" height="48.0" rx="12" fill="#0f1b2d"/>
+<text x="500.0" y="436.1" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#ffffff">The linker puts .isr_vector first in flash, so the vector table is exactly where the CPU looks at reset</text>
+</svg>
